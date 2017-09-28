@@ -98,6 +98,9 @@ public class ObservableCapsuleFlatModel2Cpp extends FlatModel2Cpp {
 		ArrayList<String> params = new ArrayList<String>();
 		int i =0;
 		org.eclipse.uml2.uml.Transition initT = (org.eclipse.uml2.uml.Transition)trans.getSource(t);
+		if (initT == null) {
+			return func;
+		}
 		if (initT.getTriggers().size() > 0) {
 			CallEvent event = (CallEvent) initT.getTriggers().get(0).getEvent();
 			EList<Parameter> parameters = event.getOperation().getOwnedParameters();
