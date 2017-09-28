@@ -74,7 +74,8 @@ public class MakeTransitionTriggerableHandler extends ObserveHandler {
 		Port port = initialTrigger.getPorts().get(0);
 		Port observerPort = capsule.getOwnedPort("observation", protocol);
 		
-		String messageName = initialTrigger.getEvent().getName();
+		CallEvent event = (CallEvent)initialTrigger.getEvent();
+		String messageName = event.getOperation().getName();
 		String portName = port.getName();
 		String capsuleName = ((NamedElement)transition.getOwner().getOwner().getOwner()).getName();
 		String proposedName = capsuleName + "_" + portName + "_" + messageName;
