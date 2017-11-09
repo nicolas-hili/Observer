@@ -12,7 +12,7 @@ import animation.Gui;
 public class SocketClient extends Thread {
 	
 	int port = 8080;
-	String address = "127.0.0.1";
+	String address = "10.217.89.29";
 	boolean connected = false;
 	
 	Socket clientSocket = null;
@@ -33,8 +33,9 @@ public class SocketClient extends Thread {
 		while (!Thread.currentThread().isInterrupted()) {
 			
 			while (!connected && !Thread.currentThread().isInterrupted()) {
+				System.out.println("not connected");
 		    	try {
-		    		clientSocket = new Socket("localhost", 8080);
+		    		clientSocket = new Socket("10.217.89.29", 8080);
 		    		inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		    		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		    		connected = true;
@@ -42,6 +43,7 @@ public class SocketClient extends Thread {
 				} catch (IOException e) {
 				}
 	    	}
+			System.out.println("connected");
 			
 			while (connected && !Thread.currentThread().isInterrupted()) {
 	    		

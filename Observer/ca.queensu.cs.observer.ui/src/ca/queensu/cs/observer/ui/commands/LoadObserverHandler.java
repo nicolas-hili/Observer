@@ -23,6 +23,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -37,8 +38,12 @@ import org.eclipse.papyrus.infra.core.services.ServiceException;
 import org.eclipse.papyrus.infra.core.services.ServicesRegistry;
 import org.eclipse.papyrus.infra.emf.utils.EMFHelper;
 import org.eclipse.papyrus.uml.tools.model.UmlUtils;
+import org.eclipse.papyrusrt.umlrt.core.utils.CapsuleUtils;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.PackageableElement;
@@ -91,7 +96,10 @@ public class LoadObserverHandler extends AbstractHandler {
 			final EList<EObject> contents = UmlUtils.getUmlResource(modelSet).getContents();
 
 			final Model model = (Model)UmlUtils.getUmlResource(modelSet).getContents().get(0);
-
+			
+			String topCapsuleName = getTopCapsuleName(model);
+			PackageableElement topCapsule = findTopCapsule(topCapsuleName, model);
+			
 			editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
 				
 				@Override
@@ -105,8 +113,15 @@ public class LoadObserverHandler extends AbstractHandler {
 							contents.add(umlObject);
 					}
 					
+					// Get the observer capsule
+					Class observer = (Class) model.getNestedPackage("Observation").getPackagedElement("Observer");
+					
+					// Add the Observer attribute to the top capsule
+					((Class)topCapsule).createOwnedAttribute("observer", observer);
+					
+					
 					// Apply the profile
-					model.applyProfile(profile);
+				//	model.applyProfile(profile);
 				}
 			});
 			
@@ -120,6 +135,23 @@ public class LoadObserverHandler extends AbstractHandler {
 		return null;
 	}
 	
+	private PackageableElement findTopCapsule(String topCapsuleName, Package root) {
+		PackageableElement pe = root.getPackagedElement(topCapsuleName);
+		if (pe != null && pe instanceof Classifier && CapsuleUtils.isCapsule((Classifier)pe)) {
+			return pe;
+		}
+		
+		EList<Package> nestedPackages = root.getNestedPackages();
+		for (int i = 0; i < nestedPackages.size(); i++) {
+			Package nestedPackage = nestedPackages.get(i);
+			pe = findTopCapsule(topCapsuleName, nestedPackage);
+			if (pe != null)
+				return pe;
+		}		
+		
+		return null;
+	}
+
 	/**
 	 * Load template resource.
 	 *
@@ -138,6 +170,24 @@ public class LoadObserverHandler extends AbstractHandler {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Obtains the name of the Top capsule.
+	 * 
+	 * @param root
+	 *            - The model's root {@link Element}.
+	 * @return The name of the Top capsule.
+	 */
+	public static String getTopCapsuleName(Element root) {
+		String retVal = null;
+
+		EAnnotation anno = root.getEAnnotation("UMLRT_Default_top");
+		if (anno != null) {
+			retVal = anno.getDetails().get("top_name");
+		}
+
+		return retVal != null ? retVal : "Top";
 	}
 
 }

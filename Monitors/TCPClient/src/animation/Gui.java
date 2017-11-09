@@ -42,7 +42,7 @@ public class Gui {
    public static JButton disconnectButton = null;
 
    // Connection info
-   public static String hostIP = "127.0.0.1";
+   public static String hostIP = "10.217.89.29";
    public static int port = 8080;
    public static int connectionStatus = DISCONNECTED;
    public static boolean isHost = true;

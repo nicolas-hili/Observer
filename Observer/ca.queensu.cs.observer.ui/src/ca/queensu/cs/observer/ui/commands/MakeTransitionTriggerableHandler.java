@@ -27,6 +27,7 @@ import org.eclipse.papyrus.emf.facet.util.ui.internal.exported.handler.HandlerUt
 import org.eclipse.papyrus.infra.core.services.ServiceException;
 import org.eclipse.papyrus.infra.tools.util.PlatformHelper;
 import org.eclipse.uml2.uml.CallEvent;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Collaboration;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
@@ -38,7 +39,6 @@ import org.eclipse.uml2.uml.Port;
 import org.eclipse.uml2.uml.Transition;
 import org.eclipse.uml2.uml.Trigger;
 import org.eclipse.uml2.uml.UMLFactory;
-import org.eclipse.uml2.uml.Class;
 
 public class MakeTransitionTriggerableHandler extends ObserveHandler {
 
@@ -88,36 +88,62 @@ public class MakeTransitionTriggerableHandler extends ObserveHandler {
 		if (observerInterface == null)
 			return;
 		
-//		observerInterface.get
+		CallEvent existingCallEvent = null;
+		Operation existingOperation = null;
+		
+		for (Operation operation: observerInterface.getOwnedOperations()) {
+			if (operation.getName().equals(proposedName)) {
+				existingOperation = operation;
+				break;
+			}
+		}
+		
+		for (PackageableElement pe: observerPackage.getPackagedElements()) {
+			if (pe instanceof CallEvent && proposedName.equals(pe.getName())) {
+				existingCallEvent = (CallEvent)pe;
+				break;
+			}
+		}
+		
+		final CallEvent callEvent = existingCallEvent;
+		final Operation op = existingOperation;
 		
 		editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
 			
 			@Override
 			protected void doExecute() {
 				
-				Operation mimicOperation = UMLFactory.eINSTANCE.createOperation();
-				mimicOperation.setName(proposedName);
-				
-				EAnnotation observerAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
-				observerAnnotation.setSource("observer");
-				observerAnnotation.getReferences().add(((CallEvent)initialTrigger.getEvent()).getOperation());
-				
-				observerAnnotation.getDetails().put("name", messageName);
-				observerAnnotation.getDetails().put("capsule", capsuleName);
-				mimicOperation.getEAnnotations().add(observerAnnotation);
-				
-				
-				CallEvent mimicEvent = UMLFactory.eINSTANCE.createCallEvent();
-				mimicEvent.setName(proposedName);
-				mimicEvent.setOperation(mimicOperation);
-				
-				observerPackage.getPackagedElements().add(mimicEvent);
-				observerInterface.getOwnedOperations().add(mimicOperation);
-				
-				Trigger mimicTrigger = UMLFactory.eINSTANCE.createTrigger();
-				mimicTrigger.getPorts().add(observerPort);
-				mimicTrigger.setEvent(mimicEvent);
-				triggers.add(mimicTrigger);
+				if (callEvent != null && op != null) {
+					Trigger mimicTrigger = UMLFactory.eINSTANCE.createTrigger();
+					mimicTrigger.getPorts().add(observerPort);
+					mimicTrigger.setEvent(callEvent);
+					triggers.add(mimicTrigger);
+				}
+				else {
+					Operation mimicOperation = UMLFactory.eINSTANCE.createOperation();
+					mimicOperation.setName(proposedName);
+					
+					EAnnotation observerAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+					observerAnnotation.setSource("observer");
+					observerAnnotation.getReferences().add(((CallEvent)initialTrigger.getEvent()).getOperation());
+					
+					observerAnnotation.getDetails().put("name", messageName);
+					observerAnnotation.getDetails().put("capsule", capsuleName);
+					mimicOperation.getEAnnotations().add(observerAnnotation);
+					
+					
+					CallEvent mimicEvent = UMLFactory.eINSTANCE.createCallEvent();
+					mimicEvent.setName(proposedName);
+					mimicEvent.setOperation(mimicOperation);
+					
+					observerPackage.getPackagedElements().add(mimicEvent);
+					observerInterface.getOwnedOperations().add(mimicOperation);
+					
+					Trigger mimicTrigger = UMLFactory.eINSTANCE.createTrigger();
+					mimicTrigger.getPorts().add(observerPort);
+					mimicTrigger.setEvent(mimicEvent);
+					triggers.add(mimicTrigger);
+				}
 			}
 		});
 	}
