@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:RTCppProperties="http://www.eclipse.org/papyrus/umlrt/cppproperties" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_MZw7AAdxEeadtKuU2t6fMg" name="ObserverModel">
+    <eAnnotations xmi:id="_GCr80Ad0EeadtKuU2t6fMg" source="UMLRT_Default_top">
+      <details xmi:id="_GCsj4Ad0EeadtKuU2t6fMg" key="top_name" value="TOP"/>
+    </eAnnotations>
+    <packagedElement xmi:type="uml:Class" xmi:id="_SikFQAdxEeadtKuU2t6fMg" name="TOP" isActive="true">
+      <ownedAttribute xmi:id="_qQ-wcAdzEeadtKuU2t6fMg" name="sender" visibility="protected" type="_U84yoAdxEeadtKuU2t6fMg" isOrdered="true" aggregation="composite">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qRDo8AdzEeadtKuU2t6fMg" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_qREQAAdzEeadtKuU2t6fMg" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_qz-v0AdzEeadtKuU2t6fMg" name="reciever" visibility="protected" type="_XIyCcAdxEeadtKuU2t6fMg" isOrdered="true" aggregation="composite">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q0BMEAdzEeadtKuU2t6fMg" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q0BMEQdzEeadtKuU2t6fMg" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_U84yoAdxEeadtKuU2t6fMg" name="Sender" classifierBehavior="_iG1rcAdxEeadtKuU2t6fMg" isActive="true">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_4AvSsC9MEeaxYMPe_sHEiw" name="Timer1" visibility="public" isOrdered="true" aggregation="composite" isBehavior="true">
+        <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4BLXkC9MEeaxYMPe_sHEiw" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4BMlsC9MEeaxYMPe_sHEiw" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_gIjKgDCJEeaxYMPe_sHEiw" name="ObserverComm" visibility="protected" type="_KS0icDCLEeaxYMPe_sHEiw" isOrdered="true" aggregation="composite" isBehavior="true" isConjugated="true" isService="false">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gIqfQDCJEeaxYMPe_sHEiw" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gIv-0DCJEeaxYMPe_sHEiw" value="1"/>
+      </ownedAttribute>
+      <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_iG1rcAdxEeadtKuU2t6fMg" name="Sender">
+        <region xmi:id="_iZW-0AdxEeadtKuU2t6fMg" name="Region1">
+          <transition xmi:id="_6Zog8AdxEeadtKuU2t6fMg" name="init" source="_jvWhYAdxEeadtKuU2t6fMg" target="_kbRMMAdxEeadtKuU2t6fMg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_hM79EAdzEeadtKuU2t6fMg" name="intial">
+              <language>C++</language>
+              <body>    //port2.registerSPP(&quot;portsap&quot;);
+    std::cout&lt;&lt;&quot;sender is started\n&quot;;
+    Timer1.informEvery(UMLRTTimespec(1,0), 4);
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_fe-pkC9LEeaxYMPe_sHEiw" name="sendmsg" source="_kbRMMAdxEeadtKuU2t6fMg" target="_kbRMMAdxEeadtKuU2t6fMg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_bif7AC9NEeaxYMPe_sHEiw" name="sendmsg">
+              <language>C++</language>
+              <body>    //port4.msg().send();
+    //port4.query().send(4);
+    ObserverEvent  e1;
+    e1.event.setSourceName(&quot;sendmsg&quot;);
+    e1.event.setCapsuleInstance(this->getName());
+    e1.event.setTimePointToNow();
+    e1.event.setEventSourceKind(ACTIONECODE);
+    e1.event.setEventType(ACTIONSTART);
+    e1.event.setCpuTik();
+    e1.event.setPayloadField(&quot;TRANSITIONTYPE&quot;, &quot;Self-EXTERNAL-TRANISTION&quot;);
+    //e1.test3=100;
+    //ObserverComm.event(&quot;test&quot;).send();
+    ObserverComm.event(e1).send();
+    std::cout&lt;&lt;&quot;message has been sent\n&quot;;
+</body>
+            </effect>
+            <trigger xmi:id="_XT07IC9NEeaxYMPe_sHEiw" name="Timeout" port="_4AvSsC9MEeaxYMPe_sHEiw">
+              <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+            </trigger>
+          </transition>
+          <transition xmi:id="__dy24DAMEeaxYMPe_sHEiw" source="_kbRMMAdxEeadtKuU2t6fMg" target="_kbRMMAdxEeadtKuU2t6fMg">
+            <trigger xmi:id="_mhuO4DCQEeaxYMPe_sHEiw" event="_KTIEcDCLEeaxYMPe_sHEiw" port="_gIjKgDCJEeaxYMPe_sHEiw"/>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_jvWhYAdxEeadtKuU2t6fMg" name="Initial1"/>
+          <subvertex xmi:type="uml:State" xmi:id="_kbRMMAdxEeadtKuU2t6fMg" name="Running"/>
+        </region>
+      </ownedBehavior>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_XIyCcAdxEeadtKuU2t6fMg" name="Observer" isActive="true">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_k0n4EDCJEeaxYMPe_sHEiw" name="ObserverComm" visibility="public" type="_KS0icDCLEeaxYMPe_sHEiw" isOrdered="true" aggregation="composite" isBehavior="true">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_k03IoDCJEeaxYMPe_sHEiw" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_k03vsDCJEeaxYMPe_sHEiw" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_bJCsQDGJEeaxYMPe_sHEiw" name="clientConn"/>
+      <ownedAttribute xmi:id="_id3i8DHEEeaxYMPe_sHEiw" name="config"/>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_W2ELwDKoEeaxYMPe_sHEiw" name="configTimer" visibility="public" isOrdered="true" aggregation="composite" isBehavior="true">
+        <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_W2JEQDKoEeaxYMPe_sHEiw" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_W2JrUDKoEeaxYMPe_sHEiw" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_UbjWgDK7Eea2-oZZIR7RkQ" name="checkTCPConnTimer" visibility="public" isOrdered="true" aggregation="composite" isBehavior="true">
+        <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UdCkQDK7Eea2-oZZIR7RkQ" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UdJR8DK7Eea2-oZZIR7RkQ" value="1"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_9VpAgD8TEea_INjZTfhBHQ" name="sharedMemory"/>
+      <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_dy-CgAdxEeadtKuU2t6fMg" name="Observer">
+        <region xmi:id="_f2Z54AdxEeadtKuU2t6fMg" name="Region1">
+          <transition xmi:id="_9XO6gAdxEeadtKuU2t6fMg" name="init" source="_8BWssAdxEeadtKuU2t6fMg" target="_fxzoADCVEeaxYMPe_sHEiw">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_USaAUAdzEeadtKuU2t6fMg" name="initial">
+              <language>C++</language>
+              <body>    // instantiate the configutility class 
+    std::cout&lt;&lt;&quot;Observer is Starting\n&quot;;
+    config.setCommentStr(&quot;#&quot;);
+    config.setFieldSeperaor(&quot;=&quot;);
+    config.setConfigFileName(&quot;config&quot;);
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_j37AMAfBEeadtKuU2t6fMg" name="gotEvent" source="_8cnsYAdxEeadtKuU2t6fMg" target="_8cnsYAdxEeadtKuU2t6fMg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_8CLkwAfBEeadtKuU2t6fMg" name="recordAndForward">
+              <language>C++</language>
+              <body>    // send all event to external application, or write them to share library, if the capacity is full and there is no connection earase the messages
+</body>
+            </effect>
+            <trigger xmi:id="_tgs4UAfBEeadtKuU2t6fMg" name="newEvent" event="_VA1yEDCQEeaxYMPe_sHEiw" port="_k0n4EDCJEeaxYMPe_sHEiw"/>
+          </transition>
+          <transition xmi:id="_xBXrUDCVEeaxYMPe_sHEiw" source="_fxzoADCVEeaxYMPe_sHEiw" target="_7OfZgD7hEeaZboTzPJJ9rA">
+            <trigger xmi:id="_5BhSADK0Eea2-oZZIR7RkQ" port="_W2ELwDKoEeaxYMPe_sHEiw">
+              <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+            </trigger>
+          </transition>
+          <transition xmi:id="_d9A0IDCWEeaxYMPe_sHEiw" source="_NpKLIDCWEeaxYMPe_sHEiw" target="_fxzoADCVEeaxYMPe_sHEiw"/>
+          <transition xmi:id="_kgyDIDCWEeaxYMPe_sHEiw" guard="_n1oucDKsEeaxYMPe_sHEiw" source="_NpKLIDCWEeaxYMPe_sHEiw" target="_8cnsYAdxEeadtKuU2t6fMg">
+            <ownedRule xmi:id="_n1oucDKsEeaxYMPe_sHEiw" name="checkTCPConn">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_n1oucTKsEeaxYMPe_sHEiw" name="checkconnectionState">
+                <language>C++</language>
+                <body>    if (clientConn.checkConnectionStatus()==-1)
+    return false;
+    else
+    return true;
+</body>
+              </specification>
+            </ownedRule>
+          </transition>
+          <transition xmi:id="_8bR5cDG_EeaxYMPe_sHEiw" name="checkConn" source="_8cnsYAdxEeadtKuU2t6fMg" target="_8cnsYAdxEeadtKuU2t6fMg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_pM3HUDHAEeaxYMPe_sHEiw" name="checkConn">
+              <language>C++</language>
+              <body>    // check if the connection is open
+    // if not establish the connection
+    //-----
+</body>
+            </effect>
+            <trigger xmi:id="_GaezADK8Eea2-oZZIR7RkQ" port="_UbjWgDK7Eea2-oZZIR7RkQ">
+              <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+            </trigger>
+          </transition>
+          <transition xmi:id="_MJ7joDHAEeaxYMPe_sHEiw" name="sendEvents" source="_8cnsYAdxEeadtKuU2t6fMg" target="_8cnsYAdxEeadtKuU2t6fMg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_1s4SUDHAEeaxYMPe_sHEiw" name="sendAllEvent">
+              <language>C++</language>
+              <body>// send all event to external application, or write them to share library, if the capacity is full and there is no connection earase the messages</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_39bb8D7iEeaZboTzPJJ9rA" name="setupSharedMem" guard="_kxvjAD8KEea_INjZTfhBHQ" source="_7OfZgD7hEeaZboTzPJJ9rA" target="_jxqGMD7iEeaZboTzPJJ9rA">
+            <ownedRule xmi:id="_kxvjAD8KEea_INjZTfhBHQ" name="checkCommType">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_rtbiwD8KEea_INjZTfhBHQ">
+                <language>C++</language>
+                <body>    std::string tempStr =config.getConfig(&quot;comm&quot;);
+    if (tempStr==&quot;shm&quot;)
+    return true;
+    else 
+    return false;
+</body>
+              </specification>
+            </ownedRule>
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_d-rn4D8XEea_INjZTfhBHQ" name="setupSHM">
+              <language>C++</language>
+              <body>    // set shared memory as a server
+    sharedMemory.setUp(server);
+    std::cout&lt;&lt;&quot;observer works with SHM&quot;&lt;&lt;&quot;\n&quot;;
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_Y0194D7jEeaZboTzPJJ9rA" source="_7OfZgD7hEeaZboTzPJJ9rA" target="_NpKLIDCWEeaxYMPe_sHEiw">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_577BwD8KEea_INjZTfhBHQ">
+              <language>C++</language>
+              <body>    clientConn.conn();
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_ogzgcD7jEeaZboTzPJJ9rA" name="reconfigTCP" source="_8cnsYAdxEeadtKuU2t6fMg" target="_fxzoADCVEeaxYMPe_sHEiw"/>
+          <transition xmi:id="_vJoOkD7jEeaZboTzPJJ9rA" name="reconfigSHM" source="_jxqGMD7iEeaZboTzPJJ9rA" target="_fxzoADCVEeaxYMPe_sHEiw"/>
+          <transition xmi:id="_NZlocD8YEea_INjZTfhBHQ" name="processAndForwardEvent" source="_jxqGMD7iEeaZboTzPJJ9rA" target="_jxqGMD7iEeaZboTzPJJ9rA">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_IJ0QkD8bEea_INjZTfhBHQ" name="processAndForwardEvent">
+              <language>C++</language>
+              <body>    std::cout&lt;&lt;&quot;Observer: new event, write to shared memory:&quot;&lt;&lt; umlrtparam_eventInfo.event&lt;&lt;&quot;\n&quot;;
+    /// before adding serailization you can add any filtering or option you need
+    std::stringstream ss;
+    boost::archive::text_oarchive oa(ss);
+    oa &lt;&lt; umlrtparam_eventInfo.event;
+    //sharedMemory.safePushBackString(std::string(umlrtparam_eventInfo));
+    sharedMemory.safePushBackString(ss.str());
+</body>
+            </effect>
+            <trigger xmi:id="_ffWT8D8YEea_INjZTfhBHQ" name="newEvent" event="_VA1yEDCQEeaxYMPe_sHEiw" port="_k0n4EDCJEeaxYMPe_sHEiw"/>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_8BWssAdxEeadtKuU2t6fMg" name="InitObserver"/>
+          <subvertex xmi:type="uml:State" xmi:id="_8cnsYAdxEeadtKuU2t6fMg" name="observationWithTCP">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_z8_kADK7Eea2-oZZIR7RkQ" name="ObservationStateEntry">
+              <language>C++</language>
+              <body></body>
+            </entry>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_fxzoADCVEeaxYMPe_sHEiw" name="configLoad">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_VVPSEDG_EeaxYMPe_sHEiw" name="initObserver">
+              <language>C++</language>
+              <body>    //init the time for config read 
+    configTimer.informAt(UMLRTTimespec(2,0),4);
+    // include read config
+    config.loadConfig();
+    ///
+    std::string tempStr =config.getConfig(&quot;ip&quot;);
+    if (tempStr!=&quot;&quot;)
+    clientConn.setServerAddress(tempStr);
+    tempStr=config.getConfig(&quot;port&quot;);
+    if (tempStr==&quot;&quot;)
+    clientConn.setPort(atoi(tempStr.c_str()));
+    // configure shared memory
+    tempStr=config.getConfig(&quot;areaname&quot;);
+    if (tempStr!=&quot;&quot;)
+    sharedMemory.setName(tempStr);
+    tempStr=config.getConfig(&quot;qname&quot;);
+    if (tempStr!=&quot;&quot;)
+    sharedMemory.setQueueName(tempStr);
+</body>
+            </entry>
+          </subvertex>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_NpKLIDCWEeaxYMPe_sHEiw" name="checkTCPConn" kind="choice"/>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_7OfZgD7hEeaZboTzPJJ9rA" name="CommsType" kind="choice"/>
+          <subvertex xmi:type="uml:State" xmi:id="_jxqGMD7iEeaZboTzPJJ9rA" name="observationWithSharedMem">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_7_JoUD8LEea_INjZTfhBHQ">
+              <language>C++</language>
+              <body></body>
+            </entry>
+          </subvertex>
+        </region>
+      </ownedBehavior>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_KS2-sDCLEeaxYMPe_sHEiw" name="Observation">
+      <packagedElement xmi:type="uml:Collaboration" xmi:id="_KS0icDCLEeaxYMPe_sHEiw" name="Observation">
+        <interfaceRealization xmi:id="_KTCk4DCLEeaxYMPe_sHEiw" client="_KS0icDCLEeaxYMPe_sHEiw" supplier="_KS5a8DCLEeaxYMPe_sHEiw" contract="_KS5a8DCLEeaxYMPe_sHEiw"/>
+        <interfaceRealization xmi:id="_KTLu0DCLEeaxYMPe_sHEiw" client="_KS0icDCLEeaxYMPe_sHEiw" supplier="_KTJSkDCLEeaxYMPe_sHEiw" contract="_KTJSkDCLEeaxYMPe_sHEiw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_KS5a8DCLEeaxYMPe_sHEiw" name="Observation">
+        <ownedOperation xmi:id="_VA1LADCQEeaxYMPe_sHEiw" name="event">
+          <ownedParameter xmi:id="_Er_EADHDEeaxYMPe_sHEiw" name="eventInfo" type="_mq-gIHP9EeaEDcVtgDNKNw"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_KTDzADCLEeaxYMPe_sHEiw" name="Observation~"/>
+      <packagedElement xmi:type="uml:Usage" xmi:id="_KTHdYDCLEeaxYMPe_sHEiw" client="_KS0icDCLEeaxYMPe_sHEiw" supplier="_KTDzADCLEeaxYMPe_sHEiw"/>
+      <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_KTIEcDCLEeaxYMPe_sHEiw" name="*"/>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_KTJSkDCLEeaxYMPe_sHEiw" name="ObservationIO"/>
+      <packagedElement xmi:type="uml:Usage" xmi:id="_KTMV4DCLEeaxYMPe_sHEiw" client="_KS0icDCLEeaxYMPe_sHEiw" supplier="_KTJSkDCLEeaxYMPe_sHEiw"/>
+      <packagedElement xmi:type="uml:CallEvent" xmi:id="_VA1yEDCQEeaxYMPe_sHEiw" operation="_VA1LADCQEeaxYMPe_sHEiw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_mq-gIHP9EeaEDcVtgDNKNw" name="ObserverEvent">
+      <ownedAttribute xmi:id="_wGZr8HSxEeaEDcVtgDNKNw" name="event" type="_wc-xMHS3EeaEDcVtgDNKNw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_wc-xMHS3EeaEDcVtgDNKNw" name="Event"/>
+    <packagedElement xmi:type="uml:Artifact" xmi:id="_9D4nUHS3EeaEDcVtgDNKNw" name="Event" fileName=""/>
+    <profileApplication xmi:id="_MlWf8AdxEeadtKuU2t6fMg">
+      <eAnnotations xmi:id="_MlYVIAdxEeadtKuU2t6fMg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/uml-rt.profile.uml#_1h74oEeVEeO0lv5O1DTHOQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_IjNqwAdyEeadtKuU2t6fMg">
+      <eAnnotations xmi:id="_IjO44AdyEeadtKuU2t6fMg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/statemachine#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/UMLRealTimeSM-addendum.profile.uml#_KLcn0FDtEeOA4ecmvfqvaw"/>
+    </profileApplication>
+    <profileApplication xmi:id="_IjQHAAdyEeadtKuU2t6fMg">
+      <eAnnotations xmi:id="_IjQuEAdyEeadtKuU2t6fMg" source="PapyrusVersion">
+        <details xmi:id="_IjQuEQdyEeadtKuU2t6fMg" key="Version" value="0.0.11"/>
+        <details xmi:id="_IjQuEgdyEeadtKuU2t6fMg" key="Comment" value=""/>
+        <details xmi:id="_IjQuEwdyEeadtKuU2t6fMg" key="Copyright" value=""/>
+        <details xmi:id="_IjQuFAdyEeadtKuU2t6fMg" key="Date" value="2015-12-10"/>
+        <details xmi:id="_IjQuFQdyEeadtKuU2t6fMg" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:id="_IjQHAQdyEeadtKuU2t6fMg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/cppproperties#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_da6scDGCEeaxYMPe_sHEiw">
+      <eAnnotations xmi:id="_da7TgDGCEeaxYMPe_sHEiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/FCM/1#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://FCM_PROFILES/FCM.profile.uml#_5mvT0MtjEd2H_o0jIC6qDQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_dbEdcDGCEeaxYMPe_sHEiw">
+      <eAnnotations xmi:id="_dbFEgDGCEeaxYMPe_sHEiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/MARTE/1#//Alloc"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://Papyrus_PROFILES/MARTE.profile.uml#_ar8OsAPMEdyuUt-4qHuVvQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_dbKkEDGCEeaxYMPe_sHEiw">
+      <eAnnotations xmi:id="_dbKkETGCEeaxYMPe_sHEiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/MARTE/1#//HLAM"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://Papyrus_PROFILES/MARTE.profile.uml#_yNSZIAPMEdyuUt-4qHuVvQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_dbXYYDGCEeaxYMPe_sHEiw">
+      <eAnnotations xmi:id="_dbXYYTGCEeaxYMPe_sHEiw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/MARTE/1#//GCM"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://Papyrus_PROFILES/MARTE.profile.uml#_YgAioAPMEdyuUt-4qHuVvQ"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLRealTime:Capsule xmi:id="_Sl00oAdxEeadtKuU2t6fMg" base_Class="_SikFQAdxEeadtKuU2t6fMg"/>
+  <UMLRealTime:Capsule xmi:id="_U9f2oAdxEeadtKuU2t6fMg" base_Class="_U84yoAdxEeadtKuU2t6fMg"/>
+  <UMLRealTime:Capsule xmi:id="_XJDvQAdxEeadtKuU2t6fMg" base_Class="_XIyCcAdxEeadtKuU2t6fMg"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_voL7IAdyEeadtKuU2t6fMg" implementationPreface="#include &lt;iostream>&#xA;#include &lt;unistd.h>" base_Class="_U84yoAdxEeadtKuU2t6fMg"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_G5QN4AdzEeadtKuU2t6fMg" headerPreface="#include &lt;iostream>&#xA;#include &lt;unistd.h>&#xA;#include &quot;TCPClient.h&quot;&#xA;#include &quot;Config.h&quot;&#xA;#include &quot;SharedMem.h&quot;&#xA;using  namespace Comms;&#xA;using  namespace ConfigUtil;" implementationPreface="" base_Class="_XIyCcAdxEeadtKuU2t6fMg"/>
+  <UMLRealTime:CapsulePart xmi:id="_qRDB4AdzEeadtKuU2t6fMg" base_Property="_qQ-wcAdzEeadtKuU2t6fMg"/>
+  <UMLRealTime:CapsulePart xmi:id="_q0AlAAdzEeadtKuU2t6fMg" base_Property="_qz-v0AdzEeadtKuU2t6fMg"/>
+  <UMLRealTime:RTPort xmi:id="_4BUhgC9MEeaxYMPe_sHEiw" base_Port="_4AvSsC9MEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTPort xmi:id="_gIybEDCJEeaxYMPe_sHEiw" isNotification="true" isWired="false" base_Port="_gIjKgDCJEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTPort xmi:id="_k0-dYDCJEeaxYMPe_sHEiw" isPublish="true" isWired="false" base_Port="_k0n4EDCJEeaxYMPe_sHEiw"/>
+  <UMLRealTime:ProtocolContainer xmi:id="_KS4M0DCLEeaxYMPe_sHEiw" base_Package="_KS2-sDCLEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTMessageSet xmi:id="_KTB90DCLEeaxYMPe_sHEiw" base_Interface="_KS5a8DCLEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTMessageSet xmi:id="_KTGPQDCLEeaxYMPe_sHEiw" base_Interface="_KTDzADCLEeaxYMPe_sHEiw" rtMsgKind="out"/>
+  <UMLRealTime:RTMessageSet xmi:id="_KTLHwDCLEeaxYMPe_sHEiw" base_Interface="_KTJSkDCLEeaxYMPe_sHEiw" rtMsgKind="inOut"/>
+  <UMLRealTime:Protocol xmi:id="_KTNkADCLEeaxYMPe_sHEiw" base_Collaboration="_KS0icDCLEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTPort xmi:id="_W2KSYDKoEeaxYMPe_sHEiw" base_Port="_W2ELwDKoEeaxYMPe_sHEiw"/>
+  <UMLRealTime:RTPort xmi:id="_UdTC8DK7Eea2-oZZIR7RkQ" base_Port="_UbjWgDK7Eea2-oZZIR7RkQ"/>
+  <RTCppProperties:PassiveClassProperties xmi:id="_57UdgHP_EeaEDcVtgDNKNw" headerPreface="using namespace events;" base_Class="_mq-gIHP9EeaEDcVtgDNKNw"/>
+  <RTCppProperties:PassiveClassProperties xmi:id="_zAhsAHS3EeaEDcVtgDNKNw" base_Class="_wc-xMHS3EeaEDcVtgDNKNw" generateHeader="false" generateImplementation="false"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_Bw03kHS4EeaEDcVtgDNKNw" base_Artifact="_9D4nUHS3EeaEDcVtgDNKNw" includeFile="/*&#xA; * Event.h&#xA; *&#xA; *  Created on: Sep 2, 2016&#xA; *      Author: mojtababagherzadeh&#xA; *      event class for saving real-time system events during observation&#xA; *      part of the event kind and type  are defined based on paper&#xA; *      Graf, Susanne, Ileana Ober, and Iulian Ober. &quot;A real-time profile for UML.&quot;&#xA; *      International Journal on Software Tools for Technology Transfer 8.2 (2006): 113-127.&#xA; */&#xA;&#xA;&#xA;#include &lt;iostream>&#xA;#include &lt;map>&#xA;#include &quot;umlrttimespec.hh&quot;&#xA;#include &lt;boost/archive/text_oarchive.hpp>&#xA;#include &lt;boost/archive/text_iarchive.hpp>&#xA;#include &lt;boost/serialization/map.hpp>&#xA;#include &lt;sstream>&#xA;#include  &lt;time.h>&#xA;#include &quot;umlrtobjectclass.hh&quot;&#xA;&#xA;namespace events {&#xA;// main category for the event sources, refer to apendix of paper for detail&#xA;enum EVENTSOURCEKIND{SIGNALLING,METHOD,ACTIONECODE,TRANISTION,STATE,CAPSULE,ATTRIBUTE,TIMER,RESOURCE,CONNECTION,UNKOWNSOURCEKIND};&#xA;// types of signal events&#xA;enum EVENTTYPE{&#xA;&#x9;SENDSIGNAL,RECIEVESIGNAL,DEFERSIGNAL,RECALLSIGNAL,CANCELLSIGNAL, // signal event&#xA;&#x9;METHODCALL,METHODCALLRECIEVE,METHODSTARTEXECUTE,METHODRETURN,METHODFAILED,METHODRETURNRECIEVED, // method event&#xA;&#x9;ACTIONSTART,ACTIONEND, // action code events&#xA;&#x9;TRANISTIONSTART,TRANISTIONEND ,// TRANSITION&#xA;&#x9;STATEENTRYSTART,STATEENTRYEND,STATEEXITSTART,STATEEXITEND,STATEIDLESTART,STATEIDLEEND, // state events&#xA;&#x9;CAPSULEINSTNSIATE,CAPSULEFREE, // capsule event&#xA;&#x9;ATTRIBUTEINSTNSIATE,ATTRIBUTEFREE,ATTRIBUTECHANGE, // attribute event&#xA;&#x9;TIMERSTART,TIMERRESET,TIMERCANCELL,TIMERTIMEDOUT, // Timer events&#xA;&#x9;RESOURCEASSIGNED,RESOURCERELEASED,RESOURCEPREEMPTED,RESOURCERESUMED,   // resource event&#xA;&#x9;CONNECTIONESTABLISHED,CONNECTIONFAILED, // connection event&#xA;&#x9;UNKOWNTYPE&#xA;};&#xA;//enum SIGNALINGEVENTTYPE{SENDSIGNAL,RECIEVESIGNAL,DEFERSIGNAL,RECALLSIGNAL,CANCELLSIGNAL};&#xA;// types of event for function call&#xA;//enum METHODEVENTTYPE{METHODCALL,METHODCALLRECIEVE,METHODSTARTEXECUTE,METHODRETURN,METHODFAILED,METHODRETURNRECIEVED};&#xA;// types of event for action codes&#xA;//enum ACTIONCODEEVENTTYPE{ACTIONSTART,ACTIONEND};&#xA;// types of event for transitions&#xA;//enum TRAISIONEVENTTYPE{TRAISIONSTART,TRAISIONEND};&#xA;// types of event for state&#xA;//enum STATEEVENTTYPE{STATEENTRYSTART,STATEENTRYEND,STATEEXITSTART,STATEEXITEND,STATEIDLESTART,STATEIDLEEND};&#xA;// types of event for capsule&#xA;//enum CAPSULEEVENTTYPE{CAPSULEINSTNSIATE,CAPSULEFREE};&#xA;// types of event for function call&#xA;//enum ATTRIBUTEEVENTTYPE{ATTRIBUTEINSTNSIATE,ATTRIBUTEFREE,ATTRIBUTECHANGE};&#xA;// types of event for timer&#xA;//enum TIMEREVENTTYPE{TIMERSTART,TIMERRESET,TIMERCANCELL,TIMERTIMEDOUT};&#xA;// types of event for resources&#xA;//enum RESOURCEEVENTTYPE{RESOURCEASSIGNED,RESOURCERELEASED,RESOURCEPREEMPTED,RESOURCERESUMED};&#xA;/// the map is used to save the message payload for each event type and can be customized based on event type&#xA;typedef std::map&lt;std::string,std::string> EventPayload;&#xA;class Event {&#xA;public:&#xA;&#x9;Event(std::string capsuleInstance,std::string sourceName);&#xA;&#x9;Event(std::string capsuleInstance,std::string sourceName, EVENTSOURCEKIND eventSourceKind);&#xA;&#x9;Event(std::string capsuleInstance,std::string sourceName,EVENTSOURCEKIND eventSourceKind, EVENTTYPE eventType);&#xA;&#x9;Event(std::string capsuleInstance,std::string sourceName,EVENTSOURCEKIND eventSourceKind, EVENTTYPE eventType,long timepointsec,long timepointnano=0);&#xA;&#x9;Event(std::string capsuleInstance,std::string sourceName,EVENTSOURCEKIND eventSourceKind, EVENTTYPE eventType,EventPayload eventPaylod,long timepointsec=0,long timepointnano=0);&#xA;    Event();&#xA;&#x9;virtual ~Event();&#xA;&#x9;const std::string&amp; getCapsuleInstance() const;&#xA;&#x9;void setCapsuleInstance(const std::string&amp; capsuleInstance);&#xA;&#x9;const EventPayload&amp; getEventPayload() const;&#xA;&#x9;void setEventPayload(const EventPayload&amp; eventPayload);&#xA;&#x9;EVENTSOURCEKIND getEventSourceKind() const;&#xA;&#x9;void setEventSourceKind(EVENTSOURCEKIND eventsource);&#xA;&#x9;const std::string&amp; getSourceName() const;&#xA;&#x9;void setSourceName(const std::string&amp; sourceName);&#xA;&#x9;/// set time of event to the current timestamp, the time stamp is the nanosecond counted from 1970 and saved as sec and nanosecond&#xA;&#x9;void setTimePointToNow();&#xA;&#x9;friend std::ostream &amp; operator &lt;&lt; (std::ostream &amp; out, const Event  Event );&#xA;&#x9;//friend std::istream &amp; operator >> (std::istream &amp; in, const Event  Event );&#xA;&#x9;long getTimePointNano() const;&#xA;&#x9;void setTimePointNano(long timePointNano);&#xA;&#x9;long getTimePointSecond() const;  // read the current timestamp and save them in related fields, it is better we use this field instead of setting time manually&#xA;&#x9;void setTimePointSecond(long timePointSecond);&#xA;&#x9;/// add filed to the message payload&#xA;&#x9;void setPayloadField(std::string key, std::string value);&#xA;&#x9;std::string getPayloadField(std::string key);&#xA;&#x9;std::string  getEventSourceKindLabel() const;&#xA;&#x9;EVENTTYPE getEventType() const;&#xA;&#x9;void setEventType(EVENTTYPE eventType);&#xA;&#x9;std::string getEventTypeLabel() const;&#xA;&#xA;    //// label for enumeration&#xA;&#x9;static const   std::string EVENTSOURCEKINDLABEL[];&#xA;&#x9;static const   std::string EVENTTYPELABEL[];&#xA;&#xA;    //// generate unqiue if for each thread&#xA;&#x9;static std::string generateEventID();&#xA;    //// cpu time fuction&#xA;&#x9;double getCpuTik() const;&#xA;&#x9;void setCpuTik();  ///  this save the cpu tick process until that moment, by using setCpuTik/CLOCKS_PER_SEC can be converted to second&#xA;&#x9;static double currentCpuTik();&#xA;&#x9;/// Unique event id&#xA;&#x9;const std::string&amp; getEventId() const;&#xA;    //// customize dump of event's fields to string&#xA;&#xA;&#x9;std::string dumpToString(std::string format,  char seperator='@');&#xA;&#x9;std::string payloadToString(char seperator=',');&#xA;&#xA;private:&#xA;&#x9;/// implementaion related to serialization&#xA;&#x9;friend class boost::serialization::access;&#xA;&#x9;template&lt;class Archive> void serialize(Archive &amp; ar, const unsigned int version=1,const std::string requiredField=&quot;&quot;);&#xA;&#xA;&#x9;/// filed detail&#xA;&#x9;EVENTSOURCEKIND eventSourceKind; // shows the evenetsource kind&#xA;&#x9;EVENTTYPE eventType;                   // shows event type&#xA;&#x9;std::string capsuleInstance;     // show capsule instance name that generate event&#xA;&#x9;std::string sourceName;          // based on the event source kind, this fields shows the&#xA;&#x9;long timePointSecond;&#xA;&#x9;long timePointNano;&#xA;&#x9;EventPayload eventPayload;&#xA;&#x9;std::string eventID;&#xA;&#x9;double cpuTik;&#xA;&#x9;////for generating and parsing purpose&#xA;&#x9;std::vector&lt;std::string> fieldNames;&#xA;&#x9;//std::map&lt;std::string,bool> fieldsInOutput;&#xA;&#xA;};&#xA;&#xA;} /* namespace events */&#xA;//// function to serialize, whenever we add new data filed, if we need to send it to clinet add the related line in below function&#xA;template&lt;class Archive>&#xA;inline void events::Event::serialize(Archive&amp; ar, const unsigned int version,&#xA;&#x9;&#x9;const std::string requiredField) {&#xA;&#x9;ar &amp; eventID;&#xA;&#x9;ar &amp; eventSourceKind;&#xA;&#x9;//ar &amp; &quot;test1&quot;;&#xA;&#x9;ar &amp; eventType;&#xA;&#x9;ar &amp; capsuleInstance;&#xA;&#x9;ar &amp; sourceName;&#xA;&#x9;ar &amp; cpuTik;&#xA;&#x9;ar &amp; timePointSecond;&#xA;&#x9;ar &amp; timePointNano;&#xA;&#x9;ar &amp; eventPayload;&#xA;&#xA;}&#xA;&#xA;&#xA;" sourceFile="/*&#xA; * Event.cpp&#xA; *&#xA; *  Created on: Sep 2, 2016&#xA; *      Author: mojtababagherzadeh&#xA; */&#xA;&#xA;&#xA;&#xA;namespace events {&#xA;const   std::string Event::EVENTSOURCEKINDLABEL[]={&quot;SIGNALLING&quot;,&quot;METHOD&quot;,&quot;ACTIONECODE&quot;,&quot;TRANISTION&quot;,&quot;STATE&quot;,&quot;CAPSULE&quot;,&quot;ATTRIBUTE&quot;,&quot;TIMER&quot;,&quot;RESOURCE&quot;,&quot;CONNECTION&quot;,&quot;UNKOWNSOURCEKIND&quot;};&#xA;const   std::string Event::EVENTTYPELABEL[]={&#xA;&#x9;&#x9;&quot;SENDSIGNAL&quot;,&quot;RECIEVESIGNAL&quot;,&quot;DEFERSIGNAL&quot;,&quot;RECALLSIGNAL&quot;,&quot;CANCELLSIGNAL&quot;, // signal event&#xA;&#x9;&#x9;&quot;METHODCALL&quot;,&quot;METHODCALLRECIEVE&quot;,&quot;METHODSTARTEXECUTE&quot;,&quot;METHODRETURN&quot;,&quot;METHODFAILED&quot;,&quot;METHODRETURNRECIEVED&quot;, // method event&#xA;&#x9;&#x9;&quot;ACTIONSTART&quot;,&quot;ACTIONEND&quot;, // action code events&#xA;&#x9;&#x9;&quot;TRANISTIONSTART&quot;,&quot;TRANISTIONEND&quot; ,// TRANSITION&#xA;&#x9;&#x9;&quot;STATEENTRYSTART&quot;,&quot;STATEENTRYEND&quot;,&quot;STATEEXITSTART&quot;,&quot;STATEEXITEND&quot;,&quot;STATEIDLESTART&quot;,&quot;STATEIDLEEND&quot;, // state events&#xA;&#x9;&#x9;&quot;CAPSULEINSTNSIATE&quot;,&quot;CAPSULEFREE&quot;, // capsule event&#xA;&#x9;&#x9;&quot;ATTRIBUTEINSTNSIATE&quot;,&quot;ATTRIBUTEFREE&quot;,&quot;ATTRIBUTECHANGE&quot;, // attribute event&#xA;&#x9;&#x9;&quot;TIMERSTART&quot;,&quot;TIMERRESET&quot;,&quot;TIMERCANCELL&quot;,&quot;TIMERTIMEDOUT&quot;, // Timer events&#xA;&#x9;&#x9;&quot;RESOURCEASSIGNED&quot;,&quot;RESOURCERELEASED&quot;,&quot;RESOURCEPREEMPTED&quot;,&quot;RESOURCERESUMED&quot;, // resource event&#xA;&#x9;&#x9;&quot;CONNECTIONESTABLISHED&quot;,&quot;CONNECTIONFAILED&quot;, //&#xA;&#x9;&#x9;&quot;UNKOWNTYPE&quot;&#xA;};&#xA;//&#x9;&#x9;{&quot;METHODCALL&quot;,&quot;METHODCALLRECIEVE&quot;,&quot;METHODSTARTEXECUTE&quot;,&quot;METHODRETURN&quot;,&quot;METHODFAILED&quot;,&quot;METHODRETURNRECIEVED&quot;}};&#xA;Event::Event() {&#xA;&#xA;&#x9;this->capsuleInstance=&quot;&quot;;&#xA;&#x9;this->eventType=UNKOWNTYPE;&#xA;&#x9;this->eventSourceKind=UNKOWNSOURCEKIND;&#xA;&#x9;this->sourceName=&quot;&quot;;&#xA;&#x9;this->timePointSecond=0;&#xA;&#x9;this->timePointNano=0;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;Event::~Event() {&#xA;&#x9;// TODO Auto-generated destructor stub&#xA;}&#xA;&#xA;std::ostream &amp; operator &lt;&lt; (std::ostream &amp; out, const Event  event )&#xA;{&#xA;&#x9; // print all fields seperated with ';', subfiled seperated with ',' and : for mapped value&#xA;&#x9; out&lt;&lt;event.getEventId()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getCapsuleInstance()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getEventSourceKindLabel()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getEventTypeLabel()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getSourceName()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getCpuTik()&lt;&lt;';';&#xA;&#x9; out&lt;&lt;event.getTimePointSecond()&lt;&lt;',';&#xA;&#x9; out&lt;&lt;event.getTimePointNano()&lt;&lt;';';&#xA;&#x9; /// message payload&#xA;&#x9; for(std::map&lt;std::string,std::string>::const_iterator it = event.eventPayload.begin(); it != event.eventPayload.end(); ++it)&#xA;&#x9;    &#x9;out&lt;&lt; it->first &lt;&lt;':'&lt;&lt;it->second&lt;&lt;&quot;,&quot;;&#xA;&#x9; return out;&#xA;}&#xA;/*&#xA;std::istream &amp; operator >> (std::istream &amp; in, const Event  Event )&#xA;{&#xA;&#x9;return in;&#xA;}*/&#xA;const std::string&amp; Event::getCapsuleInstance() const {&#xA;&#x9;return capsuleInstance;&#xA;}&#xA;&#xA;void Event::setCapsuleInstance(const std::string&amp; capsuleInstance) {&#xA;&#x9;this->capsuleInstance = capsuleInstance;&#xA;}&#xA;&#xA;const EventPayload&amp; Event::getEventPayload() const {&#xA;&#x9;return eventPayload;&#xA;}&#xA;&#xA;void Event::setEventPayload(const EventPayload&amp; eventPayload) {&#xA;&#x9;this->eventPayload = eventPayload;&#xA;}&#xA;&#xA;EVENTSOURCEKIND Event::getEventSourceKind() const {&#xA;&#x9;return eventSourceKind;&#xA;}&#xA;&#xA;void Event::setEventSourceKind(EVENTSOURCEKIND eventSourceKind) {&#xA;&#x9;this->eventSourceKind = eventSourceKind;&#xA;}&#xA;&#xA;&#xA;const std::string&amp; Event::getSourceName() const {&#xA;&#x9;return sourceName;&#xA;}&#xA;&#xA;void Event::setSourceName(const std::string&amp; sourceName) {&#xA;&#x9;this->sourceName = sourceName;&#xA;}&#xA;&#xA;&#xA;&#xA;Event::Event( std::string capsuleInstance,&#xA;&#x9;&#x9;std::string sourceName) {&#xA;&#x9;this->capsuleInstance=capsuleInstance;&#xA;&#x9;this->sourceName=sourceName;&#xA;&#x9;this->eventType=UNKOWNTYPE;&#xA;&#x9;this->eventSourceKind=UNKOWNSOURCEKIND;&#xA;&#x9;this->timePointSecond=0;&#xA;&#x9;this->timePointNano=0;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;&#xA;void Event::setTimePointToNow() {&#xA;&#x9;UMLRTTimespec ts;&#xA;&#x9;ts.getclock(ts);&#xA;    this->setTimePointNano(ts.tv_nsec);&#xA;    this->setTimePointSecond(ts.tv_sec);&#xA;}&#xA;&#xA;long Event::getTimePointNano() const {&#xA;&#x9;return timePointNano;&#xA;}&#xA;&#xA;void Event::setTimePointNano(long timePointNano) {&#xA;&#x9;this->timePointNano = timePointNano;&#xA;}&#xA;&#xA;long Event::getTimePointSecond() const {&#xA;&#x9;return timePointSecond;&#xA;}&#xA;&#xA;Event::Event(std::string capsuleInstance,&#xA;&#x9;&#x9;std::string sourceName, EVENTSOURCEKIND eventSourceKind, EVENTTYPE eventType) {&#xA;&#x9;this->capsuleInstance=capsuleInstance;&#xA;&#x9;this->sourceName=sourceName;&#xA;&#x9;this->eventSourceKind=eventSourceKind;&#xA;&#x9;this->eventType=eventType;&#xA;&#x9;this->timePointSecond=0;&#xA;&#x9;this->timePointNano=0;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;&#xA;&#xA;Event::Event( std::string capsuleInstance,&#xA;&#x9;&#x9;std::string sourceName, EVENTSOURCEKIND eventSourceKind, EVENTTYPE eventType,&#xA;&#x9;&#x9;long timepointsec, long timepointnano) {&#xA;&#x9;this->capsuleInstance=capsuleInstance;&#xA;&#x9;this->sourceName=sourceName;&#xA;&#x9;this->eventSourceKind=eventSourceKind;&#xA;&#x9;this->eventType=eventType;&#xA;&#x9;this->timePointSecond=timepointsec;&#xA;&#x9;this->timePointNano=timepointnano;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;Event::Event(std::string capsuleInstance,std::string sourceName,EVENTSOURCEKIND eventSourceKind,&#xA;&#x9;EVENTTYPE eventType,EventPayload eventPayload,long timepointsec,long timepointnano) {&#xA;&#x9;this->capsuleInstance=capsuleInstance;&#xA;&#x9;this->sourceName=sourceName;&#xA;&#x9;this->eventSourceKind=eventSourceKind;&#xA;&#x9;this->eventType=eventType;&#xA;&#x9;this->timePointSecond=timepointsec;&#xA;&#x9;this->timePointNano=timepointnano;&#xA;&#x9;this->eventPayload=eventPayload;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;Event::Event(std::string capsuleInstance, std::string sourceName,&#xA;&#x9;&#x9;EVENTSOURCEKIND eventSourceKind) {&#xA;&#x9;this->capsuleInstance=capsuleInstance;&#xA;&#x9;this->sourceName=sourceName;&#xA;&#x9;this->eventSourceKind=eventSourceKind;&#xA;&#x9;this->eventType=UNKOWNTYPE;&#xA;&#x9;this->timePointSecond=0;&#xA;&#x9;this->timePointNano=0;&#xA;&#x9;this->eventID=generateEventID();&#xA;}&#xA;&#xA;void Event::setTimePointSecond(long timePointSecond) {&#xA;&#x9;this->timePointSecond = timePointSecond;&#xA;}&#xA;&#xA;&#xA;&#xA;EVENTTYPE Event::getEventType() const {&#xA;&#x9;return eventType;&#xA;}&#xA;&#xA;std::string Event::getEventSourceKindLabel(&#xA;&#x9;&#x9;) const {&#xA;&#x9;return this->EVENTSOURCEKINDLABEL[this->getEventSourceKind()];&#xA;}&#xA;&#xA;void Event::setEventType(EVENTTYPE eventType) {&#xA;&#x9;this->eventType = eventType;&#xA;}&#xA;&#xA;&#xA;&#xA;std::string Event::getEventTypeLabel() const {&#xA;&#x9;return this->EVENTTYPELABEL[this->getEventType()];&#xA;}&#xA;&#xA;&#xA;&#xA;void events::Event::setPayloadField(std::string key, std::string value) {&#xA;&#x9;if (key.length()>=1)&#xA;&#x9;&#x9;this->eventPayload[key]=value;&#xA;}&#xA;&#xA; std::string events::Event::getPayloadField(std::string key) {&#xA;&#x9;if (this->eventPayload.count(key))&#xA;&#x9;&#x9;&#x9;return this->eventPayload.at(key);&#xA;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;return &quot;&quot;;&#xA;}&#xA;&#xA;std::string Event::generateEventID() {&#xA;&#x9;UMLRTTimespec ts;&#xA;&#x9;ts.getclock(ts);&#xA;&#x9;std::stringstream ss;&#xA;&#x9;ss&lt;&lt;ts.tv_sec&lt;&lt;ts.tv_nsec;&#xA;&#x9;return ss.str();&#xA;}&#xA;&#xA;&#xA;&#xA;double events::Event::getCpuTik() const {&#xA;&#x9;return this->cpuTik;&#xA;}&#xA;&#xA;const std::string&amp; events::Event::getEventId() const {&#xA;&#x9;return eventID;&#xA;}&#xA;&#xA;void events::Event::setCpuTik() {&#xA;&#xA;    this->cpuTik = currentCpuTik();&#xA;}&#xA;&#xA;double events::Event::currentCpuTik() {&#xA;    return double(clock());&#xA;&#xA;}&#xA;&#xA;std::string Event::dumpToString(std::string format, char seperator) {&#xA;&#x9;//std::vector&lt;std::string> fieldNames;&#xA;&#x9;// parse the format was requested&#xA;&#x9;std::stringstream ss(format);&#xA;&#x9;std::string tempS;&#xA;&#x9;char ch1;&#xA;&#x9;if (format!=&quot;&quot;)&#xA;&#x9;{&#xA;&#x9;&#x9;while (ss >> ch1)&#xA;&#x9;    {&#xA;&#x9;&#x9;&#x9;if ( ch1=='\f' || ch1=='\t' || ch1=='\v' )&#xA;&#x9;&#x9;&#x9;&#x9;continue;&#xA;&#x9;&#x9;&#x9;else if (ch1=='@')&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;&#x9;fieldNames.push_back(tempS);&#xA;&#x9;&#x9;&#x9;&#x9;tempS=&quot;&quot;;&#xA;&#x9;&#x9;&#x9;&#x9;continue;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;tempS=tempS+ch1;&#xA;&#x9;    }&#xA;&#x9;&#x9;if (tempS!=&quot;&quot;)&#xA;&#x9;&#x9;&#x9;fieldNames.push_back(tempS);&#xA;&#x9;}&#xA;&#x9;std::stringstream ss1;&#xA;&#x9;std::vector&lt;std::string>::iterator it;&#xA;&#x9;bool needSeperator=false;&#xA;&#x9;for(it=fieldNames.begin() ; it &lt; fieldNames.end(); it++ )&#xA;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;std::string tempS1=(std::string(*it));&#xA;&#x9;&#x9;&#x9;std::transform(tempS1.begin(), tempS1.end(), tempS1.begin(), ::tolower);&#xA;&#x9;&#x9;&#x9;//std::cout&lt;&lt;tempS1&lt;&lt;&quot;\n&quot;;&#xA;&#x9;&#x9;&#x9;if (tempS1==&quot;eventsourcesind&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getEventSourceKindLabel();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;eventtype&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getEventTypeLabel();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;capsuleinstance&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getCapsuleInstance();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;sourcename&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getSourceName();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;timepointsecond&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getTimePointSecond();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;timepointnano&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getTimePointNano();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;eventid&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getEventId();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;cputik&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->getCpuTik();&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;else if (tempS1==&quot;eventpayload&quot;)&#xA;&#x9;&#x9;&#x9;{&#xA;&#x9;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;&#x9;ss1&lt;&lt;seperator;&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;&#x9;ss1&lt;&lt;this->payloadToString(',');&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;    }&#xA;&#x9;return ss1.str();&#xA;}&#xA;&#xA;std::string Event::payloadToString(char seperator) {&#xA;&#x9;std::stringstream ss;&#xA;&#x9;bool needSeperator;&#xA;&#x9;for(std::map&lt;std::string,std::string>::const_iterator it = this->eventPayload.begin(); it != this->eventPayload.end(); ++it)&#xA;&#x9;{&#xA;&#x9;&#x9;if (needSeperator)&#xA;&#x9;&#x9;&#x9;ss&lt;&lt;seperator;&#xA;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;needSeperator=true;&#xA;&#x9;&#x9;ss&lt;&lt; it->first &lt;&lt;':'&lt;&lt;it->second;&#xA;&#x9;}&#xA;&#x9; return ss.str();&#xA;}&#xA;&#xA;} /* namespace events */&#xA;"/>
+  <RTCppProperties:AttributeProperties xmi:id="_JFTwYHU9EeaD0su17ZXL7Q" type="TCPClient" base_Property="_bJCsQDGJEeaxYMPe_sHEiw"/>
+  <RTCppProperties:AttributeProperties xmi:id="_PKlFgHU9EeaD0su17ZXL7Q" type="Config" base_Property="_id3i8DHEEeaxYMPe_sHEiw"/>
+  <RTCppProperties:AttributeProperties xmi:id="_Vd6r0HU9EeaD0su17ZXL7Q" type="SharedMem" base_Property="_9VpAgD8TEea_INjZTfhBHQ"/>
+</xmi:XMI>
