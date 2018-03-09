@@ -1,0 +1,315 @@
+/// ParameterProperties streotype
+operation UMLRTModel!Parameter applyUMLRTStereotype (umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="ParameterProperties");
+	if (s.isUndefined()){
+		var RTCppPropertiesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="RTCppProperties");
+		var parameterPropertiesS:UMLRTModel!Stereotype= RTCppPropertiesProfile.packagedElement.selectOne(s|s.name="ParameterProperties");
+		self.applyStereotype(parameterPropertiesS);
+		return parameterPropertiesS;
+		}
+	else
+		return s;
+}
+
+
+/// UMLRT Statemachine state     streotype
+operation UMLRTModel!StateMachine applyUMLRTStereotype(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s|s.name="RTStateMachine");
+	if (s.isUndefined()){
+		var UMLRTStateMachinesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRTStateMachines");
+		var RTPRTStateMachineS:UMLRTModel!Stereotype= UMLRTStateMachinesProfile.packagedElement.selectOne(s|s.name="RTStateMachine");
+		//RTPRTStateMachineS.println();
+		self.applyStereotype(RTPRTStateMachineS);
+		return RTPRTStateMachineS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied sterotype UMLRT StateMachine, using this pointer we can update the detal field
+operation UMLRTModel!StateMachine getAppliedUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!RTStateMachine.all.selectOne(p|p.base_StateMachine=self );
+		return appliedStreotypeDetail;
+}
+
+
+
+/// port streotype
+operation UMLRTModel!Port applyUMLRTStereotype (umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="RTPort");
+	if (s.isUndefined()){
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var portS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="RTPort");
+		self.applyStereotype(portS);
+		return portS;
+		}
+	else
+		return s;
+}
+//// get the pointer to detail of applied profile, using this pointer we can update the detal fields
+operation UMLRTModel!Port getUMLRTStereotype() : Any {
+	var appliedStreotypeDetail=UMLRTModel!RTPort.all.selectOne(p|p.base_port=self );
+	return appliedStreotypeDetail;
+}
+
+
+/// capsule streotype
+operation UMLRTModel!Class applyUMLRTStereotype (umlrtModel:Any)  {
+	//self.println();
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="Capsule");
+	//var ownedModel=self.owningModel;
+	//umlrtModel.profileApplication.appliedProfile.println("Inside UMLRTModel!Class applyUMLRTStereotype");
+	if (s.isUndefined()){
+		//var UMLRealTimeProfile = UMLRTModel!Package.all.select(c|c.name="UMLRealTime").first();
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var capsuleS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="Capsule");
+		//capsuleS.println();
+		self.applyStereotype(capsuleS);
+		return capsuleS;
+		}
+	else 
+		return s;
+}
+
+//// get the pointer to detail of applied profile, using this pointer we can update the detal field
+operation UMLRTModel!Class getUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!Capsule.all.selectOne(p|p.base_Class=self );
+		return appliedStreotypeDetail;
+}
+
+/// AttributeProperties streotype
+operation UMLRTModel!Property applyRTCPPStereotype (umlrtModel:Any)  {
+    self.type=UMLPrimitiveTypes.packagedElement.selectOne(t|t.name="Boolean");  // we need to set it boolean, other wise the code generation will fail
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="AttributeProperties");
+	if (s.isUndefined()){
+		var RTCppPropertiesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="RTCppProperties");
+		var attributePropertiesS:UMLRTModel!Stereotype= RTCppPropertiesProfile.packagedElement.selectOne(s|s.name="AttributeProperties");
+		self.applyStereotype(attributePropertiesS);
+		return attributePropertiesS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied profile, using this pointer we can update the detal field
+
+operation UMLRTModel!Property applyUMLRTStereotype(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="CapsulePart");
+	if (s.isUndefined()){
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var partS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="CapsulePart");
+		self.applyStereotype(partS);
+		return partS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied profile, using this pointer we can update the detal field
+operation UMLRTModel!Property getUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!CapsulePart.all.selectOne(p|p.base_Property=self );
+		return appliedStreotypeDetail;
+}
+
+
+
+
+operation UMLRTModel!Parameter getUMLRTStereotype(umlrtModel:Any) : Any {
+
+       // var appliedStreotypeDetail=UMLRTModel!RTMessageSet.all.selectOne(p|p.base_Parameter=self );
+		var appliedStreotypeDetail=UMLRTModel!ParameterProperties.all.selectOne(p|p.base_Parameter=self );
+		return appliedStreotypeDetail;
+}
+
+
+//////ArtifactProperties streotype
+
+operation UMLRTModel!Artifact getUMLRTStereotype() : Any {
+		//AttributeProperties.all.println();
+		var appliedStreotypeDetail=UMLRTModel!ArtifactProperties.all.selectOne(p|p.base_Artifact=self );
+		return appliedStreotypeDetail;
+}
+operation UMLRTModel!Artifact applyUMLRTStereotype (umlrtModel:Any):Any  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="ArtifactProperties");
+	if (s.isUndefined()){
+		var RTCppPropertiesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="RTCppProperties");
+		var artifactPropertiesS:UMLRTModel!Stereotype= RTCppPropertiesProfile.packagedElement.selectOne(s|s.name="ArtifactProperties");
+		self.applyStereotype(artifactPropertiesS);
+		return artifactPropertiesS;
+		}
+	else
+		return s;
+}
+
+//////////////
+
+
+operation Any remDanglingUMLRTStereotypes() : Any {
+		//ParameterProperties.all.println();
+		/*for (s in ParameterProperties.all)
+			if (s.base_Parameter.owner.isUndefined() )
+				s.base_Parameter.qualifiedName.println("without Link");
+			else 
+				s.base_Parameter.qualifiedName.println("with Linke");*/
+		delete UMLRTModel!ParameterProperties.all.select(p|p.base_Parameter.isUndefined() or p.base_Parameter.owner.isUndefined() );
+		delete UMLRTModel!AttributeProperties.all.select(p|p.base_Property.isUndefined() );
+}
+
+/////
+
+/// capsule properties streotype
+operation UMLRTModel!Class applyUMLRTCapsuleProperties(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="CapsuleProperties");
+	if (s.isUndefined()){
+		var RTCppPropertiesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="RTCppProperties");
+		var CapsulePropertiesS:UMLRTModel!Stereotype= RTCppPropertiesProfile.packagedElement.selectOne(s|s.name="CapsuleProperties");
+		self.applyStereotype(CapsulePropertiesS);
+		return CapsulePropertiesS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied profile, using this pointer we can update the detal field
+operation UMLRTModel!Class getUMLRTCapsuleProperties() : Any {
+		var appliedStreotypeDetail=UMLRTModel!CapsuleProperties.all.selectOne(p|p.base_Class=self );
+		return appliedStreotypeDetail;
+}
+
+
+/// capsule properties streotype
+operation UMLRTModel!State applyUMLRTStereotype(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="RTState");
+	if (s.isUndefined()){
+		var UMLRTStateMachinesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRTStateMachines");
+		var RTStateS:UMLRTModel!Stereotype= UMLRTStateMachinesProfile.packagedElement.selectOne(s|s.name="RTState");
+		self.applyStereotype(RTStateS);
+		return RTStateS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied profile, using this pointer we can update the detal field
+operation UMLRTModel!State getUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!UMLRTStateMachines.all.selectOne(p|p.base_State=self );
+		return appliedStreotypeDetail;
+}
+
+
+/// UMLRT region   streotype
+operation UMLRTModel!Region applyUMLRTStereotype(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s| s.name="RTRegion");
+	if (s.isUndefined()){
+		var UMLRTStateMachinesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRTStateMachines");
+		var RTRegionS:UMLRTModel!Stereotype= UMLRTStateMachinesProfile.packagedElement.selectOne(s|s.name="RTRegion");
+		self.applyStereotype(RTRegionS);
+		return RTRegionS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied sterotype UMLRT region, using this pointer we can update the detal field
+operation UMLRTModel!Region getUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!RTRegion.all.selectOne(p|p.base_Region=self );
+		return appliedStreotypeDetail;
+}
+
+/// UMLRT Pseudo state     streotype
+operation UMLRTModel!Pseudostate applyUMLRTStereotype(umlrtModel:Any)  {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s|s.name="RTPseudostate");
+	if (s.isUndefined()){
+		var UMLRTStateMachinesProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRTStateMachines");
+		var RTPseudostateS:UMLRTModel!Stereotype= UMLRTStateMachinesProfile.packagedElement.selectOne(s|s.name="RTPseudostate");
+		self.applyStereotype(RTPseudostateS);
+		return RTPseudostateS;
+		}
+	else 
+		return s;
+}
+//// get the pointer to detail of applied sterotype UMLRT region, using this pointer we can update the detal field
+operation UMLRTModel!Pseudostate getUMLRTStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!RTPseudostate.all.selectOne(p|p.base_Pseudostate=self );
+		return appliedStreotypeDetail;
+}
+
+
+
+
+
+/// apply UMLRT protocol container  streotype
+operation UMLRTModel!Package applyUMLRTStereotype(umlrtModel:Any) :Any {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s|s.name="ProtocolContainer");
+	if (s.isUndefined()){
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var ProtocolContainerS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="ProtocolContainer");
+		//ProtocolContainerS.println();
+		self.applyStereotype(ProtocolContainerS);
+		return ProtocolContainerS;
+		}
+	else 
+		return s;
+}
+//// get applied protocol container state machine
+operation UMLRTModel!Package  getAppliedUMLRTProtocolContainerStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!ProtocolContainer.all.selectOne(p|p.base_Package=self );
+		return appliedStreotypeDetail;
+}
+
+//// apply profile to UMLRTModels
+operation Any applyProfiles()  {
+		//var appliedStreotypeDetail=UMLRTModel!ProtocolContainer.all.selectOne(p|p.base_Package=self );
+	//UMLRTModel!Package.all.select(c|c.name="UMLRealTime").println();
+	if (UMLRTModel!Package.all.select(c|c.name="UMLRealTime").first().isUndefined()){
+		var UMLRealTimeProfile = HelperModel!Package.all.select(c|c.name="UMLRealTime").first();
+		self.applyProfile(UMLRealTimeProfile);
+		}
+	if (UMLRTModel!Package.all.select(c|c.name="UMLRTStateMachines").first().isUndefined()){
+		var UMLRTStateMachinesProfile = HelperModel!Package.all.select(c|c.name="UMLRTStateMachines").first();
+		self.applyProfile(UMLRTStateMachinesProfile);
+	}
+	if (UMLRTModel!Package.all.select(c|c.name="RTCppProperties").first().isUndefined()){
+		//comment it for now, untill the installation problem is fixed
+		var RTCppPropertiesProfile = HelperModel!Package.all.select(c|c.name="RTCppProperties").first();
+		self.applyProfile(RTCppPropertiesProfile);
+	}
+	
+}
+
+
+/// apply Collaboration streotype 
+operation UMLRTModel!Collaboration applyUMLRTStereotype(umlrtModel:Any) :Any {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s|s.name="Protocol");
+	if (s.isUndefined()){
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var CollaborationS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="Protocol");
+		//ProtocolContainerS.println();
+		self.applyStereotype(CollaborationS);
+		return CollaborationS;
+		}
+	else 
+		return s;
+}
+// get detail of applied porotocol streotype
+operation UMLRTModel!Collaboration getAppliedUMLRTProtocolStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!Protocol.all.selectOne(p|p.base_Collaboration=self );
+		return appliedStreotypeDetail;
+}
+
+//// 
+
+/// apply interface  related stereotype 
+operation UMLRTModel!Interface applyUMLRTStereotype(umlrtModel:Any) :Any {
+	var s:UMLRTModel!Stereotype=self.getAppliedStereotypes().selectOne(s|s.name="RTMessageSet");
+	if (s.isUndefined()){
+		var UMLRealTimeProfile = umlrtModel.profileApplication.appliedProfile.selectOne(c|c.name="UMLRealTime");
+		var InterfaceS:UMLRTModel!Stereotype= UMLRealTimeProfile.packagedElement.selectOne(s|s.name="RTMessageSet");
+		//ProtocolContainerS.println();
+		self.applyStereotype(InterfaceS);
+		return InterfaceS;
+		}
+	else 
+		return s;
+}
+// get detail of applied porotocol streotype
+operation UMLRTModel!Interface getAppliedUMLRTMessageSetStereotype() : Any {
+		var appliedStreotypeDetail=UMLRTModel!RTMessageSet.all.selectOne(p|p.base_Interface=self );
+		return appliedStreotypeDetail;
+}
+
+////

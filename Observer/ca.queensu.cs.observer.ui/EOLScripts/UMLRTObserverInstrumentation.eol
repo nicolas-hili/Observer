@@ -1,0 +1,127 @@
+/*
+    
+    Developers:
+    Mojtaba Bagherzadeh(mojtaba@cs.queensu.ca): Initial development
+
+*/
+
+import "UMLRTQuery.eol";
+import "UMLRTCodeReflection.eol";
+import "UMLRTCodeGenUtil.eol";
+import "UMLRTProfilesOperations.eol";
+import "UMLRTElementOperation.eol";
+import "DetailTracing.eol";
+
+//-----------------------------intialize variables........................................//
+p1.println();
+
+//
+var uniqueId:Integer=0; // manages the generation of unique id for the name of the elements
+var instrumentPrefix:String="Observation__"; // use as a prefix for the  generated variables' name
+var generationPrefix="__Generated__";  // used for consistent naming
+var endLine:String="\n";  // end of line character
+var uniqueID:Integer=1; // we need to name the added state and transition uniquely
+var Observarion:String="Observation"; 
+var ObserverProtocalName:String="Observation";
+var traceType:String="Observation"; // type of tracing 
+var debugLevel:Integer=0; // 0= info , 1= debug at frist level functions 2= debug at second level and 3= debug at thirth level 
+var currentCapsuleName:String=""; // refers the the the capsule that passed for instrumentation
+var ObserverCapsuleName:String="Observer";
+var eventClassName:String="Event";
+var steeringEventName="steer";
+var steeringEvent;
+var rtsBaseCommProtocol;
+var activePorts:Set;
+var observartionPortName="observerP";
+var observationPort;
+var observationProtocol;
+var eventSignalName:String="event"; // used for code generation;
+var eventClassName:String="event";
+
+
+//-----------------------------loading user models, gateway model, debug protocol........................................//
+
+var UMLPrimitiveTypes=UMLRTModel!Package.all.select(c|c.name="PrimitiveTypes").first();
+//var UMLRTSLIB=UMLRTModel!Package.all.select(c|c.name="UMLRT-RTS").first();
+var modelroot=UMLRTModel!Package.all.select(c|c.type.name="Model").first();
+observationProtocol=modelroot.getAllNestedPackage().select(p|p.name=ObserverProtocalName); // load the debugging protocol
+steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.name="CallEvent" and e.`operation`.name=steeringEventName);
+//"Instrumentaion is Started on model:".println("Debug Level 0: ");
+//modelroot.println("Debug Level 0: ");
+ 
+
+/// extract all state machine and classes
+
+var allStateMachines:Set=modelroot.getAllStateMachines().select(s|s.owner.name<>ObserverCapsuleName);
+var allClasses=modelroot.getAllOwnedClasses().select(c|c.name<>ObserverCapsuleName);
+allClasses.size().println("number of capsule");
+allStateMachines.getAllRegions().getAllStates().size().println("number of states");
+
+//----------------------------main loop of the transformation........................................//
+transaction{
+	//addGateWay();
+	refineStructure();
+	for (SM in allStateMachines){
+	    currentCapsuleName=SM.owner.name;
+	    observationPort=SM.owner.ownedAttributes.select(a|a.name=observartionPortName);
+		//steeringEvent=;
+		var allStates=SM.getAllRegions().getAllStates().select(s|s.stateType()=="Composite" or s.stateType()=="State");
+		var allTransitions=SM.getAllRegions().getAllTransitions();
+		/// instrument States
+		for (s in allStates){
+			s.addTrace(traceType);
+		}
+	    /// instrument Transitions
+	    for (t in allTransitions){
+	    		if (t.source.name==null)
+	    			t.source.assignName();
+	    		if (t.target.name==null)
+	    			t.target.assignName();
+			t.addTrace(traceType);
+			// add trigger for steering
+			if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC"){
+				t.createTrigger(instrumentPrefix.concat("MSG"), observationPort, steeringEvent);
+				}
+		}
+	}
+//return modelroot;
+//abort;
+	}
+	
+	
+//----------------------------defined main functions for transformation........................................//
+/// refine state machine for stop and resume operation
+
+
+operation  refineStructure(){
+	/// add debug port to all capsules
+	//"refineStructure is started".println();
+	//var gateWayRoot=modelroot!Package.all.select(c|c.type.name=ObserverCapsuleName).first();
+	//var gateWayCapsule=gateWayRoot.getAllOwnedClasses().selectOne(c|c.name="GateWay");
+	//observeProtocol=gateWayRoot.getAllNestedPackage().selectOne(p|p.name="ExtInterface").packagedElement.first();
+	//allClasses.addPortToCapsules(debugPortName,observeProtocol,true,1,1,"SAP");
+	for (c in allClasses)
+		//c.getUMLRTCapsuleProperties().println();
+		if (c.getStateMachine().isDefined()){
+		    //  add method to handle recalling messages
+		    //activePorts=c.getStateMachine().getAllRegions().getAllTransitions().getActivePorts();
+		    //c.addRecallAllMsgMethod(activePorts);
+			//c.println("capsule:");
+			//c.addPortToCapsules(debugPortName,observeProtocol,true,1,1,"SAP");
+			//"Add method to view attributes: ".concat(c.name).println("refineStructure: ");
+			//c.addVarWatchMethod();
+			//"Add method to change attributes: ".concat(c.name).println("refineStructure: ");
+			//c.addVarChangeMethod();
+			//"Add required attributes: ".concat(c.name).println("refineStructure: ");
+			//c.addRequiredAttributes();
+			//111--
+			//// add deatil tracing method and apply it on all states and transtions
+			//c.addTracingRequiredHeader();
+			c.addSendEventMethod();
+			//// add if guard to all stable state
+			//// generate the code for checking the condition in entry and exit
+			//// 
+			
+		}
+	
+}
