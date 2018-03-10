@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/uml2/2.2.0/GenModel"
+    copyrightText="Copyright (c) 2014 CEA LIST.&#xD;&#xA;&#xD;&#xA; All rights reserved. This program and the accompanying materials&#xD;&#xA; are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA; which accompanies this distribution, and is available at&#xD;&#xA; http://www.eclipse.org/legal/epl-v10.html"
+    modelDirectory="/org.eclipse.papyrusrt.codegen.cpp.profile/src-gen" editDirectory="/org.eclipse.papyrusrt.codegen.cpp.profile.edit/src-gen"
+    editorDirectory="/org.eclipse.papyrusrt.codegen.cpp.profile.editor/src-gen" modelPluginID="org.eclipse.papyrusrt.codegen.cpp.profile"
+    modelName="RTCppProperties" editPluginClass="org.eclipse.papyrusrt.codegen.cpp.profile.RTCppProperties.provider.RTCppPropertiesEditPlugin"
+    editorPluginClass="org.eclipse.papyrusrt.codegen.cpp.profile.RTCppProperties.presentation.RTCppPropertiesEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testSuiteClass="org.eclipse.papyrusrt.codegen.cpp.profile.RTCppProperties.tests.RTCppPropertiesAllTests"
+    importerID="org.eclipse.uml2.uml.ecore.importer" complianceLevel="6.0" copyrightFields="false"
+    providerRootExtendsClass="" usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.uml2.types/model/Types.genmodel#//types ../../org.eclipse.uml2.uml/model/UML.genmodel#//uml"
+    operationReflection="true" importOrganizing="true" invariantPrefix="">
+  <genAnnotations source="http://www.eclipse.org/emf/2002/GenModel/importer/org.eclipse.uml2.uml.ecore.importer">
+    <details key="ECORE_TAGGED_VALUES" value="PROCESS"/>
+    <details key="UNION_PROPERTIES" value="REPORT"/>
+    <details key="UNTYPED_PROPERTIES" value="REPORT"/>
+    <details key="DUPLICATE_FEATURES" value="DISCARD"/>
+    <details key="SUBSETTING_PROPERTIES" value="REPORT"/>
+    <details key="VALIDATION_DELEGATES" value="IGNORE"/>
+    <details key="OPPOSITE_ROLE_NAMES" value="IGNORE"/>
+    <details key="COMMENTS" value="PROCESS"/>
+    <details key="DUPLICATE_FEATURE_INHERITANCE" value="DISCARD"/>
+    <details key="DUPLICATE_OPERATIONS" value="DISCARD"/>
+    <details key="PROPERTY_DEFAULT_EXPRESSIONS" value="IGNORE"/>
+    <details key="INVARIANT_CONSTRAINTS" value="PROCESS"/>
+    <details key="REDEFINING_PROPERTIES" value="REPORT"/>
+    <details key="ANNOTATION_DETAILS" value="PROCESS"/>
+    <details key="NON_API_INVARIANTS" value="IGNORE"/>
+    <details key="DUPLICATE_OPERATION_INHERITANCE" value="DISCARD"/>
+    <details key="REDEFINING_OPERATIONS" value="REPORT"/>
+    <details key="INVOCATION_DELEGATES" value="IGNORE"/>
+    <details key="DERIVED_FEATURES" value="PROCESS"/>
+    <details key="OPERATION_BODIES" value="IGNORE"/>
+    <details key="CAMEL_CASE_NAMES" value="IGNORE"/>
+    <details key="SUPER_CLASS_ORDER" value="PROCESS"/>
+  </genAnnotations>
+  <foreignModel>RTCppProperties.profile.uml</foreignModel>
+  <genPackages xsi:type="genmodel:GenPackage" prefix="RTCppProperties" basePackage="org.eclipse.papyrusrt.codegen.cpp.profile"
+      disposableProviderFactory="true" ecorePackage="RTCppProperties.ecore#/">
+    <genEnums xsi:type="genmodel:GenEnum" typeSafeEnumCompatible="false" ecoreEnum="RTCppProperties.ecore#//ClassKind">
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//ClassKind/Class"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//ClassKind/Struct"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//ClassKind/Union"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//ClassKind/Typedef"/>
+    </genEnums>
+    <genEnums xsi:type="genmodel:GenEnum" typeSafeEnumCompatible="false" ecoreEnum="RTCppProperties.ecore#//AttributeKind">
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//AttributeKind/Member"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//AttributeKind/Global"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//AttributeKind/MutableMember"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//AttributeKind/Define"/>
+    </genEnums>
+    <genEnums xsi:type="genmodel:GenEnum" typeSafeEnumCompatible="false" ecoreEnum="RTCppProperties.ecore#//InitializationKind">
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//InitializationKind/Assignment"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//InitializationKind/Constant"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//InitializationKind/Constructor"/>
+    </genEnums>
+    <genEnums xsi:type="genmodel:GenEnum" typeSafeEnumCompatible="false" ecoreEnum="RTCppProperties.ecore#//DependencyKind">
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//DependencyKind/ForwardReference"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//DependencyKind/Inclusion"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//DependencyKind/None"/>
+    </genEnums>
+    <genEnums xsi:type="genmodel:GenEnum" typeSafeEnumCompatible="false" ecoreEnum="RTCppProperties.ecore#//OperationKind">
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//OperationKind/Member"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//OperationKind/Friend"/>
+      <genEnumLiterals xsi:type="genmodel:GenEnumLiteral" ecoreEnumLiteral="RTCppProperties.ecore#//OperationKind/Global"/>
+    </genEnums>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//PassiveClassProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//PassiveClassProperties/kind"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//PassiveClassProperties/implementationType"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" image="false" ecoreClass="RTCppProperties.ecore#//ClassProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//ClassProperties/base_Class"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassProperties/privateDeclarations"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassProperties/protectedDeclarations"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassProperties/publicDeclarations"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" image="false" ecoreClass="RTCppProperties.ecore#//CppFileProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//CppFileProperties/headerPreface"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//CppFileProperties/headerEnding"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//CppFileProperties/implementationPreface"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//CppFileProperties/implementationEnding"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" image="false" ecoreClass="RTCppProperties.ecore#//GenerationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//GenerationProperties/generate"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" image="false" ecoreClass="RTCppProperties.ecore#//FileGenerationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//FileGenerationProperties/generateHeader"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//FileGenerationProperties/generateImplementation"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" image="false" ecoreClass="RTCppProperties.ecore#//ClassGenerationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateStateMachine"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateAssignmentOperator"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateCopyConstructor"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateDefaultConstructor"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateDestructor"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateEqualityOperator"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateExtractionOperator"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateInequalityOperator"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ClassGenerationProperties/generateInsertionOperator"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//AttributeProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/kind"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/volatile"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/initialization"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/type"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/size"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/pointsToConstType"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/pointsToVolatileType"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//AttributeProperties/pointsToType"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//AttributeProperties/base_Property"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//CapsuleProperties"/>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//DependencyProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//DependencyProperties/KindInHeader"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//DependencyProperties/KindInImplementation"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//DependencyProperties/base_Dependency"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//EnumerationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//EnumerationProperties/base_Enumeration"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//OperationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//OperationProperties/Inline"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//OperationProperties/Polymorphic"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//OperationProperties/kind"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//OperationProperties/generateDefinition"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//OperationProperties/base_Operation"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//TypeProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//TypeProperties/name"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//TypeProperties/definitionFile"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//ParameterProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ParameterProperties/type"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//ParameterProperties/base_Parameter"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ParameterProperties/pointsToType"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ParameterProperties/pointsToConst"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ParameterProperties/pointsToVolatile"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//GenerelizationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//GenerelizationProperties/virtual"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//GenerelizationProperties/base_Generalization"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSAttributeProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//RTSAttributeProperties/base_Property"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSAbstractAttributeProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSAbstractAttributeProperties/generateTypeModifier"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSAbstractAttributeProperties/numElementsFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSAbstractAttributeProperties/typeDescriptor"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSDescriptorProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSDescriptorProperties/generateDescriptor"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSClassProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassProperties/typeDescriptorHint"/>
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//RTSClassProperties/base_Class"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSClassifierProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/copyFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/decodeFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/destroyFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/encodeFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/initFunctionBody"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//RTSClassifierProperties/version"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSEnumerationProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//RTSEnumerationProperties/base_Enumeration"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//RTSEnumerationLiteralProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//RTSEnumerationLiteralProperties/base_EnumerationLiteral"/>
+    </genClasses>
+    <genClasses xsi:type="genmodel:GenClass" ecoreClass="RTCppProperties.ecore#//ArtifactProperties">
+      <genFeatures xsi:type="genmodel:GenFeature" notify="false" createChild="false"
+          propertySortChoices="true" ecoreFeature="ecore:EReference RTCppProperties.ecore#//ArtifactProperties/base_Artifact"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ArtifactProperties/includeFile"/>
+      <genFeatures xsi:type="genmodel:GenFeature" createChild="false" ecoreFeature="ecore:EAttribute RTCppProperties.ecore#//ArtifactProperties/sourceFile"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
