@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,14 +16,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultCaret;
 
 import animation.server.SocketClient;
 
 
-public class Gui {
+public class Gui  extends JFrame implements Runnable {
 	
    private SocketClient client;
+
+   private volatile ArrayBlockingQueue<String> events = new ArrayBlockingQueue<String>(20);
 	
    // Connect status constants
    final static int DISCONNECTED = 0;
@@ -30,7 +34,7 @@ public class Gui {
    final static int CONNECTED = 2;
 
    // Various GUI components and info
-   public static JFrame mainFrame = null;
+//   public static JFrame mainFrame = null;
    public static JTextArea chatText = null;
    public static JTextField chatLine = null;
    public static JLabel statusBar = null;
@@ -42,12 +46,17 @@ public class Gui {
    public static JButton disconnectButton = null;
 
    // Connection info
-   public static String hostIP = "10.217.89.29";
+   public static String hostIP = "localhost";
    public static int port = 8080;
    public static int connectionStatus = DISCONNECTED;
    public static boolean isHost = true;
    
    public static Gui instance;
+   
+   public Gui(String title) {
+	   super(title);
+	   instance = this;
+   }
 
    private JPanel initOptionsPane() {
 		
@@ -87,7 +96,7 @@ public class Gui {
                   portField.setEnabled(false);
                   chatLine.setEnabled(true);
                   statusBar.setText("Online");
-                  mainFrame.repaint();
+                  repaint();
                   client = new SocketClient(instance);
 
                   client.start();
@@ -101,7 +110,7 @@ public class Gui {
                   portField.setEnabled(true);
                   chatLine.setText(""); chatLine.setEnabled(false);
                   statusBar.setText("Offline");
-                  mainFrame.repaint();
+                  repaint();
                   client.interrupt();
                }
             }
@@ -168,23 +177,42 @@ public class Gui {
       mainPane.add(chatPane, BorderLayout.CENTER);
 
       // Set up the main frame
-      mainFrame = new JFrame("TCP Client");
-      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      mainFrame.setContentPane(mainPane);
-      mainFrame.setSize(mainFrame.getPreferredSize());
-      mainFrame.setLocation(200, 200);
-      mainFrame.setSize(new Dimension(1200, 400));
-      mainFrame.setVisible(true);
+      //mainFrame = new JFrame("TCP Client");
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.setContentPane(mainPane);
+      this.setSize(this.getPreferredSize());
+      this.setLocation(200, 200);
+      this.setSize(new Dimension(1200, 400));
+      this.setVisible(true);
    }
    
-   public void pushEvent(String data) {
+/*   public void pushEvent(String data) {
 	   chatText.append("\n"+data);
-   }
+   } */
 
    public static void main(String args[]) {
-      Gui gui = new Gui();
+      Gui gui = new Gui("TCP CLIent");
       gui.initGUI();
    }
+
+	@Override
+	public void run() {
+		synchronized (this.events) {
+			String el = null;
+			while ((el = this.events.poll()) != null) {
+				chatText.append(el + "\n");
+			}
+		}
+	}
+	
+	public void updateGUI(String event) {
+	   setEvent(event);
+	   SwingUtilities.invokeLater(this);
+	}
+
+	private synchronized void setEvent(String event) {
+		this.events.add(event);
+	}
 }
 
 // Action adapter for easy event-listener coding
