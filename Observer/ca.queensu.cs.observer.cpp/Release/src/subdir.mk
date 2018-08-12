@@ -13,6 +13,12 @@ CC_SRCS += \
 ../src/Socket.cc \
 ../src/Text.cc 
 
+CPP_SRCS += \
+../src/RealTimeLibs.cpp 
+
+C_SRCS += \
+../src/SampleTCPServer.c 
+
 CC_DEPS += \
 ./src/CLIUtils.d \
 ./src/Config.d \
@@ -29,16 +35,38 @@ OBJS += \
 ./src/Event.o \
 ./src/Method.o \
 ./src/Observer.o \
+./src/RealTimeLibs.o \
+./src/SampleTCPServer.o \
 ./src/Serializer.o \
 ./src/Socket.o \
 ./src/Text.o 
+
+CPP_DEPS += \
+./src/RealTimeLibs.d 
+
+C_DEPS += \
+./src/SampleTCPServer.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 src/%.o: ../src/%.cc
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I"/home/nicolas/eclipse/papyrus-rt-observer/ws/ca.queensu.cs.observer.cpp/include" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I"/home/hili/git/Observer/Observer/ca.queensu.cs.observer.cpp/include" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+src/%.o: ../src/%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C++ Compiler'
+	g++ -I"/home/hili/git/Observer/Observer/ca.queensu.cs.observer.cpp/include" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+src/%.o: ../src/%.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C Compiler'
+	gcc -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

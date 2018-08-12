@@ -32,7 +32,7 @@ var steeringEventName="steer";
 var steeringEvent;
 var rtsBaseCommProtocol;
 var activePorts:Set;
-var observartionPortName="observerP";
+var observationPortName="observation";
 var observationPort;
 var observationProtocol;
 var eventSignalName:String="event"; // used for code generation;
@@ -41,10 +41,27 @@ var eventClassName:String="event";
 
 //-----------------------------loading user models, gateway model, debug protocol........................................//
 
+// Load the standard UML primitive types library (work in standalone)
+// See https://www.eclipse.org/forums/index.php/t/1074243/
+var libURI = UMLRTModel.resource.uri.createURI("platform:/plugin/org.eclipse.uml2.uml.resources/libraries/UMLPrimitiveTypes.library.uml");
+var libResource = UMLRTModel.resource.resourceSet.createResource(libURI);
+libResource.load(null);
+UMLRTModel.resource.resourceSet.resources.add(libResource);
+// The common approach for loading a UML primitive type
+// DataType.all.selectOne(pt|pt.name = "Integer").println();
+
 var UMLPrimitiveTypes=UMLRTModel!Package.all.select(c|c.name="PrimitiveTypes").first();
 //var UMLRTSLIB=UMLRTModel!Package.all.select(c|c.name="UMLRT-RTS").first();
 var modelroot=UMLRTModel!Package.all.select(c|c.type.name="Model").first();
-observationProtocol=modelroot.getAllNestedPackage().select(p|p.name=ObserverProtocalName); // load the debugging protocol
+
+
+observationProtocol=modelroot.getAllNestedPackage().selectOne(p|p.name=ObserverProtocalName); // load the debugging protocol
+
+if (not(observationProtocol.isDefined())) {
+	"Observer is not loaded".println();
+	return;
+}
+
 steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.name="CallEvent" and e.`operation`.name=steeringEventName);
 //"Instrumentaion is Started on model:".println("Debug Level 0: ");
 //modelroot.println("Debug Level 0: ");
@@ -54,23 +71,42 @@ steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.nam
 
 var allStateMachines:Set=modelroot.getAllStateMachines().select(s|s.owner.name<>ObserverCapsuleName);
 var allClasses=modelroot.getAllOwnedClasses().select(c|c.name<>ObserverCapsuleName);
-allClasses.size().println("number of capsule");
-allStateMachines.getAllRegions().getAllStates().size().println("number of states");
+allClasses.size().println("number of capsules: ");
+allStateMachines.getAllRegions().getAllStates().size().println("number of states: ");
 
 //----------------------------main loop of the transformation........................................//
 transaction{
 	//addGateWay();
-	refineStructure();
 	for (SM in allStateMachines){
-	    currentCapsuleName=SM.owner.name;
-	    observationPort=SM.owner.ownedAttributes.select(a|a.name=observartionPortName);
-		//steeringEvent=;
-		var allStates=SM.getAllRegions().getAllStates().select(s|s.stateType()=="Composite" or s.stateType()=="State");
-		var allTransitions=SM.getAllRegions().getAllTransitions();
+	
+		var capsule = SM.owner;
+		
+		// The capsule is observable
+		if (not(capsule.isObservable())) {
+			continue;
+		}
+		
+	    currentCapsuleName = capsule.name;
+		
+		currentCapsuleName.println("Instrumentation of capsule: ");
+		
+		
+	    observationPort = capsule.getObservablePort();	   
+
+		capsule.refineStructure();
+	    
+		var allStates = SM.getAllRegions()
+							.getAllStates()
+							->select(s | s.stateType() == "Composite" or s.stateType() == "State");
+							
+		var allTransitions = SM.getAllRegions()
+							.getAllTransitions();
+							
 		/// instrument States
 		for (s in allStates){
 			s.addTrace(traceType);
 		}
+		
 	    /// instrument Transitions
 	    for (t in allTransitions){
 	    		if (t.source.name==null)
@@ -80,29 +116,43 @@ transaction{
 			t.addTrace(traceType);
 			// add trigger for steering
 			if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC"){
-				t.createTrigger(instrumentPrefix.concat("MSG"), observationPort, steeringEvent);
+//				t.createTrigger(instrumentPrefix.concat("MSG"), observationPort, steeringEvent);
 				}
 		}
 	}
 //return modelroot;
 //abort;
 	}
-	
+
+/**
+ * Whether a capsule is observable or not.
+ */	
+operation Class isObservable () : Boolean {
+	return self.ownedAttributes->exists( a | a.name = observationPortName);
+}
+
+/**
+ * Return the observation port of a capsule.
+ */	
+operation Class getObservablePort () : Port {
+	return self.ownedAttributes
+				->selectOne( a | a.name = observationPortName);
+}
 	
 //----------------------------defined main functions for transformation........................................//
 /// refine state machine for stop and resume operation
 
 
-operation  refineStructure(){
+operation  Class refineStructure() {
 	/// add debug port to all capsules
 	//"refineStructure is started".println();
 	//var gateWayRoot=modelroot!Package.all.select(c|c.type.name=ObserverCapsuleName).first();
 	//var gateWayCapsule=gateWayRoot.getAllOwnedClasses().selectOne(c|c.name="GateWay");
 	//observeProtocol=gateWayRoot.getAllNestedPackage().selectOne(p|p.name="ExtInterface").packagedElement.first();
 	//allClasses.addPortToCapsules(debugPortName,observeProtocol,true,1,1,"SAP");
-	for (c in allClasses)
+//	for (c in allClasses)
 		//c.getUMLRTCapsuleProperties().println();
-		if (c.getStateMachine().isDefined()){
+//		if (c.getStateMachine().isDefined()){
 		    //  add method to handle recalling messages
 		    //activePorts=c.getStateMachine().getAllRegions().getAllTransitions().getActivePorts();
 		    //c.addRecallAllMsgMethod(activePorts);
@@ -117,11 +167,11 @@ operation  refineStructure(){
 			//111--
 			//// add deatil tracing method and apply it on all states and transtions
 			//c.addTracingRequiredHeader();
-			c.addSendEventMethod();
+			self.addSendEventMethod();
 			//// add if guard to all stable state
 			//// generate the code for checking the condition in entry and exit
 			//// 
 			
-		}
+//		}
 	
 }

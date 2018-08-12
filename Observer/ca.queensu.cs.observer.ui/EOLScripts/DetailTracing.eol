@@ -42,7 +42,7 @@ operation UMLRTModel!Transition addTrace(traceType:String) {
 		traceMethod.language.add("C++");
 		traceMethod.body.add("");
 		self.effect=traceMethod;		
-	}
+	} 
 	
 	self.generateTraceBody(traceType);
 }
@@ -199,7 +199,7 @@ operation Any generateSendEventBody() : String{
 	result=result.concat("std::string tempS=this->").concat(instrumentPrefix).concat("event.serialize();").concat(endLine);
 	result=result.concat("char eventStr[tempS.length()+1];").concat(endLine);
 	result=result.concat("strcpy(eventStr,tempS.c_str());").concat(endLine);
-	result=result.concat(observartionPortName).concat(".").concat(eventSignalName).concat("(eventStr).send();").concat(endLine);
+	result=result.concat(observationPortName).concat(".").concat(eventSignalName).concat("(eventStr).send();").concat(endLine);
 	return  result;
 }
 ////

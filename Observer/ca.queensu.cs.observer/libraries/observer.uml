@@ -102,7 +102,7 @@ else {
         while (iss) {
             std::string subs;
             iss >> subs; 
-            if (iss != &quot;&quot;) {
+            if (iss.str().empty()) {
                 cmd.push_back(subs);
             }
         }
