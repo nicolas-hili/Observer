@@ -123,9 +123,9 @@ operation UMLRTModel!Class  addSendEventMethod() {
 	/// define parameteres
 	/*sendEvent( int  eventSourceKind, int  eventType, const char * instanceName,const ,char * signalName, char * capsuleName, char * sourceName, 
 	char * resereve1, char * reserve2, char * reserve3, char * reserve4, const char * signalName );*/
-	sendEventOperation.addParametr("eventSourceKind", "Integer",ParameterDirectionKind#`in`,"Event::EventSource");
-	sendEventOperation.addParametr("eventType", "Integer",ParameterDirectionKind#`in`,"Event::EventKind");
-	sendEventOperation.addParametr("instanceName", "String",ParameterDirectionKind#`in`,"const char *");
+	sendEventOperation.addParametr("source", "Integer",ParameterDirectionKind#`in`,"Event::EventSource");
+	sendEventOperation.addParametr("kind", "Integer",ParameterDirectionKind#`in`,"Event::EventKind");
+	sendEventOperation.addParametr("capsuleInstance", "String",ParameterDirectionKind#`in`,"const char *");
 	sendEventOperation.addParametr("capsuleIndex", "Integer",ParameterDirectionKind#`in`,"");
 	sendEventOperation.addParametr("signalName", "String",ParameterDirectionKind#`in`,"const char *");
 	sendEventOperation.addParametr("capsuleName", "String",ParameterDirectionKind#`in`,"const char *");
@@ -167,43 +167,38 @@ operation UMLRTModel!Class  remSendEventMethod() {
 
 //// generate body for send method class
 operation Any generateSendEventBody() : String{
+
+	var preLine="evtObj.event.";
 	var result:String;
-	//Todo
-	var preLine="this->";
-	if (instrumentPrefix.length()>0)
-		preLine=preLine.concat(instrumentPrefix);
-	if (eventClassName.length()>0)
-		preLine=preLine.concat(eventClassName).concat(".");
-	else
-		preLine=preLine.concat("event.");
-	//result=preLine.concat("variablesView();").concat(endLine);
-	result=preLine.concat("clearParams();").concat(endLine);
-	result=result.concat(preLine).concat("generateEventID();").concat(endLine);
+
+	result = "EventObj evtObj;".concat(endLine);
+	result=result.concat(preLine).concat("generateEventId();").concat(endLine);
 	//result=result.concat(preLine).concat("event.setCpuTik();").concat(endLine);
 	result=result.concat(preLine).concat("setTimestamp();").concat(endLine);
-	result=result.concat(preLine).concat("getEventKind(eventSourceKind);").concat(endLine);
-	result=result.concat(preLine).concat("setEventSource(eventType);").concat(endLine);
-	//result=result.concat(preLine).concat("event.setCapsuleName(capsuleName);").concat(endLine);
-	result=result.concat(preLine).concat("setCapsuleInstance(instanceName);").concat(endLine);
+	result=result.concat(preLine).concat("setEventKind(kind);").concat(endLine);
+	result=result.concat(preLine).concat("setEventSource(source);").concat(endLine);
+	result=result.concat(preLine).concat("setCapsuleInstance(capsuleInstance);").concat(endLine);
 	//result=result.concat(preLine).concat("event.setCapsuleIndex(capsuleIndex);").concat(endLine);
 	result=result.concat(preLine).concat("setSourceName(sourceName);").concat(endLine);
 	//result=result.concat(preLine).concat("event.setVariableData(this->").concat(instrumentPrefix).concat("variablesData);").concat(endLine);
 	//result=result.concat(preLine).concat("event.setPayloadField(\"Status\",this->Debug__SRO.getStatusStr());").concat(endLine);
-	result=result.concat("if (eventSourceKind==Event::Transition){").concat(endLine);
-	result=result.concat(preLine).concat("setPayloadField(\"Source\",reserve1);").concat(endLine);
-	result=result.concat(preLine).concat("setPayloadField(\"Target\",reserve2);").concat(endLine);
-	result=result.concat(preLine).concat("setPayloadField(\"Signal\",signalName);").concat(endLine);
-	result=result.concat(preLine).concat("setPayloadField(\"SenderCapsule\",reserve3);").concat(endLine);
-	result=result.concat(preLine).concat("setPayloadField(\"Port\",reserve4);").concat(endLine);
+	result=result.concat("if (source==Event::EventSource::Transition){").concat(endLine);
+	result=result.concat(preLine).concat("setParam(\"Source\",reserve1);").concat(endLine);
+	result=result.concat(preLine).concat("setParam(\"Target\",reserve2);").concat(endLine);
+	result=result.concat(preLine).concat("setParam(\"Signal\",signalName);").concat(endLine);
+	result=result.concat(preLine).concat("setParam(\"SenderCapsule\",reserve3);").concat(endLine);
+	result=result.concat(preLine).concat("setParam(\"Port\",reserve4);").concat(endLine);
 	result=result.concat("}").concat(endLine);
-	result=result.concat("std::string tempS=this->").concat(instrumentPrefix).concat("event.serialize();").concat(endLine);
-	result=result.concat("char eventStr[tempS.length()+1];").concat(endLine);
-	result=result.concat("strcpy(eventStr,tempS.c_str());").concat(endLine);
-	result=result.concat(observationPortName).concat(".").concat(eventSignalName).concat("(eventStr).send();").concat(endLine);
+	result=result.concat(observationPortName)
+				 .concat(".")
+				 .concat(eventSignalName)
+				 .concat("(evtObj).send();")
+				 .concat(endLine);
+				 
 	return  result;
 }
 ////
-operation Any generateWriteLTTngTraceBody(): String{
+/*operation Any generateWriteLTTngTraceBody(): String{
 		var result:String;
 	//Todo
 	var preLine="this->".concat(instrumentPrefix);
@@ -229,7 +224,7 @@ operation Any generateWriteLTTngTraceBody(): String{
 	result=result.concat("strcpy(eventStr,tempS.c_str());").concat(endLine);
 	result=result.concat("tracepoint(umlrtevent_provider, umlrtevent_tracepoint,eventStr);").concat(endLine);
 	return  result;
-}
+}*/
 ///////
 
 //////create trace 
