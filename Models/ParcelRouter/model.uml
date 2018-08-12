@@ -4,6 +4,9 @@
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IbhgEML7EeaSH8bbL43htA" source="UMLRT_Default_top">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IbjVQML7EeaSH8bbL43htA" key="top_name" value="Parcer_Router"/>
     </eAnnotations>
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_o1ryQJ4yEeimx6zVUazwCQ" source="http://www.eclipse.org/papyrus-rt/language/1.0.0">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o1sZUJ4yEeimx6zVUazwCQ" key="language" value="umlrt-cpp"/>
+    </eAnnotations>
     <packagedElement xmi:type="uml:Class" xmi:id="_9X86YML5EeaSH8bbL43htA" name="Parcer_Router" isActive="true">
       <ownedAttribute xmi:type="uml:Property" xmi:id="_o9z8AML6EeaSH8bbL43htA" name="gen" visibility="protected" type="_GuPUUML6EeaSH8bbL43htA" isOrdered="true" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_sW4woML6EeaSH8bbL43htA" name="top" visibility="protected" type="_IuNA8ML6EeaSH8bbL43htA" isOrdered="true" aggregation="composite"/>
@@ -54,7 +57,7 @@
         <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_6kIb0IeXEeSVyrlWP4nYew"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_37GIwML8EeaSH8bbL43htA" name="parcel" type="_aEoEwML7EeaSH8bbL43htA">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_48hwkML8EeaSH8bbL43htA"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_48hwkML8EeaSH8bbL43htA" value="0"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_48kM0ML8EeaSH8bbL43htA" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_zN4IcMYtEeaYV5cb1Zesag" name="delay">
@@ -63,6 +66,9 @@
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_BH5zUMYuEeaYV5cb1Zesag" name="successorFree">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_uNXBkJ4yEeimx6zVUazwCQ" name="observation" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+        <type xmi:type="uml:Collaboration" href="../ca.queensu.cs.observer/libraries/observer.uml#_TIMcUNRNEearFdKvR_8nWw"/>
       </ownedAttribute>
       <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_sgJk4ML7EeaSH8bbL43htA" name="GenStateMachine" isReentrant="false">
         <region xmi:type="uml:Region" xmi:id="_sgSu0ML7EeaSH8bbL43htA" name="Region">
@@ -113,7 +119,7 @@ timer.informEvery(UMLRTTimespec(4,0));</body>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_gvpnwML6EeaSH8bbL43htA" name="right" visibility="public" type="_Qq5xwML6EeaSH8bbL43htA" isOrdered="true" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_ieg9UML6EeaSH8bbL43htA" name="left" visibility="public" type="_Qq5xwML6EeaSH8bbL43htA" isOrdered="true" aggregation="composite"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_Ko_yUML9EeaSH8bbL43htA" name="parcel" type="_aEoEwML7EeaSH8bbL43htA">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ko_yUcL9EeaSH8bbL43htA"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ko_yUcL9EeaSH8bbL43htA" value="0"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ko_yUsL9EeaSH8bbL43htA" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_QkCwQMMEEeaSH8bbL43htA" name="log" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
@@ -158,7 +164,7 @@ timer.informEvery(UMLRTTimespec(4,0));</body>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_K5yiMMMPEeaSH8bbL43htA" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_LhdrYML9EeaSH8bbL43htA" name="parcels" type="_aEoEwML7EeaSH8bbL43htA">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LhdrYcL9EeaSH8bbL43htA"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LhdrYcL9EeaSH8bbL43htA" value="0"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LhdrYsL9EeaSH8bbL43htA" value="*"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_P-w_UMMMEeaSH8bbL43htA" name="log" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
@@ -228,7 +234,7 @@ timer.informEvery(UMLRTTimespec(4,0));</body>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_sK7PEMM4EeahHehXumVB-w" name="exit" visibility="public" type="_Qq5xwML6EeaSH8bbL43htA" isOrdered="true" aggregation="composite" isBehavior="true"/>
       <ownedAttribute xmi:type="uml:Port" xmi:id="_v-KQIMM4EeahHehXumVB-w" name="detection" visibility="public" type="_wvKPQMM4EeahHehXumVB-w" isOrdered="true" aggregation="composite" isBehavior="true"/>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_4iC8wMM4EeahHehXumVB-w" name="parcel" type="_aEoEwML7EeaSH8bbL43htA">
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8_D6oMM4EeahHehXumVB-w"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8_D6oMM4EeahHehXumVB-w" value="0"/>
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8_HlAMM4EeahHehXumVB-w" value="1"/>
       </ownedAttribute>
       <ownedAttribute xmi:type="uml:Property" xmi:id="_gQNcAMOlEeaV4cHHWddkKg" name="successorFree">
@@ -534,6 +540,7 @@ this->leftSuccessorFree = free;</body>
       <packagedElement xmi:type="uml:Usage" xmi:id="_RDtUsMM5EeahHehXumVB-w" client="_RDbn4MM5EeahHehXumVB-w" supplier="_RDpDQMM5EeahHehXumVB-w"/>
       <packagedElement xmi:type="uml:CallEvent" xmi:id="_cjDs4MM5EeahHehXumVB-w" operation="_XR2R8MM5EeahHehXumVB-w"/>
     </packagedElement>
+    <packagedElement xmi:type="uml:Package" href="../ca.queensu.cs.observer/libraries/observer.uml#_rqPoENRIEeayFZJ-SYgDzA"/>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_nykGUML5EeaSH8bbL43htA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nyl7gML5EeaSH8bbL43htA" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
@@ -649,4 +656,5 @@ this->leftSuccessorFree = free;</body>
   <UMLRTStateMachines:RTPseudostate xmi:id="_RQTwYMYlEeaYV5cb1Zesag" base_Pseudostate="_RQRUIMYlEeaYV5cb1Zesag"/>
   <UMLRealTime:RTPort xmi:id="_4c99IMYlEeaYV5cb1Zesag" isWired="false" base_Port="_4c8vAMYlEeaYV5cb1Zesag"/>
   <RTCppProperties:PassiveClassProperties xmi:id="_TuYcgN5nEeakB9CQglrL_g" headerPreface="" base_Class="_aEoEwML7EeaSH8bbL43htA" privateDeclarations="" publicDeclarations=""/>
+  <UMLRealTime:RTPort xmi:id="_uNY2wJ4yEeimx6zVUazwCQ" isPublish="false" isWired="true" base_Port="_uNXBkJ4yEeimx6zVUazwCQ"/>
 </xmi:XMI>
