@@ -16,7 +16,6 @@ var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
 var ecoreUtil = emfTool.ecoreUtil;
 
 //-----------------------------intialize variables........................................//
-p1.println();
 
 //
 var uniqueId:Integer=0; // manages the generation of unique id for the name of the elements
@@ -50,10 +49,16 @@ var libURI = UMLRTModel.resource.uri.createURI("platform:/plugin/org.eclipse.uml
 var libResource = UMLRTModel.resource.resourceSet.createResource(libURI);
 libResource.load(null);
 UMLRTModel.resource.resourceSet.resources.add(libResource);
-// The common approach for loading a UML primitive type
-// DataType.all.selectOne(pt|pt.name = "Integer").println();
 
-var observerURI = UMLRTModel.resource.uri.createURI("file:/home/hili/git/Observer/Observer/ca.queensu.cs.observer/libraries/observer.uml");
+
+var observerURI; 
+
+if (observerPath.isDefined()) {
+	observerURI = UMLRTModel.resource.uri.createURI(observerPath);
+}
+else {
+	observerURI = UMLRTModel.resource.uri.createURI("platform:/ca.queensu.cs.observer/libraries/observer.uml");
+}
 var observerResource = UMLRTModel.resource.resourceSet.createResource(observerURI);
 observerResource.load(null);
 //UMLRTModel.resource.resourceSet.resources.add(observerResource);
