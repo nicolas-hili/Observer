@@ -146,19 +146,17 @@ operation  UMLRTModel!Transition createTrigger(name:String,port:Any,event:Any) :
 
 /// set port kind
 operation  UMLRTModel!Port setPortKind(kind:String){ // any should be set of capsules
+	var s: Stereotype = self.appliedStereotypes->selectOne(s | s.name == "RTPort");
 	if (kind=="SAP"){
 			self.isService=false;
-			//self.println("Port name is:");
-			//(self.getUMLRTStereotypeDetail()).println("streotype rerurned");
-			(self.getUMLRTStereotypeDetail()).isWired=false;
-			//self.wired=false;
+			self.setValue(s, "isWired", false);
+			self.setValue(s, "isNotification", true);
 			self.isBehavior=true;
-			self.getUMLRTStereotypeDetail().isNotification=true;
 			}
 	else if (kind=="SPP"){
 			self.isService=true;
-			self.wired=false;
-			self.getUMLRTStereotypeDetail().isPublish=true;
+			self.setValue(s, "isWired", false);
+			self.setValue(s, "isPublish", true);
 			self.isBehavior=true;
 			}
 		//case "Relay": // for relay port, not requiered for now
@@ -171,7 +169,7 @@ operation  UMLRTModel!Class addPortToCapsules(name:String,portType:Any,conj:Bool
 		var p:UMLRTModel!Port=self.createPort(name, conj, lower, upper, portType);
 		self.ownedAttributes.add(p);
 		//self.println("adding debugging port to capsule :");
-		p.applyUMLRTStereotype();
+		p.applyUMLRTStereotype(modelroot);
 		p.setPortKind(kind);
 }
 
@@ -281,7 +279,7 @@ operation UMLRTModel!Class createPort(name:String,conj:Boolean,lowerValue:Intege
 	var p:UMLRTModel!Port= new UMLRTModel!Port;
 	p.name=name;
 	self.ownedAttributes.add(p);
-	p.applyUMLRTStereotype();
+	p.applyUMLRTStereotype(modelroot);
 	p.isConjugated=conj;
 	p.type=type;
 	//p.visibility.println();

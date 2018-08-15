@@ -12,6 +12,9 @@ import "UMLRTProfilesOperations.eol";
 import "UMLRTElementOperation.eol";
 import "DetailTracing.eol";
 
+var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+var ecoreUtil = emfTool.ecoreUtil;
+
 //-----------------------------intialize variables........................................//
 p1.println();
 
@@ -50,19 +53,21 @@ UMLRTModel.resource.resourceSet.resources.add(libResource);
 // The common approach for loading a UML primitive type
 // DataType.all.selectOne(pt|pt.name = "Integer").println();
 
+var observerURI = UMLRTModel.resource.uri.createURI("file:/home/hili/git/Observer/Observer/ca.queensu.cs.observer/libraries/observer.uml");
+var observerResource = UMLRTModel.resource.resourceSet.createResource(observerURI);
+observerResource.load(null);
+//UMLRTModel.resource.resourceSet.resources.add(observerResource);
+
 var UMLPrimitiveTypes=UMLRTModel!Package.all.select(c|c.name="PrimitiveTypes").first();
 //var UMLRTSLIB=UMLRTModel!Package.all.select(c|c.name="UMLRT-RTS").first();
-var modelroot=UMLRTModel!Package.all.select(c|c.type.name="Model").first();
+var modelroot:Model=UMLRTModel!Package.all.select(c|c.type.name="Model").first();
 
 
-observationProtocol=modelroot.getAllNestedPackage().selectOne(p|p.name=ObserverProtocalName); // load the debugging protocol
+//observationProtocol=modelroot.getAllNestedPackage().selectOne(p|p.name=ObserverProtocalName); // load the debugging protocol
 
-if (not(observationProtocol.isDefined())) {
-	"Observer is not loaded".println();
-	return;
-}
 
-steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.name="CallEvent" and e.`operation`.name=steeringEventName);
+
+//steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.name="CallEvent" and e.`operation`.name=steeringEventName);
 //"Instrumentaion is Started on model:".println("Debug Level 0: ");
 //modelroot.println("Debug Level 0: ");
  
@@ -76,7 +81,44 @@ allStateMachines.getAllRegions().getAllStates().size().println("number of states
 
 //----------------------------main loop of the transformation........................................//
 transaction{
-	//addGateWay();
+
+	/* Load observer */	
+	var copiedContents = ecoreUtil.copyAll(observerResource.getContents());
+	modelroot.eResource().getContents().addAll(copiedContents);
+	modelroot.packagedElement.add(copiedContents.get(0));
+	var observerPackage = copiedContents.get(0);
+	var observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
+	var observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
+	
+	/* Get top capsule */
+	var topCapsuleAnnotation = modelroot.eAnnotations.selectOne(e | e.source="UMLRT_Default_top");
+	var topCapsule: Class;
+	
+	if (topCapsuleAnnotation.isDefined()) {
+		topCapsule = allClasses->selectOne(c | c.name == topCapsuleAnnotation.details.first().value);
+	}
+	else {
+		topCapsule = allClasses->selectOne(c | c.name == "Top");
+	}
+	
+	if (not topCapsule.isDefined()) {
+		"No top capsule defined".println();
+		return;
+	}
+	
+	/* Add the Observer capsule part */
+	var observerProperty = new UMLRTModel!Property();
+	observerProperty.type = observerCapsule;
+	observerProperty.name = observerCapsule.name.toLowerCase();
+	topCapsule.ownedAttributes.add(observerProperty);
+	observerProperty.applyUMLRTStereotype(modelroot);
+	
+	/* Add Observer port to all observable capsules */
+	for (capsule in allClasses) {
+		capsule.addPortToCapsules("observation",observerProtocol, false, 1, 1, "SAP");
+	}
+		
+	
 	for (SM in allStateMachines){
 	
 		var capsule = SM.owner;
@@ -121,7 +163,7 @@ transaction{
 	}
 //return modelroot;
 //abort;
-	}
+	} 
 
 /**
  * Whether a capsule is observable or not.
