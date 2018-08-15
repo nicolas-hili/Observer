@@ -26,7 +26,7 @@ public class Gui  extends JFrame implements Runnable {
 	
    private SocketClient client;
 
-   private volatile ArrayBlockingQueue<String> events = new ArrayBlockingQueue<String>(20);
+   private volatile ArrayBlockingQueue<String> events = new ArrayBlockingQueue<String>(1024);
 	
    // Connect status constants
    final static int DISCONNECTED = 0;
