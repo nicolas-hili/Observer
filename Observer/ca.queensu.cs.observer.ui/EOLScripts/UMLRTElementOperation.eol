@@ -166,7 +166,7 @@ operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: 
 		}
 	}
 	
-	if (/*existingCallEvent.isDefined() and */existingOperation.isDefined()) {
+	if (existingCallEvent.isDefined() and existingOperation.isDefined()) {
 		var mimicTrigger: UMLRTModel!Trigger = new UMLRTModel!Trigger();
 		mimicTrigger.port.add(observerPort);
 		mimicTrigger.event = existingCallEvent;
