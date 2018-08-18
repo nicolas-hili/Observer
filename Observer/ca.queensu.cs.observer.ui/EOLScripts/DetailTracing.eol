@@ -62,22 +62,13 @@ operation UMLRTModel!Transition generateTraceBody(traceType:String) {
 	    lineEnd=lineEnd.concat(",(char *)\"").concat(self.qualifiedName).concat("\",(char *)\"").concat(self.source.name).concat("\",(char *)\"").concat(self.target.name).concat("\",msg->signal.getSrcPort()->containerClass->name,msg->signal.getSrcPort()->getName());").concat(endLine);//.concat(self.trigger.port.name).concat(");\n");
     } 
     else {
-        //self.println("trace in exception list for transition: ");
-        //self.transType().println("Transition type is: ");
-        //self.source.println("source is ");
-        //self.source.println("target is ");
-       // self.qualifiedName.println()
-        //currentCapsuleName.println("current capsule name is ");
 	    lineStart=instrumentPrefix.concat("sendEvent(Event::Transition,Event::TransitionStart,this->getName(),this->getIndex(),(char *)\"\",this->getTypeName()");
 		lineStart=lineStart.concat(",(char *)\"").concat(self.qualifiedName).concat("\",(char *)\"").concat(self.source.name).concat("\",(char *)\"").concat(self.target.name).concat("\",(char *)\"null\",(char *)\"null\");").concat(endLine);//concat(self.trigger.port.name).concat(");\n");
 	    lineEnd=instrumentPrefix.concat("sendEvent(Event::Transition,Event::TransitionEnd,this->getName(),this->getIndex(),(char *)\"\",this->getTypeName()");
 	    lineEnd=lineEnd.concat(",(char *)\"").concat(self.qualifiedName).concat("\",(char *)\"").concat(self.source.name).concat("\",(char *)\"").concat(self.target.name).concat("\",(char *)\"null\",(char *)\"null\");").concat(endLine);//.concat(self.trigger.port.name).concat(");\n");
     }
 	var tempEffect=self.effect.body.first();
-    //tempEffect=lineStart.concat(endLine).concat(tempEffect);  // add trace at start of action code 
     tempEffect=tempEffect.concat(endLine).concat(lineEnd);    // add trace at end of the action code 
-    // deactive line end
-    //tempEffect=tempEffect.concat("\n").concat(lineEnd);
     self.effect.body.clear();
     self.effect.body.add(tempEffect);
 }
@@ -112,6 +103,14 @@ operation UMLRTModel!State addTrace(traceType:String) {
 	self.generateTraceBody(traceType);
 	//return  result;
 }
+
+// Remove send method
+operation UMLRTModel!Class removeSendEventMethod() {
+	var name = instrumentPrefix.concat("sendEvent");
+	delete self.ownedOperation->selectOne(op | op.name == name);
+	delete self.ownedBehavior->selectOne(be  | be.name == name);
+}
+
 
 //// add method for send event 
 operation UMLRTModel!Class  addSendEventMethod() {
@@ -264,11 +263,11 @@ operation UMLRTModel!State generateTraceBody(traceType:String) {
 /////
 operation UMLRTModel!State cleanTraceBody(traceType:String){
 	var tempEntry=self.entry.body.first();
-	tempEntry=tempEntry.cleanAddedCode("__Debug__sendEvent(");
+	tempEntry=tempEntry.cleanAddedCode(instrumentPrefix.concat("sendEvent("));
 	self.entry.body.clear();
 	self.entry.body.add(tempEntry);
 	var tempExit=self.exit.body.first();
-	tempExit=tempExit.cleanAddedCode("__Debug__sendEvent(");
+	tempExit=tempExit.cleanAddedCode(instrumentPrefix.concat("sendEvent("));
 	//tempExit.println();
 	self.exit.body.clear();
 	self.exit.body.add(tempExit);

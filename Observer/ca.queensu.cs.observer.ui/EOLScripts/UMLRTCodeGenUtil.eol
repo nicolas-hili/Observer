@@ -244,7 +244,7 @@ operation String cleanAddedCode(keyword:String):String{
 	//;
 	//lines.println("after");
 	var result="";
-	for (line in lines.select(line| not line.trim().startsWith(keyword))){
+	for (line in lines->select(line : String | not line.trim().startsWith(keyword))) {
 		result=result.concat(line).concat(endLine);
 	}
 	//result.println();

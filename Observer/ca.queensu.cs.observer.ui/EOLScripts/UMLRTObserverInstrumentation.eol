@@ -2,6 +2,7 @@
     
     Developers:
     Mojtaba Bagherzadeh(mojtaba@cs.queensu.ca): Initial development
+	Nicolas Hili (hili@cs.queensu.ca): General improvement
 
 */
 
@@ -52,6 +53,8 @@ UMLRTModel.resource.resourceSet.resources.add(libResource);
 
 
 var observerURI; 
+var observerCapsule: UMLRTModel!Class;
+var observerProtocol: UMLRTModel!Collaboration;
 
 if (observerPath.isDefined()) {
 	observerURI = UMLRTModel.resource.uri.createURI(observerPath);
@@ -59,165 +62,229 @@ if (observerPath.isDefined()) {
 else {
 	observerURI = UMLRTModel.resource.uri.createURI("platform:/ca.queensu.cs.observer/libraries/observer.uml");
 }
+
 var observerResource = UMLRTModel.resource.resourceSet.createResource(observerURI);
 observerResource.load(null);
-//UMLRTModel.resource.resourceSet.resources.add(observerResource);
+UMLRTModel.resource.resourceSet.resources.add(observerResource);
 
 var UMLPrimitiveTypes=UMLRTModel!Package.all.select(c|c.name="PrimitiveTypes").first();
 //var UMLRTSLIB=UMLRTModel!Package.all.select(c|c.name="UMLRT-RTS").first();
 var modelroot:Model=UMLRTModel!Package.all.select(c|c.type.name="Model").first();
 
+/// extract all state machine and capsules
+var allStateMachines: Set	= modelroot.getAllStateMachines()
+									   ->select(s | s.owner.name <> ObserverCapsuleName);
+									   
+var allClasses: Set			= modelroot.getAllOwnedClasses()
+									   ->select(c | c.name <> ObserverCapsuleName and c.name <> "EventObj");
 
-//observationProtocol=modelroot.getAllNestedPackage().selectOne(p|p.name=ObserverProtocalName); // load the debugging protocol
+/// Get top capsule
+var topCapsuleAnnotation = modelroot.eAnnotations.selectOne(e | e.source="UMLRT_Default_top");
+var topCapsule: Class;
+
+if (topCapsuleAnnotation.isDefined()) {
+	topCapsule = allClasses->selectOne(c | c.name == topCapsuleAnnotation.details.first().value);
+}
+else {
+	topCapsule = allClasses->selectOne(c | c.name == "Top");
+}
+
+if (not topCapsule.isDefined()) {
+	"No top capsule defined".println();
+	return;
+}
+
+allClasses.size().println("Number of capsules: ");
+allStateMachines.getAllRegions().getAllStates().size().println("Number of states: ");
+"".println();
 
 
-
-//steeringEvent=observationProtocol.packagedElement.first().selectOne(e|e.type.name="CallEvent" and e.`operation`.name=steeringEventName);
-//"Instrumentaion is Started on model:".println("Debug Level 0: ");
-//modelroot.println("Debug Level 0: ");
- 
-
-/// extract all state machine and classes
-
-var allStateMachines:Set=modelroot.getAllStateMachines().select(s|s.owner.name<>ObserverCapsuleName);
-var allClasses=modelroot.getAllOwnedClasses().select(c|c.name<>ObserverCapsuleName);
-allClasses.size().println("number of capsules: ");
-allStateMachines.getAllRegions().getAllStates().size().println("number of states: ");
 
 //----------------------------main loop of the transformation........................................//
 transaction{
 
-	/* Load observer */	
-	var copiedContents = ecoreUtil.copyAll(observerResource.getContents());
-	modelroot.eResource().getContents().addAll(copiedContents);
-	modelroot.packagedElement.add(copiedContents.get(0));
-	var observerPackage = copiedContents.get(0);
-	var observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
-	var observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
+	var observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
+	if (observerPackage.isDefined()) {
+		"--\nObserver has already been loaded. Start cleaning...".println();
+		
+		observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
+		observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
+		var observerProtocolPackage = observerPackage.packagedElement->selectOne(c | c.name == "Observation");
+		
+		"-> Deletion of the Observer capsule part in Top".println();
+		delete topCapsule.ownedAttributes->selectOne(p | p.name == observerCapsule.name.toLowerCase());
+		
+		// Un-instumenting the capsule	
+		for (capsule in allClasses) {
+		
+			var stateMachine : UMLRTModel!StateMachine = capsule
+								.ownedBehavior
+								->selectOne(b | b.type.name = "StateMachine");
+								
+			if (not stateMachine.isDefined()) {
+				// No state machine, we do not instrument
+				continue;
+			}
 	
-	/* Get top capsule */
-	var topCapsuleAnnotation = modelroot.eAnnotations.selectOne(e | e.source="UMLRT_Default_top");
-	var topCapsule: Class;
+			capsule.name.println("-> Un-instrumentation of capsule: ");	
+			capsule.uninstrumentStateMachine(stateMachine);
+			capsule.uninstrumentStructure();
+			
+		}
+		
+		"-> Deletion of the Observer package".println();
+		delete modelroot.packagedElement->selectOne(pe | pe.name == "Observation");
+		
+		"Done.\n".println();
+	}	
 	
-	if (topCapsuleAnnotation.isDefined()) {
-		topCapsule = allClasses->selectOne(c | c.name == topCapsuleAnnotation.details.first().value);
+	"--\nStart (re-)building".println();
+	
+	
+	"-> Load observer".println();
+	var copied = ecoreUtil.copyAll(observerResource.getContents());
+	for(iterator in copied) {
+		if(iterator.eClass().name=="Package") {
+			modelroot.packagedElement.add(iterator);
+		}
+		else {
+			modelroot.eResource().getContents().add(iterator);
+		}
 	}
-	else {
-		topCapsule = allClasses->selectOne(c | c.name == "Top");
-	}
+	var observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
+
+	observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
+	observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
+	var observerProtocolPackage = observerPackage.packagedElement->selectOne(c | c.name == "Observation");
 	
-	if (not topCapsule.isDefined()) {
-		"No top capsule defined".println();
-		return;
-	}
+	/* Hack for fixing the model after copying*/
+	var observerInterface: UMLRTModel!Interface = observerProtocol.getAllImplementedInterfaces().get(0);
 	
-	/* Add the Observer capsule part */
+	var collaborationInterface = observerProtocol.getInterfaceRealizations().get(0).contract;
+	var collaborationInterfaceIO = observerProtocol.getInterfaceRealizations().get(1).contract;
+	observerProtocol.getInterfaceRealizations().clear();
+	
+	var collaborationInterfaceRealization:		UMLRTModel!InterfaceRealization		= new UMLRTModel!InterfaceRealization;
+	var collaborationInterfaceRealizationIO:	UMLRTModel!InterfaceRealization 	= new UMLRTModel!InterfaceRealization;
+	
+	collaborationInterfaceRealization.contract		= collaborationInterface;
+	collaborationInterfaceRealizationIO.contract	= collaborationInterfaceIO;
+	observerProtocol.getInterfaceRealizations().add(collaborationInterfaceRealization);
+	observerProtocol.getInterfaceRealizations().add(collaborationInterfaceRealizationIO);
+	
+	var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
+	mimicOperation.name = "myBigOperation";
+	observerInterface.ownedOperation.add(mimicOperation);
+	
+	"-> Add the Observer capsule part".println();
 	var observerProperty = new UMLRTModel!Property();
 	observerProperty.type = observerCapsule;
 	observerProperty.name = observerCapsule.name.toLowerCase();
 	topCapsule.ownedAttributes.add(observerProperty);
 	observerProperty.applyUMLRTStereotype(modelroot);
-	
-	/* Add Observer port to all observable capsules */
+
+	// Instrument capsules	
 	for (capsule in allClasses) {
-		capsule.addPortToCapsules("observation",observerProtocol, false, 1, 1, "SAP");
-	}
-		
 	
-	for (SM in allStateMachines){
-	
-		var capsule = SM.owner;
-		
-		// The capsule is observable
-		if (not(capsule.isObservable())) {
+		var stateMachine : UMLRTModel!StateMachine = capsule
+							.ownedBehavior
+							->selectOne(b | b.type.name = "StateMachine");
+							
+		if (not stateMachine.isDefined()) {
+			// No state machine, we do not instrument
 			continue;
 		}
-		
-	    currentCapsuleName = capsule.name;
-		
-		currentCapsuleName.println("Instrumentation of capsule: ");
-		
-	    observationPort = capsule.getObservablePort();	   
 
+		capsule.name.println("-> Instrumentation of capsule: ");	
 		capsule.refineStructure();
-	    
-		var allStates = SM.getAllRegions()
-							.getAllStates()
-							->select(s | s.stateType() == "Composite" or s.stateType() == "State");
-							
-		var allTransitions = SM.getAllRegions()
-							.getAllTransitions();
-							
-		/// instrument States
-		for (s in allStates){
-			s.addTrace(traceType);
-		}
+		capsule.refineStateMachine(stateMachine);
 		
-	    /// instrument Transitions
-	    for (t in allTransitions){
-	    		if (t.source.name==null)
-	    			t.source.assignName();
-	    		if (t.target.name==null)
-	    			t.target.assignName();
-			t.addTrace(traceType);
-			// add trigger for steering
-			if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC"){
-//				t.createTrigger(instrumentPrefix.concat("MSG"), observationPort, steeringEvent);
-				}
-		}
 	}
-//return modelroot;
-//abort;
-	} 
-
-/**
- * Whether a capsule is observable or not.
- */	
-operation Class isObservable () : Boolean {
-	return self.ownedAttributes->exists( a | a.name = observationPortName);
-}
+	"Done.\n--".println();
+} 
 
 /**
  * Return the observation port of a capsule.
  */	
-operation Class getObservablePort () : Port {
+operation Class getObservablePort() : Port {
 	return self.ownedAttributes
 				->selectOne( a | a.name = observationPortName);
 }
-	
-//----------------------------defined main functions for transformation........................................//
-/// refine state machine for stop and resume operation
 
+operation  Class uninstrumentStructure() {
+
+	/* Remove Observer port from all observable capsules */
+	self.removePort(observationPortName);
+	
+	/* Remove sendEventMethod */
+	self.removeSendEventMethod();
+}
 
 operation  Class refineStructure() {
-	/// add debug port to all capsules
-	//"refineStructure is started".println();
-	//var gateWayRoot=modelroot!Package.all.select(c|c.type.name=ObserverCapsuleName).first();
-	//var gateWayCapsule=gateWayRoot.getAllOwnedClasses().selectOne(c|c.name="GateWay");
-	//observeProtocol=gateWayRoot.getAllNestedPackage().selectOne(p|p.name="ExtInterface").packagedElement.first();
-	//allClasses.addPortToCapsules(debugPortName,observeProtocol,true,1,1,"SAP");
-//	for (c in allClasses)
-		//c.getUMLRTCapsuleProperties().println();
-//		if (c.getStateMachine().isDefined()){
-		    //  add method to handle recalling messages
-		    //activePorts=c.getStateMachine().getAllRegions().getAllTransitions().getActivePorts();
-		    //c.addRecallAllMsgMethod(activePorts);
-			//c.println("capsule:");
-			//c.addPortToCapsules(debugPortName,observeProtocol,true,1,1,"SAP");
-			//"Add method to view attributes: ".concat(c.name).println("refineStructure: ");
-			//c.addVarWatchMethod();
-			//"Add method to change attributes: ".concat(c.name).println("refineStructure: ");
-			//c.addVarChangeMethod();
-			//"Add required attributes: ".concat(c.name).println("refineStructure: ");
-			//c.addRequiredAttributes();
-			//111--
-			//// add deatil tracing method and apply it on all states and transtions
-			//c.addTracingRequiredHeader();
-			self.addSendEventMethod();
-			//// add if guard to all stable state
-			//// generate the code for checking the condition in entry and exit
-			//// 
-			
-//		}
+
+	/* Add Observer port to all observable capsules */
+	self.addPortToCapsules(observationPortName, observerProtocol, false, 1, 1, "SAP");
+		
+	/* Add sendEvent method */
+	self.addSendEventMethod();
 	
+}
+
+operation  Class uninstrumentStateMachine(sm : UMLRTModel!StateMachine) {
+	
+	var allStates = sm.getAllRegions()
+						.getAllStates()
+						->select(s | s.stateType() == "Composite" or s.stateType() == "State");
+							
+	var allTransitions = sm.getAllRegions()
+						.getAllTransitions();
+							
+	/// instrument States
+	for (s in allStates){
+		s.cleanTraceBody("");
+	}
+		
+	/// instrument Transitions
+	for (t in allTransitions){
+		t.cleanTraceBody("");
+		
+		// add trigger for steering
+		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {	
+			var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
+			var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
+			t.removeTrigger(self.getObservablePort());
+		}
+	}
+}
+
+operation  Class refineStateMachine(sm : UMLRTModel!StateMachine) {
+
+	var allStates = sm.getAllRegions()
+						.getAllStates()
+						->select(s | s.stateType() == "Composite" or s.stateType() == "State");
+							
+	var allTransitions = sm.getAllRegions()
+						.getAllTransitions();
+							
+	/// instrument States
+	for (s in allStates){
+		s.addTrace(traceType);
+	}
+		
+	/// instrument Transitions
+	for (t in allTransitions){
+		if (t.source.name==null)
+	    	t.source.assignName();
+	    if (t.target.name==null)
+	    	t.target.assignName();
+	    	
+		t.addTrace(traceType);
+		
+		// add trigger for steering
+		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {	
+			var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
+			var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
+			t.createTrigger(prefix, existingTrigger, self.getObservablePort());
+		}
+	}
 }

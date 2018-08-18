@@ -132,16 +132,65 @@ operation UMLRTModel!Transition createDeferTriggers(){
 			self.createTrigger(instrumentPrefix.concat("MSG"), p, anyEvent);
 }
 
+
+operation UMLRTModel!Transition removeTrigger(observerPort: UMLRTModel!Port) {
+	delete self.trigger->selectOne(t | t.port->exists(p | p.name == observerPort.name));
+}
+
 //// create trigger 
-operation  UMLRTModel!Transition createTrigger(name:String,port:Any,event:Any) : UMLRTModel!Trigger {
-	var t:UMLRTModel!Trigger= new UMLRTModel!Trigger();
-	t.name=name;
-	//port.println();
-	//t.port.add(port);
-	t.port=port;
-	t.event=event;
-	self.trigger.add(t);
-	return t;
+operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: UMLRTModel!Trigger, observerPort: UMLRTModel!Port) {
+	
+	// Variable initialisation
+	var initialPort: UMLRTModel!Port = initialTrigger.port.first();
+	var observerInterface: UMLRTModel!Interface = observerProtocol.getAllImplementedInterfaces().get(0);
+	var p: UMLRTModel!Package = observerProtocol.getPackage();
+	
+	var event: UMLRTModel!CallEvent = initialTrigger.event;
+	var messageName: String = event.`operation`.name;
+	var proposedName: String = prefix + messageName;
+
+	var existingCallEvent: UMLRTModel!CallEvent;
+	var existingOperation: UMLRTModel!Operation;
+	
+	for (op in observerInterface.getOwnedOperations()) {
+		if (op.getName().equals(proposedName)) {
+			existingOperation = op;
+			break;
+		}
+	}
+	
+	for (pe in p.getPackagedElements()) {
+		if (pe.eClass().name == "CallEvent" and proposedName == pe.name) {
+			existingCallEvent = pe;
+			break;
+		}
+	}
+	
+	if (/*existingCallEvent.isDefined() and */existingOperation.isDefined()) {
+		var mimicTrigger: UMLRTModel!Trigger = new UMLRTModel!Trigger();
+		mimicTrigger.port.add(observerPort);
+		mimicTrigger.event = existingCallEvent;
+		self.trigger.add(mimicTrigger);
+	}
+	else {
+		//FIXME: Create a call event
+		var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
+		mimicOperation.name = proposedName;
+		observerInterface.ownedOperation.add(mimicOperation);
+		
+		var mimicEvent: UMLRTModel!CallEvent = new UMLRTModel!CallEvent();
+		modelroot.packagedElement.add(mimicEvent);	// Trick to avoid bug
+		p.packagedElement.add(mimicEvent);
+//		mimicEvent.name = proposedName;
+		mimicEvent.`operation` = mimicOperation;
+		
+		var mimicTrigger: UMLRTModel!Trigger = new UMLRTModel!Trigger();
+		mimicTrigger.port.add(observerPort);
+		mimicTrigger.event = mimicEvent;
+		self.trigger.add(mimicTrigger);
+								
+	}
+				
 }
 
 /// set port kind
@@ -163,6 +212,13 @@ operation  UMLRTModel!Port setPortKind(kind:String){ // any should be set of cap
 		//case "Ext": // external behaviour, not requiered for now
 		//case "Int": // internal behaviour, not requiered for now
 }
+
+/// add port to set of capsule
+operation  UMLRTModel!Class removePort(name: String) {
+		delete self.ownedPort->selectOne(p | p.name == name);
+}
+
+
 
 /// add port to set of capsule
 operation  UMLRTModel!Class addPortToCapsules(name:String,portType:Any,conj:Boolean,lower:Integer,upper:Integer,kind:String){ // any should be set of capsules
