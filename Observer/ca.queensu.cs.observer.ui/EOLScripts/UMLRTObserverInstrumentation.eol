@@ -179,6 +179,7 @@ transaction{
 	topCapsule.ownedAttributes.add(observerProperty);
 	observerProperty.aggregation = (UMLRTModel!AggregationKind#composite);
 	observerProperty.applyUMLRTStereotype(modelroot);
+	
 
 	// Instrument capsules	
 	for (capsule in allClasses) {
@@ -197,6 +198,10 @@ transaction{
 		capsule.refineStateMachine(stateMachine);
 		
 	}
+
+	"-> Instrumentation of the Observer capsule".println();
+	observerCapsule.instrumentObserver();
+
 	"Done.\n--".println();
 } 
 
@@ -284,4 +289,34 @@ operation  Class refineStateMachine(sm : UMLRTModel!StateMachine) {
 			t.createTrigger(prefix, existingTrigger, self.getObservablePort());
 		}
 	}
+}
+
+operation UMLRTModel!Class instrumentObserver () {
+	// FIXME: should be called listCapsuleMessages instead of listCapsuleMessage
+	var listCapsuleMessageOperation : UMLRTModel!Operation = self.ownedOperation->selectOne(op | op.name == "listCapsuleMessage");
+	var behavior : UMLRTModel!OpaqueBehavior = listCapsuleMessageOperation.method->first();
+	behavior.body->clear();
+	var body : String = "std::string sourceName = evt.getSourceName();\n";
+	for (sm in allStateMachines) { 
+		// for all capsule:
+		body += "if (sourceName == \""+sm.owner.name+"\") {\n";
+		
+		var allTransitions = sm.getAllRegions()
+						.getAllTransitions();
+						
+		var i: Integer = 0;
+		var opNames = allTransitions->select(t | t.trigger->exists(tr | tr.port->exists(p | p.name == "observation")))
+									 ->collect(t | t.trigger->first())
+									 ->collect(tr | tr.event.`operation`)
+									 ->collect(op | op.name)
+									 ->asSet();
+
+		for (opName in opNames) { 
+				body += "\tevt.setParam(\""+i+"\", \""+opName+"\");\n";
+				i++;
+		}
+		body += "}\n";
+	}
+	body += "return evt;";
+	behavior.body.add(body);
 }
