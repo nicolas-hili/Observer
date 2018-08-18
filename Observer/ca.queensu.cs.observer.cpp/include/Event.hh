@@ -28,7 +28,8 @@ typedef enum {
 		Capsule,
 		Attribute,
 		Timer,
-		UnknownSource
+		UnknownSource,
+		Command
 	} EventSource;
 
 	typedef enum {
@@ -58,7 +59,10 @@ typedef enum {
 		TimerSet,
 		TimerCancel,
 		TimerTimeout, // Timer events
-		UnknownKind
+		UnknownKind,
+		List,		  // Command events
+		Show,
+		Trigger
 	} EventKind;
 
 private:
