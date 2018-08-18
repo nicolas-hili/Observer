@@ -144,7 +144,7 @@ public class ObserverUpdate {
 		for (int i = 0; i < fragmentLenght; i++) {
 			observerPath += fragments[i] + "/";
 		}
-		observerPath += "ca.queensu.cs.observer.cpp/";
+		observerPath += "../Observer/ca.queensu.cs.observer.cpp/";
 		
 		File observerSourceFolder = new File(observerPath + "src/");
 		File observerIncludeFolder = new File(observerPath + "include/");
@@ -185,7 +185,7 @@ public class ObserverUpdate {
 		for (int i = 0; i < fragmentLenght; i++) {
 			observerPath += fragments[i] + "/";
 		}
-		observerPath += "ca.queensu.cs.observer/";
+		observerPath += "../Observer/ca.queensu.cs.observer/";
 		observerPath += "libraries/";
 		observerPath += "observer.uml";
 		
