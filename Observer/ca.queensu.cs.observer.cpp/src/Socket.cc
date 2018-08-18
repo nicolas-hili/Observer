@@ -123,40 +123,10 @@ int Socket::connect() {
 	// keep track of the biggest file descriptor
 	fdmax = listener; // so far, it's this one
 
->>>>>>> r1remote/master
 	return result;
 
 }
 
-<<<<<<< HEAD
-inline int TCPClient::getPort() const {
-	return this->port;
-}
-
-inline void TCPClient::setPort(int port) {
-	this->port = port;
-}
-
-inline const std::string& TCPClient::getServerAddress()  {
-	return serverAddress;
-}
-
-inline void TCPClient::setServerAddress(const std::string& serverAddress) {
-	this->serverAddress = serverAddress;
-}
-
-inline connectionStatus TCPClient::getStatus() const {
-	return status;
-}
-
-inline void TCPClient::setStatus(connectionStatus status) {
-	this->status = status;
-}
-
-} /* namespace Comms */
-
-#endif /* TCPCLIENT_H_ */
-=======
 void Socket::disconnect() {
 }
 
