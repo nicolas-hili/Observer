@@ -116,6 +116,7 @@ operation UMLRTModel!Class removeSendEventMethod() {
 operation UMLRTModel!Class  addSendEventMethod() {
 	self.remSendEventMethod();
 	var sendEventOperation:UMLRTModel!Operation= new UMLRTModel!Operation;
+	sendEventOperation.concurrency = (UMLRTModel!CallConcurrencyKind#guarded);
 	sendEventOperation.name=instrumentPrefix.concat("sendEvent");
 	sendEventOperation.visibility=VisibilityKind#private;
 	self.ownedOperation.add(sendEventOperation);

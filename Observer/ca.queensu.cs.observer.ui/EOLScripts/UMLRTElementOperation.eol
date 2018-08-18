@@ -173,7 +173,6 @@ operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: 
 		self.trigger.add(mimicTrigger);
 	}
 	else {
-		//FIXME: Create a call event
 		var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
 		mimicOperation.name = proposedName;
 		observerInterface.ownedOperation.add(mimicOperation);
@@ -181,7 +180,7 @@ operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: 
 		var mimicEvent: UMLRTModel!CallEvent = new UMLRTModel!CallEvent();
 		modelroot.packagedElement.add(mimicEvent);	// Trick to avoid bug
 		p.packagedElement.add(mimicEvent);
-//		mimicEvent.name = proposedName;
+		mimicEvent.name = proposedName;
 		mimicEvent.`operation` = mimicOperation;
 		
 		var mimicTrigger: UMLRTModel!Trigger = new UMLRTModel!Trigger();
@@ -227,6 +226,7 @@ operation  UMLRTModel!Class addPortToCapsules(name:String,portType:Any,conj:Bool
 		//self.println("adding debugging port to capsule :");
 		p.applyUMLRTStereotype(modelroot);
 		p.setPortKind(kind);
+		p.aggregation = (UMLRTModel!AggregationKind#composite);
 }
 
 /// create composite  state 

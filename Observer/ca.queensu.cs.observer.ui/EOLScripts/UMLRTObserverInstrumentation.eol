@@ -172,15 +172,12 @@ transaction{
 	observerProtocol.getInterfaceRealizations().add(collaborationInterfaceRealization);
 	observerProtocol.getInterfaceRealizations().add(collaborationInterfaceRealizationIO);
 	
-	var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
-	mimicOperation.name = "myBigOperation";
-	observerInterface.ownedOperation.add(mimicOperation);
-	
 	"-> Add the Observer capsule part".println();
 	var observerProperty = new UMLRTModel!Property();
 	observerProperty.type = observerCapsule;
 	observerProperty.name = observerCapsule.name.toLowerCase();
 	topCapsule.ownedAttributes.add(observerProperty);
+	observerProperty.aggregation = (UMLRTModel!AggregationKind#composite);
 	observerProperty.applyUMLRTStereotype(modelroot);
 
 	// Instrument capsules	
