@@ -98,12 +98,13 @@ allClasses.size().println("Number of capsules: ");
 allStateMachines.getAllRegions().getAllStates().size().println("Number of states: ");
 "".println();
 
+var observerPackage;
 
 
 //----------------------------main loop of the transformation........................................//
 transaction{
 
-	var observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
+	observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
 	if (observerPackage.isDefined()) {
 		"--\nObserver has already been loaded. Start cleaning...".println();
 		
@@ -151,7 +152,7 @@ transaction{
 			modelroot.eResource().getContents().add(iterator);
 		}
 	}
-	var observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
+	observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
 
 	observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
 	observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
@@ -292,7 +293,11 @@ operation  Class refineStateMachine(sm : UMLRTModel!StateMachine) {
 }
 
 operation UMLRTModel!Class instrumentObserver () {
-	// FIXME: should be called listCapsuleMessages instead of listCapsuleMessage
+	self.createListCapsuleMessageOperation();
+	self.createTriggerCapsuleMessageOperation();
+}
+
+operation UMLRTModel!Class createListCapsuleMessageOperation () {
 	var listCapsuleMessageOperation : UMLRTModel!Operation = self.ownedOperation->selectOne(op | op.name == "listCapsuleMessage");
 	var behavior : UMLRTModel!OpaqueBehavior = listCapsuleMessageOperation.method->first();
 	behavior.body->clear();
@@ -307,9 +312,10 @@ operation UMLRTModel!Class instrumentObserver () {
 		var i: Integer = 0;
 		var opNames = allTransitions->select(t | t.trigger->exists(tr | tr.port->exists(p | p.name == "observation")))
 									 ->collect(t | t.trigger->first())
-									 ->collect(tr | tr.event.`operation`)
-									 ->collect(op | op.name)
-									 ->asSet();
+									 ->collect(tr | tr.port->first().name + "_" + tr.event.`operation`.name)
+//									 ->collect(tr | tr.event.`operation`)
+//									 ->collect(op | op.name)
+									 ->asSet(); // to remove duplicates
 
 		for (opName in opNames) { 
 				body += "\tevt.setParam(\""+i+"\", \""+opName+"\");\n";
@@ -319,4 +325,212 @@ operation UMLRTModel!Class instrumentObserver () {
 	}
 	body += "return evt;";
 	behavior.body.add(body);
+}
+
+operation UMLRTModel!Class createTriggerCapsuleMessageOperation () {
+	var listCapsuleMessageOperation : UMLRTModel!Operation = self.ownedOperation->selectOne(op | op.name == "triggerCapsuleMessage");
+	var behavior : UMLRTModel!OpaqueBehavior = listCapsuleMessageOperation.method->first();
+	behavior.body->clear();
+	
+	var body : String = "std::map<std::string, size_t>::iterator iter;" + endLine +
+    					"std::string instanceName = evt.getCapsuleInstance(); // name of the instance" + endLine +
+    					"std::string capsuleType = \"\";     // name of the capsule" + endLine +
+					    "std::string opName    = evt.getParam(\"operation\");" + endLine +
+					    "int portIndex = -1;" + endLine +
+					    "for(iter=capsules.begin(); iter!=capsules.end(); ++iter) {" + endLine +
+					    "if (iter->first == instanceName) {"+endLine + 
+					    "portIndex = capsules[iter->first];"+endLine +
+					    "capsuleType = capsuleTypes[iter->first];"+endLine +
+					    "break;"+endLine +
+					    "}"+endLine +
+					    "}"+endLine +
+					    "// For debugging purpose"+endLine +
+					    "  printf(\"instanceName = %s, capsuleType = %s, portIndex = %d\"," +
+					    "      instanceName.c_str()," +
+					    "      capsuleType.c_str()," +
+					    "      (int)portIndex);"+endLine +
+					    "if (portIndex == -1) {"+endLine +
+					    "printf(\"Problem with instanceName = %s\", instanceName.c_str());" +
+					    "evt.setParam(\"success\", 0);"+endLine +
+					    "return evt;"+endLine +
+					    "}"+endLine;
+    
+    
+    
+	for (sm in allStateMachines) { 
+		// for all capsule:
+		body += "if (capsuleType == \""+sm.owner.name+"\") {\n";
+		
+		var allTransitions = sm.getAllRegions()
+						.getAllTransitions();
+						
+		var i: Integer = 0;
+		var opNames = allTransitions->select(t | t.trigger->exists(tr | tr.port->exists(p | p.name == "observation")))
+									 ->collect(t | t.trigger->first())
+									 ->collect(tr | tr.port->first().name + "_" + tr.event.`operation`.name)
+//									 ->collect(tr | tr.event.`operation`)
+//									 ->collect(op | op.name)
+									 ->asSet(); // to remove duplicate
+
+		for (opName in opNames) { 
+			body += "if (opName == \""+opName+"\") {\n";
+			body += self.initComplexParameters(sm.owner.name + "_" + opName);
+			body += "observation." + sm.owner.name + "_" + opName + "("+self.generateParameters(sm.owner.name + "_" + opName)+").sendAt(portIndex);\n";
+			body += "evt.setParam(\"success\", 1);\n";
+			body += "}\n";
+		}
+		body += "}\n";
+	}
+	body += "return evt;";
+	behavior.body.add(body);
+}
+
+operation UMLRTModel!Class initComplexParameters (opName : String) : String {
+	var body : String = '';
+	var observerInterface: UMLRTModel!Interface = observerProtocol.getAllImplementedInterfaces().get(0);
+	var p: UMLRTModel!Package = observerProtocol.getPackage();
+	
+	var existingOperation: UMLRTModel!Operation;
+	
+	for (op in observerInterface.getOwnedOperations()) {
+		if (op.getName().equals(opName)) {
+			existingOperation = op;
+			break;
+		}
+	}
+	
+	if (existingOperation.ownedParameter->size() == 0) {
+		return "";
+	}
+	var i = 0;
+	var size = existingOperation.ownedParameter->size();
+	
+	for (param in existingOperation.ownedParameter) {
+		var typeName = param.type.name;
+		var finalValue = typeName.toLowerCase();
+		if (typeName <> "Boolean" and typeName <> "Integer" and typeName <> "String" and typeName <> "Natural") {
+			// Complex type, we need to initialize the local parameter of the Observer
+			body += "init_" + finalValue + "(evt, \""+param.name+"\");\n";
+		}
+	}
+	return body;
+}
+
+operation UMLRTModel!Class generateParameters (opName : String) : String {
+	var signature : String = '';
+	var observerInterface: UMLRTModel!Interface = observerProtocol.getAllImplementedInterfaces().get(0);
+	var p: UMLRTModel!Package = observerProtocol.getPackage();
+	
+	var existingOperation: UMLRTModel!Operation;
+	
+	for (op in observerInterface.getOwnedOperations()) {
+		if (op.getName().equals(opName)) {
+			existingOperation = op;
+			break;
+		}
+	}
+	
+	if (existingOperation.ownedParameter->size() == 0) {
+		return "";
+	}
+	var i = 0;
+	var size = existingOperation.ownedParameter->size();
+	
+	for (param in existingOperation.ownedParameter) { 
+		var typeName = param.type.name;
+		var finalValue = typeName.toLowerCase();
+		if (typeName == "Boolean") {
+			finalValue = "to_bool(evt.getParam(\""+param.name+"\"))";
+		}
+		else if (typeName == "Integer") {
+			finalValue = "atoi(evt.getParam(\""+param.name+"\").c_str())";
+		}
+		else if (typeName == "String") {
+			finalValue = "getParam(\""+param.name+"\")";
+		}
+		else if (typeName == "Natural") {
+			finalValue = "atof(evt.getParam(\""+param.name+"\").c_str())";
+		}
+		else {
+			if(not observerCapsule.ownedAttribute->exists(attr | attr.name == finalValue)) {
+				// Create an attribute within the Observer capsule to handle the creation of passive class arguments
+				var attr : UMLRTModel!Property = new UMLRTModel!Property();
+				attr.name = finalValue;
+				attr.type = param.type;
+				topCapsule.ownedAttribute.add(attr);  // Trick to avoid bug
+				observerCapsule.ownedAttribute.add(attr);
+				
+				// Create a to_<paramName> operation within the Observer
+				param.createToParamOperation();				
+			}
+				finalValue = "this->" + finalValue;
+		}
+		
+		signature += finalValue;
+		i++;
+		if (i < size) {
+			signature += ", ";
+		}
+	}
+	return signature;
+}
+
+operation UMLRTModel!Parameter createToParamOperation () {
+	
+	var eventClass = observerPackage.nestedPackage->selectOne(p | p.name == "internal")
+								   .packagedElement->selectOne(pe | pe.name == "Event");
+								   
+	var op: UMLRTModel!Operation = new UMLRTModel!Operation();
+	op.name = "init_" + self.type.name.toLowerCase();
+	var eventParameter = op.createOwnedParameter("evt", DataType.all.selectOne(pt|pt.name = "Integer"));
+	var prefixParameter = op.createOwnedParameter("prefix", DataType.all.selectOne(pt|pt.name = "String"));
+	
+	var behavior: UMLRTModel!OpaqueBehavior = new UMLRTModel!OpaqueBehavior();
+	behavior.name = "init_" + self.type.name.toLowerCase();
+	op.method.add(behavior);
+	
+		
+	behavior.language.add("C++");
+	var body: String = "";
+	body += self.type.generateAffectationForParameter(self.type.name.toLowerCase() + ".", self.name  + ".");
+	//body += "return " + self.type.name.toLowerCase() + ";" + endLine;
+	behavior.body.add(body);
+	
+	topCapsule.ownedOperation.add(op);  // Trick to avoid bug
+	topCapsule.ownedBehavior.add(behavior);  // Trick to avoid bug
+	observerCapsule.ownedOperation.add(op);
+	observerCapsule.ownedBehavior.add(behavior);
+	
+	// Trick to create a parameter of type Event
+	var RTCppPropertiesProfile = modelroot.profileApplication.appliedProfile.selectOne(c|c.name="RTCppProperties");
+	var parameterPropertiesStereotype:UMLRTModel!Stereotype= RTCppPropertiesProfile.packagedElement.selectOne(s|s.name="ParameterProperties");
+	eventParameter.applyStereotype(parameterPropertiesStereotype);
+	eventParameter.setValue(parameterPropertiesStereotype, "type", "Event");
+	
+	prefixParameter.applyStereotype(parameterPropertiesStereotype);
+	prefixParameter.setValue(parameterPropertiesStereotype, "type", "std::string");
+}
+
+operation UMLRTModel!Class generateAffectationForParameter (varPrefix : String, prefix : String): String {
+	var body: String = "";
+	for (attr in self.ownedAttributes) { 
+		var typeName = attr.type.name;
+		if (typeName == "Boolean") {
+			body += varPrefix + attr.name + " = to_bool(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+		}
+		else if (typeName == "Integer") {
+			body += varPrefix + attr.name + " = atoi(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+		}
+		else if (typeName == "String") {
+			body += varPrefix + attr.name + " = getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+		}
+		else if (typeName == "Natural") {
+			body += varPrefix + attr.name + " = atof(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+		}
+		else {
+			// FIXME: Unchecked
+			body += attr.type.generateAffectationForParameter(varPrefix+attr.name+".", prefix+attr.name+".");
+		}
+	}
+	return body;
 }

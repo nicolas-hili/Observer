@@ -30,7 +30,7 @@ Text::Text() :
 	this->setParamSeparator(';');
 	this->setKeyValueSeparator(':');
 	this->setFormat(
-			"eventId|sourceName|eventSource|eventKind|seconds|nanoseconds|params");
+			"eventId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|params");
 }
 
 Text::~Text() {
@@ -245,6 +245,8 @@ void Text::setField(const std::string field, const std::string value,
 		event.setEventId(value);
 	else if (field == "sourcename")
 		event.setSourceName(value);
+	else if (field == "capsuleinstance")
+		event.setCapsuleInstance(value);
 	else if (field == "eventsource") {
 		event.setEventSource((Event::EventSource) (atoi(value.c_str())));
 	} else if (field == "eventkind") {

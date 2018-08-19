@@ -142,6 +142,7 @@ operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: 
 	
 	// Variable initialisation
 	var initialPort: UMLRTModel!Port = initialTrigger.port.first();
+	var initialOperation: UMLRTModel!Operation = initialTrigger.event.`operation`;
 	var observerInterface: UMLRTModel!Interface = observerProtocol.getAllImplementedInterfaces().get(0);
 	var p: UMLRTModel!Package = observerProtocol.getPackage();
 	
@@ -173,7 +174,8 @@ operation  UMLRTModel!Transition createTrigger(prefix : String, initialTrigger: 
 		self.trigger.add(mimicTrigger);
 	}
 	else {
-		var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
+//		var mimicOperation: UMLRTModel!Operation = new UMLRTModel!Operation();
+		var mimicOperation: UMLRTModel!Operation = ecoreUtil.copy(initialOperation);
 		mimicOperation.name = proposedName;
 		observerInterface.ownedOperation.add(mimicOperation);
 		
