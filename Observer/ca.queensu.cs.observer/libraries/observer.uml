@@ -125,51 +125,7 @@ else {
         break;
       }
     }
-}
-
-/*std::string data = this->method->read();
-    std::stringstream ss;
-    if (data != &quot;&quot;) {
-
-        std::istringstream iss(data);
-        std::vector&lt;std::string> cmd;
-        while (iss) {
-            std::string subs;
-            iss >> subs; 
-            if (iss.str().empty()) {
-                cmd.push_back(subs);
-            }
-        }
-
-        if (cmd.size() == 0)
-            return;
-
-        if (cmd.size() > 1 &amp;&amp; cmd[0] == &quot;list&quot; &amp;&amp; cmd[1] == &quot;capsules&quot;) {
-            ss  &lt;&lt; &quot;List of capsules:\n&quot;;
-            std::map&lt;std::string, size_t>::iterator iter;
-            for(iter=capsules.begin(); iter!=capsules.end(); ++iter) {
-                ss &lt;&lt; &quot; - &quot; &lt;&lt; iter->first &lt;&lt; &quot; [&quot;&lt;&lt; capsuleTypes[iter->first]&lt;&lt; &quot;]\n&quot;;
-            }
-            this->method->sendData(ss.str());
-        }
-        else if (cmd.size() > 2 &amp;&amp; cmd[0] == &quot;show&quot; &amp;&amp; cmd[1] == &quot;capsule&quot;) {
-
-            printf(&quot;capsule:%s|type:%s\n&quot;, cmd[1].c_str(), capsuleTypes[cmd[2]].c_str());
-            if (capsuleTypes[cmd[2]] == &quot;&quot;) {
-                printf(&quot;error: %s\n&quot;, capsuleTypes[cmd[2]].c_str());
-                return;
-            }
-            std::string capsuleType = capsuleTypes[cmd[2]];
-            ss  &lt;&lt; &quot;Capsule: &quot; &lt;&lt; cmd[2];
-            ss  &lt;&lt; &quot; type: &quot; &lt;&lt; capsuleTypes[cmd[2]] &lt;&lt; &quot;\n&quot;;
-            ss  &lt;&lt; &quot;List of triggers:\n&quot;;
-            if (capsuleType == &quot;Gen&quot;) {
-                ss &lt;&lt; &quot; - &quot; &lt;&lt; &quot;generate()\n&quot;;
-                this->method->sendData(ss.str());
-            }
-        }
-
-    }*/</body>
+}</body>
             </effect>
             <trigger xmi:type="uml:Trigger" xmi:id="_ZnQ4wNhDEeaqev0ObzxoAQ" port="_JX_00NhDEeaqev0ObzxoAQ">
               <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
@@ -179,10 +135,10 @@ else {
             <effect xmi:type="uml:OpaqueBehavior" xmi:id="_zp5NwBYIEee3LJqEo64_Eg">
               <language>C++</language>
               <body>std::stringstream ss;
-    ss &lt;&lt; msg->signal.getSrcPort()->slot->name &lt;&lt; &quot;:&quot; &lt;&lt; msg->signal.getSrcPort()->slot->capsuleIndex;
-    printf(&quot;capsule name: %s at port %d\n&quot;, ss.str().c_str(), (int)msg->sapIndex0_);
-    capsules[ss.str()] = msg->sapIndex0_;
-    capsuleTypes[ss.str()] = msg->signal.getSrcPort()->slot->capsuleClass->name;</body>
+ss &lt;&lt; msg->signal.getSrcPort()->slot->name &lt;&lt; &quot;:&quot; &lt;&lt; msg->signal.getSrcPort()->slot->capsuleIndex;
+printf(&quot;capsule name: %s at port %d\n&quot;, ss.str().c_str(), (int)msg->sapIndex0_);
+capsules[ss.str()] = msg->sapIndex0_;
+capsuleTypes[ss.str()] = msg->signal.getSrcPort()->slot->capsuleClass->name;</body>
             </effect>
             <trigger xmi:type="uml:Trigger" xmi:id="_syzaIBYIEee3LJqEo64_Eg" port="_kLF8oNRNEearFdKvR_8nWw">
               <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_PQtAwOzeEeSRtqCWFwOf8g"/>
