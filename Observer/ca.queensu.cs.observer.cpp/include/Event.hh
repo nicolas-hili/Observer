@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <time.h>
 
 class Event {
 
@@ -73,6 +74,7 @@ private:
 	long nanoseconds;
 	EventSource eventSource;
 	EventKind eventKind;
+	double cpuTick;
 	std::map<std::string, std::string> params;
 
 public:
@@ -96,6 +98,9 @@ public:
 	void setEventId(const std::string eventId);
 	const std::string getEventId() const;
 	void generateEventId();
+	const double getCpuTick() const;
+	void setCpuTick(double tick = 0.0);
+	static double currentCpuTick();
 	const std::map<std::string, std::string> getParams() const;
 	const std::string getParam(std::string key) const;
 	void setParams(const std::map<std::string, std::string> params);
