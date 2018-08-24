@@ -41,7 +41,7 @@ OBJS += \
 src/%.o: ../src/%.cc
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I"/home/hili/git/Observer/Observer/ca.queensu.cs.observer.cpp/include" -I"/home/hili/bin/eclipse/Papyrus-RT-1.0/Papyrus-RT/plugins/org.eclipse.papyrusrt.rts_1.0.0.201707181457/umlrts/include" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I"/Users/mojtababagherzadeh/git/Observer/Observer/ca.queensu.cs.observer.cpp/include" -I"/home/hili/bin/eclipse/Papyrus-RT-1.0/Papyrus-RT/plugins/org.eclipse.papyrusrt.rts_1.0.0.201707181457/umlrts/include" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
