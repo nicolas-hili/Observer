@@ -29,6 +29,7 @@ Event::Event(std::string capsuleInstance, std::string sourceName,
 	this->setSourceName(sourceName);
 	this->setEventSource(eventSource);
 	this->setEventKind(eventKind);
+	this->setCpuTick();
 }
 
 const std::string Event::getCapsuleInstance() const {
@@ -124,6 +125,22 @@ void Event::generateEventId() {
 	ss << seconds << nanoseconds << r;
 	this->eventId = ss.str();
 }
+
+const double Event::getCpuTick() const {
+	return this->cpuTick;
+}
+
+void Event::setCpuTick(double tick) {
+  if (tick == 0.0)
+    this->cpuTick = currentCpuTick();
+  else
+    this->cpuTick = tick;
+}
+
+double Event::currentCpuTick() {
+  return double(clock());
+}
+
 
 const std::map<std::string, std::string> Event::getParams() const {
 	return params;

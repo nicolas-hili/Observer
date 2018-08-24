@@ -10,6 +10,7 @@ CC_SRCS += \
 ../src/Method.cc \
 ../src/Observer.cc \
 ../src/Serializer.cc \
+../src/SharedMem.cc \
 ../src/Socket.cc \
 ../src/Text.cc 
 
@@ -20,6 +21,7 @@ CC_DEPS += \
 ./src/Method.d \
 ./src/Observer.d \
 ./src/Serializer.d \
+./src/SharedMem.d \
 ./src/Socket.d \
 ./src/Text.d 
 
@@ -30,6 +32,7 @@ OBJS += \
 ./src/Method.o \
 ./src/Observer.o \
 ./src/Serializer.o \
+./src/SharedMem.o \
 ./src/Socket.o \
 ./src/Text.o 
 
