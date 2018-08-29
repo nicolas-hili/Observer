@@ -284,7 +284,7 @@ operation  Class refineStateMachine(sm : UMLRTModel!StateMachine) {
 		t.addTrace(traceType);
 		
 		// add trigger for steering
-		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {	
+		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {
 			var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
 			var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
 			t.createTrigger(prefix, existingTrigger, self.getObservablePort());
@@ -451,6 +451,9 @@ operation UMLRTModel!Class generateParameters (opName : String) : String {
 		else if (typeName == "Natural") {
 			finalValue = "atof(evt.getParam(\""+param.name+"\").c_str())";
 		}
+		else if (typeName == "Real") {
+			finalValue = "atof(evt.getParam(\""+param.name+"\").c_str())";
+		}
 		else {
 			if(not observerCapsule.ownedAttribute->exists(attr | attr.name == finalValue)) {
 				// Create an attribute within the Observer capsule to handle the creation of passive class arguments
@@ -525,6 +528,9 @@ operation UMLRTModel!Class generateAffectationForParameter (varPrefix : String, 
 			body += varPrefix + attr.name + " = getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
 		}
 		else if (typeName == "Natural") {
+			body += varPrefix + attr.name + " = atof(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+		}
+		else if (typeName == "Real") {
 			body += varPrefix + attr.name + " = atof(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
 		}
 		else {
