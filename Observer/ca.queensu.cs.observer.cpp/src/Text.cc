@@ -30,7 +30,7 @@ Text::Text() :
 	this->setParamSeparator(';');
 	this->setKeyValueSeparator(':');
 	this->setFormat(
-			"eventId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|params");
+			"eventId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|cpuTick|params");
 }
 
 Text::~Text() {
@@ -229,6 +229,9 @@ const std::string Text::getField(const std::string field,
 	} else if (field == "nanoseconds") {
 		ss << event.getNanoseconds();
 		return ss.str();
+	} else if (field == "cputick") {
+		ss << event.getCpuTick();
+		return ss.str();
 	} else if (field == "params") {
 		return this->serializeParams(event);
 	}
@@ -255,6 +258,8 @@ void Text::setField(const std::string field, const std::string value,
 		event.setSeconds(atol(value.c_str()));
 	} else if (field == "nanoseconds") {
 		event.setNanoseconds(atol(value.c_str()));
+	} else if (field == "cputick") {
+		event.setCpuTick(atol(value.c_str()));
 	} else if (field == "params") {
 		this->parseParameters(event, value);
 	}

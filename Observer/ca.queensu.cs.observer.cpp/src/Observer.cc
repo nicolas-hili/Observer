@@ -15,6 +15,7 @@
 #include "Config.hh"
 #include "Method.hh"
 #include "Socket.hh"
+#include "SharedMem.hh"
 #include "Serializer.hh"
 #include "Text.hh"
 #include "Event.hh"
@@ -31,18 +32,21 @@ int main () {
     serializer->configure(config.getConfigList());
 
     Method* method;
-    method = new Socket();
+    method = new SharedMem();
     method->configure(config.getConfigList());
+    method->connect();
     printf("connection: %d\n", method->connect());
 
     // testing the serializer
     Event eventIn, eventOut;
     std::string strIn, strOut;
-    eventIn.setSourceName("source name");
+
+/*    eventIn.setSourceName("source name");
     eventIn.setParam("key1", "value1");
     eventIn.setParam("key2", "value2");
-    eventIn.setParam("key3", "value3");
-
+    eventIn.setParam("key3", "value3"); */
+    eventIn.setEventSource(Event::EventSource::Command);
+    eventIn.setEventKind(Event::EventKind::List);
     strIn = serializer->serialize(eventIn);
 
     eventOut = serializer->parse(strIn);
@@ -50,6 +54,18 @@ int main () {
 
     printf("%s\n", strIn.c_str());
     printf("%s\n", strOut.c_str());
+
+
+    // Test list function
+    method->sendData(strOut);
+
+        while (true) {
+		std::string event = method->read();
+		if (event != ""){
+			std::cout << event;
+		}
+    }
+
     method->disconnect();
     free(serializer);
     free(method);
