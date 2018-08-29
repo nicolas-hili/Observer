@@ -408,7 +408,7 @@ operation UMLRTModel!Class initComplexParameters (opName : String) : String {
 	for (param in existingOperation.ownedParameter) {
 		var typeName = param.type.name;
 		var finalValue = typeName.toLowerCase();
-		if (typeName <> "Boolean" and typeName <> "Integer" and typeName <> "String" and typeName <> "Natural") {
+		if (typeName <> "Boolean" and typeName <> "Integer" and typeName <> "String" and typeName <> "Natural" and typeName <> "Real") {
 			// Complex type, we need to initialize the local parameter of the Observer
 			body += "init_" + finalValue + "(evt, \""+param.name+"\");\n";
 		}
