@@ -40,8 +40,8 @@ var observationPort;
 var observationProtocol;
 var eventSignalName:String="event"; // used for code generation;
 var eventClassName:String="event";
-
-
+var triggerCount:Integer=0;
+var addedTrigger:Integer=0;
 //-----------------------------loading user models, gateway model, debug protocol........................................//
 
 // Load the standard UML primitive types library (work in standalone)
@@ -50,6 +50,7 @@ var libURI = UMLRTModel.resource.uri.createURI("platform:/plugin/org.eclipse.uml
 var libResource = UMLRTModel.resource.resourceSet.createResource(libURI);
 libResource.load(null);
 UMLRTModel.resource.resourceSet.resources.add(libResource);
+	
 
 
 var observerURI; 
@@ -204,6 +205,11 @@ transaction{
 	observerCapsule.instrumentObserver();
 
 	"Done.\n--".println();
+	/*triggerCount.println("Number of triggers: ");
+	addedTrigger.println("Number of added triggers: ");
+	allClasses.size().println("Number of classes before instrument: ");
+	modelroot.getAllOwnedClasses().size().println("Number of classes after instrument: ");*/
+	//abort;
 } 
 
 /**
@@ -254,8 +260,11 @@ operation  Class uninstrumentStateMachine(sm : UMLRTModel!StateMachine) {
 		// add trigger for steering
 		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {	
 			var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
-			var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
-			t.removeTrigger(self.getObservablePort());
+			/// existingTrigger.event.name=="*" case need to be handled correctly
+			if (not(existingTrigger.event.name=="*") and existingTrigger.port.notEmpty())	{
+				var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
+				t.removeTrigger(self.getObservablePort());
+				}
 		}
 	}
 }
@@ -284,10 +293,25 @@ operation  Class refineStateMachine(sm : UMLRTModel!StateMachine) {
 		t.addTrace(traceType);
 		
 		// add trigger for steering
+		// commented to merge
+/*<<<<<<< HEAD 
 		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {
 			var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
 			var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";		
 			t.createTrigger(prefix, existingTrigger, self.getObservablePort());
+=======*/
+		if (t.transType()=="StoP" or t.transType()=="StoS" or  t.transType()=="StoC" or t.transType()=="CtoC") {	
+		    if (t.trigger.notEmpty()){
+				triggerCount=triggerCount+t.trigger.size();
+				var existingTrigger : UMLRTModel!Trigger = t.trigger.first();
+				/// existingTrigger.event.name=="*" case need to be handled correctly
+				if (not(existingTrigger.event.name=="*") and existingTrigger.port.notEmpty())	{
+					var prefix : String = self.name + "_" + existingTrigger.port.first().name + "_";	
+					t.createTrigger(prefix, existingTrigger, self.getObservablePort());
+					addedTrigger=addedTrigger+1;
+					}
+				}
+//>>>>>>> some small bug fixes
 		}
 	}
 }
@@ -446,7 +470,12 @@ operation UMLRTModel!Class generateParameters (opName : String) : String {
 			finalValue = "atoi(evt.getParam(\""+param.name+"\").c_str())";
 		}
 		else if (typeName == "String") {
-			finalValue = "getParam(\""+param.name+"\")";
+			//the following code is wrong for handling string, sting can not be passed as char*, either change the getParam to return char * or fix this conversion
+			/* sample code for conversion
+		    char tempStr[100];
+  		    sprintf(tempStr,"%s",evt.getParam("ServerName").c_str());
+    			observation.Server_Slave_IAmAlive(tempStr).sendAt(portIndex);*/
+			finalValue = "evt.getParam(\""+param.name+"\")";
 		}
 		else if (typeName == "Natural") {
 			finalValue = "atof(evt.getParam(\""+param.name+"\").c_str())";
@@ -514,7 +543,7 @@ operation UMLRTModel!Parameter createToParamOperation () {
 	prefixParameter.setValue(parameterPropertiesStereotype, "type", "std::string");
 }
 
-operation UMLRTModel!Class generateAffectationForParameter (varPrefix : String, prefix : String): String {
+operation Any generateAffectationForParameter (varPrefix : String, prefix : String): String {
 	var body: String = "";
 	for (attr in self.ownedAttributes) { 
 		var typeName = attr.type.name;
@@ -524,10 +553,11 @@ operation UMLRTModel!Class generateAffectationForParameter (varPrefix : String, 
 		else if (typeName == "Integer") {
 			body += varPrefix + attr.name + " = atoi(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
 		}
+		// the following code does not work correctly for string variables
 		else if (typeName == "String") {
-			body += varPrefix + attr.name + " = getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
+			body += varPrefix + attr.name + " = evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
 		}
-		else if (typeName == "Natural") {
+		else if (typeName == "Natural" or typeName == "Real") {
 			body += varPrefix + attr.name + " = atof(evt.getParam(prefix + "+ "\"." + attr.name+"\").c_str());" + endLine;
 		}
 		else if (typeName == "Real") {

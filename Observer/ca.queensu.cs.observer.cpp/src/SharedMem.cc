@@ -370,3 +370,5 @@ void SharedMem::safePushBackStringCmd(std::string data) {
 	  this->sharedDequeCmd->push_front(tempStringCmd);
   }
 }
+
+

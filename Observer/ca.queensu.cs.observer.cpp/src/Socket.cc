@@ -45,8 +45,8 @@ Socket::~Socket() {
 void Socket::configure(std::map<std::string, std::string> configList) {
 
 	std::string port, address;
-	port = this->getConfig(configList, "port");
-	address = this->getConfig(configList, "address");
+	port = this->getConfig(configList, "socket.port");
+	address = this->getConfig(configList, "socket.address");
 
 	if (!port.empty())
 		this->setPort(atoi(port.c_str()));

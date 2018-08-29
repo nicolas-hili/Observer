@@ -33,7 +33,11 @@ int main () {
 
     Method* method;
     method = new SharedMem();
+    //method = new Socket();
     method->configure(config.getConfigList());
+    (static_cast<SharedMem *> (method))->setMode(Client);
+   // ((SharedMem) method).setMode(Client);
+    //method->
     method->connect();
     printf("connection: %d\n", method->connect());
 
@@ -45,7 +49,7 @@ int main () {
     eventIn.setParam("key1", "value1");
     eventIn.setParam("key2", "value2");
     eventIn.setParam("key3", "value3"); */
-    eventIn.setEventSource(Event::EventSource::Command);
+    /*eventIn.setEventSource(Event::EventSource::Command);
     eventIn.setEventKind(Event::EventKind::List);
     strIn = serializer->serialize(eventIn);
 
@@ -57,7 +61,7 @@ int main () {
 
 
     // Test list function
-    method->sendData(strOut);
+    method->sendData(strOut);*/
 
         while (true) {
 		std::string event = method->read();

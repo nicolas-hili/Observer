@@ -49,7 +49,6 @@ public:
 
 	const std::string& getName();
 	const std::string& getNameCmd();
-
 	void setName(const std::string& name);
 	const std::string& getQueueName() const;
 	const std::string& getQueueNameCmd() const;
