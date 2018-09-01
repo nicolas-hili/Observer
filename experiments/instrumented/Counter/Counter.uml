@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RTCppProperties="http://www.eclipse.org/papyrus/umlrt/cppproperties" xmlns:UMLRTStateMachines="http://www.eclipse.org/papyrus/umlrt/statemachine" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_RwBo4KmkEeiKStjlGKlK2g" name="Counter">
+    <eAnnotations xmi:id="_RwBo4amkEeiKStjlGKlK2g" source="http://www.eclipse.org/papyrus-rt/language/1.0.0">
+      <details xmi:id="_RwBo4qmkEeiKStjlGKlK2g" key="language" value="umlrt-cpp"/>
+    </eAnnotations>
+    <eAnnotations xmi:id="_dZoT0KmlEeiKStjlGKlK2g" source="UMLRT_Default_top">
+      <details xmi:id="_dZph8KmlEeiKStjlGKlK2g" key="top_name" value="Counter"/>
+    </eAnnotations>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Tjd8cKmkEeiKStjlGKlK2g" name="Counter" classifierBehavior="_bO9BcKmkEeiKStjlGKlK2g" isActive="true">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_W-NlAKmkEeiKStjlGKlK2g" name="timer1" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+        <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_3TzMQKmkEeiKStjlGKlK2g" name="counter">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_-XgYMKmnEeiKStjlGKlK2g" name="observer" type="_-XTj8KmnEeiKStjlGKlK2g" aggregation="composite"/>
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_-ZnRAKmnEeiKStjlGKlK2g" name="observation" visibility="protected" type="_-XTj5KmnEeiKStjlGKlK2g" aggregation="composite" isBehavior="true" isService="false">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ZricKmnEeiKStjlGKlK2g" value="1"/>
+        <upperValue xmi:type="uml:LiteralInteger" xmi:id="_-ZricamnEeiKStjlGKlK2g" value="1"/>
+      </ownedAttribute>
+      <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_bO9BcKmkEeiKStjlGKlK2g" name="CounterSM" isReentrant="false">
+        <region xmi:id="_bPKc0KmkEeiKStjlGKlK2g" name="Region">
+          <transition xmi:id="_bPbikKmkEeiKStjlGKlK2g" name="Initial" source="_bPNgIKmkEeiKStjlGKlK2g" target="_bPXRIKmkEeiKStjlGKlK2g">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_qH9dEKmkEeiKStjlGKlK2g" name="Effect" isReentrant="false">
+              <language>C++</language>
+              <body>printf(&quot;Counter Capsule Is Started\n&quot;);
+timer1.informEvery(UMLRTTimespec(1,0),4);
+counter=0;
+
+Observation__sendEvent(Event::Transition,Event::TransitionEnd,this->getName(),this->getIndex(),(char *)&quot;&quot;,this->getTypeName(),(char *)&quot;Counter::Counter::CounterSM::Region::Initial&quot;,(char *)&quot;Pseudo1&quot;,(char *)&quot;State1&quot;,(char *)&quot;null&quot;,(char *)&quot;null&quot;);
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_NyjRQKmlEeiKStjlGKlK2g" name="count" source="_bPXRIKmkEeiKStjlGKlK2g" target="_bPXRIKmkEeiKStjlGKlK2g">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_Qtta0KmlEeiKStjlGKlK2g" name="Effect" isReentrant="false">
+              <language>C++</language>
+              <body>counter++;
+Observation__sendEvent(Event::Transition,Event::TransitionEnd,this->getName(),this->getIndex(),msg->getSignalName(),this->getTypeName(),(char *)&quot;Counter::Counter::CounterSM::Region::count&quot;,(char *)&quot;State1&quot;,(char *)&quot;State1&quot;,msg->signal.getSrcPort()->containerClass->name,msg->signal.getSrcPort()->getName());
+</body>
+            </effect>
+            <trigger xmi:id="_VHih0KmlEeiKStjlGKlK2g" port="_W-NlAKmkEeiKStjlGKlK2g">
+              <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+            </trigger>
+            <trigger xmi:id="_-bEpkKmnEeiKStjlGKlK2g" event="_-bECgKmnEeiKStjlGKlK2g" port="_-ZnRAKmnEeiKStjlGKlK2g"/>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_bPNgIKmkEeiKStjlGKlK2g" name="Pseudo1"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bPXRIKmkEeiKStjlGKlK2g" name="State1">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="__mzkQKmkEeiKStjlGKlK2g" name="Entry" isReentrant="false">
+              <language>C++</language>
+              <body>printf(&quot;Counter value is %d\n&quot;,counter);
+
+Observation__sendEvent(Event::State,Event::StateEntryEnd,this->getName(),this->getIndex(),msg->getSignalName(),this->getTypeName(),(char *)&quot;Counter::Counter::CounterSM::Region::State1&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;);
+</body>
+            </entry>
+            <exit xmi:type="uml:OpaqueBehavior" xmi:id="_-a2AEKmnEeiKStjlGKlK2g" name="State1__2">
+              <language>C++</language>
+              <body>
+Observation__sendEvent(Event::State,Event::StateExitEnd,this->getName(),this->getIndex(),msg->getSignalName(),this->getTypeName(),(char *)&quot;Counter::Counter::CounterSM::Region::State1&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;,(char *)&quot;&quot;);
+</body>
+            </exit>
+          </subvertex>
+        </region>
+      </ownedBehavior>
+      <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_-avSYKmnEeiKStjlGKlK2g" name="Observation__sendEvent" specification="_-ZtXoKmnEeiKStjlGKlK2g">
+        <language>C++</language>
+        <body>EventObj evtObj;
+evtObj.event.generateEventId();
+evtObj.event.setTimestamp();
+evtObj.event.setEventKind(kind);
+evtObj.event.setEventSource(source);
+evtObj.event.setCapsuleInstance(capsuleInstance);
+evtObj.event.setSourceName(sourceName);
+if (source==Event::EventSource::Transition){
+evtObj.event.setParam(&quot;Source&quot;,reserve1);
+evtObj.event.setParam(&quot;Target&quot;,reserve2);
+evtObj.event.setParam(&quot;Signal&quot;,signalName);
+evtObj.event.setParam(&quot;SenderCapsule&quot;,reserve3);
+evtObj.event.setParam(&quot;Port&quot;,reserve4);
+}
+observation.event(evtObj).send();
+</body>
+      </ownedBehavior>
+      <ownedOperation xmi:id="_-ZtXoKmnEeiKStjlGKlK2g" name="Observation__sendEvent" visibility="private" concurrency="guarded" method="_-avSYKmnEeiKStjlGKlK2g">
+        <ownedParameter xmi:id="_-Zvz4KmnEeiKStjlGKlK2g" name="source">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-Z5k4KmnEeiKStjlGKlK2g" name="kind">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-aA5oKmnEeiKStjlGKlK2g" name="capsuleInstance">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-aL4wKmnEeiKStjlGKlK2g" name="capsuleIndex">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-aMf0KmnEeiKStjlGKlK2g" name="signalName">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-aVpwKmnEeiKStjlGKlK2g" name="capsuleName">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-acXcKmnEeiKStjlGKlK2g" name="sourceName">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-acXcamnEeiKStjlGKlK2g" name="reserve1">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-ac-gKmnEeiKStjlGKlK2g" name="reserve2">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-ac-gamnEeiKStjlGKlK2g" name="reserve3">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+        <ownedParameter xmi:id="_-amvgKmnEeiKStjlGKlK2g" name="reserve4">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedParameter>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_-XTj4KmnEeiKStjlGKlK2g" name="Observation">
+      <eAnnotations xmi:id="_-XTj4amnEeiKStjlGKlK2g" source="http://www.eclipse.org/papyrus-rt/language/1.0.0">
+        <details xmi:id="_-XTj4qmnEeiKStjlGKlK2g" key="language" value="umlrt-cpp"/>
+      </eAnnotations>
+      <packagedElement xmi:type="uml:Package" xmi:id="_-XTj46mnEeiKStjlGKlK2g" name="Observation">
+        <packagedElement xmi:type="uml:Collaboration" xmi:id="_-XTj5KmnEeiKStjlGKlK2g" name="Observation">
+          <interfaceRealization xmi:id="_-XfKEKmnEeiKStjlGKlK2g" client="_-XTj5KmnEeiKStjlGKlK2g" supplier="_-XTj56mnEeiKStjlGKlK2g" contract="_-XTj56mnEeiKStjlGKlK2g"/>
+          <interfaceRealization xmi:id="_-XfKEamnEeiKStjlGKlK2g" client="_-XTj5KmnEeiKStjlGKlK2g" supplier="_-XTj7amnEeiKStjlGKlK2g" contract="_-XTj7amnEeiKStjlGKlK2g"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_-XTj56mnEeiKStjlGKlK2g" name="Observation">
+          <ownedOperation xmi:id="_-bC0YKmnEeiKStjlGKlK2g" name="Counter_timer1_timeout"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_-XTj6KmnEeiKStjlGKlK2g" name="Observation~">
+          <ownedOperation xmi:id="_-XTj6amnEeiKStjlGKlK2g" name="event">
+            <ownedParameter xmi:id="_-XTj6qmnEeiKStjlGKlK2g" name="data" type="_-XTkIKmnEeiKStjlGKlK2g"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_-XTj66mnEeiKStjlGKlK2g" client="_-XTj5KmnEeiKStjlGKlK2g" supplier="_-XTj6KmnEeiKStjlGKlK2g"/>
+        <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_-XTj7KmnEeiKStjlGKlK2g" name="*"/>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_-XTj7amnEeiKStjlGKlK2g" name="ObservationIO"/>
+        <packagedElement xmi:type="uml:Usage" xmi:id="_-XTj7qmnEeiKStjlGKlK2g" client="_-XTj5KmnEeiKStjlGKlK2g" supplier="_-XTj7amnEeiKStjlGKlK2g"/>
+        <packagedElement xmi:type="uml:CallEvent" xmi:id="_-XTj76mnEeiKStjlGKlK2g" operation="_-XTj6amnEeiKStjlGKlK2g"/>
+        <packagedElement xmi:type="uml:CallEvent" xmi:id="_-bECgKmnEeiKStjlGKlK2g" name="Counter_timer1_timeout" operation="_-bC0YKmnEeiKStjlGKlK2g"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_-XTj8KmnEeiKStjlGKlK2g" name="Observer" classifierBehavior="_-XTj-qmnEeiKStjlGKlK2g" isActive="true">
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_-XTj8amnEeiKStjlGKlK2g" name="observation" visibility="public" type="_-XTj5KmnEeiKStjlGKlK2g" isOrdered="true" aggregation="composite" isBehavior="true" isConjugated="true">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-XTj8qmnEeiKStjlGKlK2g" value="20"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-XTj86mnEeiKStjlGKlK2g" value="20"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_-XTj9KmnEeiKStjlGKlK2g" name="log" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+          <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_6kIb0IeXEeSVyrlWP4nYew"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_-XTj9amnEeiKStjlGKlK2g" name="commandTimer" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+          <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_-XTj9qmnEeiKStjlGKlK2g" name="eventQueue" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Port" xmi:id="_-XTj96mnEeiKStjlGKlK2g" name="eventTimer" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+          <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_-XTj-KmnEeiKStjlGKlK2g" name="isPeriodic">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+          <defaultValue xmi:type="uml:LiteralBoolean" xmi:id="_-XTj-amnEeiKStjlGKlK2g"/>
+        </ownedAttribute>
+        <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_-XTj-qmnEeiKStjlGKlK2g" name="ObserverStateMachine" isReentrant="false">
+          <region xmi:id="_-XTj-6mnEeiKStjlGKlK2g" name="Region">
+            <transition xmi:id="_-XTj_KmnEeiKStjlGKlK2g" name="configure" source="_-XTkCqmnEeiKStjlGKlK2g" target="_-XTkC6mnEeiKStjlGKlK2g">
+              <effect xmi:type="uml:OpaqueBehavior" xmi:id="_-XTj_amnEeiKStjlGKlK2g">
+                <language>C++</language>
+                <body>int n = config.load();
+log.show(&quot;Number of entries: %d\n&quot;, n);
+
+// Socket
+this->method = new Socket();
+this->method->configure(config.getConfigList());
+this->method->connect();
+
+// Text 
+this->serializer = new Text();
+this->serializer->configure(config.getConfigList());
+
+std::string mode = config.get(&quot;mode&quot;);
+std::string periodicity = config.get(&quot;periodicity&quot;);
+
+// If sending events is set as periodic
+if (periodicity != &quot;&quot; &amp;&amp; mode == &quot;periodic&quot;) {
+	this->isPeriodic = true;
+	// Periodicity is set in microseconds
+	// Multiplied by 1000 to get nanoseconds
+	long nano = (long long)(atol(periodicity.c_str())*1000);
+	long seconds = nano/1000000000;
+	eventTimer.informEvery(UMLRTTimespec(seconds, (nano-1000000000*seconds)));
+}
+
+// Instantiating the command timer
+commandTimer.informEvery(UMLRTTimespec(0,500000000));
+</body>
+              </effect>
+            </transition>
+            <transition xmi:id="_-XTj_qmnEeiKStjlGKlK2g" name="event received" source="_-XTkC6mnEeiKStjlGKlK2g" target="_-XTkC6mnEeiKStjlGKlK2g">
+              <effect xmi:type="uml:OpaqueBehavior" xmi:id="_-XTj_6mnEeiKStjlGKlK2g">
+                <language>C++</language>
+                <body>std::string event = this->serializer->serialize(data.event) + &quot;\n&quot;;
+if (this->isPeriodic) {
+	eventQueue.push_back(event);
+}
+else {
+	this->method->sendData(event);
+}</body>
+              </effect>
+              <trigger xmi:id="_-XTkAKmnEeiKStjlGKlK2g" event="_-XTj76mnEeiKStjlGKlK2g" port="_-XTj8amnEeiKStjlGKlK2g"/>
+            </transition>
+            <transition xmi:id="_-XTkAamnEeiKStjlGKlK2g" name="command received" source="_-XTkC6mnEeiKStjlGKlK2g" target="_-XTkC6mnEeiKStjlGKlK2g">
+              <effect xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkAqmnEeiKStjlGKlK2g">
+                <language>C++</language>
+                <body>std::string data = this->method->read();
+    if (data != &quot;&quot;) {
+    Event evt = this->serializer->parse(data);
+    if (evt.getEventSource() == Event::EventSource::Command) {
+
+      std::map&lt;std::string, size_t>::iterator iter;
+      std::string sourceName = evt.getSourceName();
+
+      switch(evt.getEventKind()) {
+        case Event::EventKind::List:
+          // List of capsule parts
+          evt.setSourceName(&quot;Observer&quot;);
+          for(iter=capsules.begin(); iter!=capsules.end(); ++iter) {
+            evt.setParam(iter->first, capsuleTypes[iter->first]);
+          }
+          this->method->sendData(this->serializer->serialize(evt));
+          this->method->sendData(&quot;\n&quot;);
+        break;
+        case Event::EventKind::Show:
+          // Show a specific capsule part
+          this->method->sendData(this->serializer->serialize(listCapsuleMessage(evt)));
+          this->method->sendData(&quot;\n&quot;);
+        break;
+        case Event::EventKind::Trigger:
+          evt = this->triggerCapsuleMessage(evt);
+          this->method->sendData(this->serializer->serialize(evt));
+          this->method->sendData(&quot;\n&quot;);
+        break;
+        default:
+        break;
+      }
+    }
+}
+
+/*std::string data = this->method->read();
+    std::stringstream ss;
+    if (data != &quot;&quot;) {
+
+        std::istringstream iss(data);
+        std::vector&lt;std::string> cmd;
+        while (iss) {
+            std::string subs;
+            iss >> subs; 
+            if (iss.str().empty()) {
+                cmd.push_back(subs);
+            }
+        }
+
+        if (cmd.size() == 0)
+            return;
+
+        if (cmd.size() > 1 &amp;&amp; cmd[0] == &quot;list&quot; &amp;&amp; cmd[1] == &quot;capsules&quot;) {
+            ss  &lt;&lt; &quot;List of capsules:\n&quot;;
+            std::map&lt;std::string, size_t>::iterator iter;
+            for(iter=capsules.begin(); iter!=capsules.end(); ++iter) {
+                ss &lt;&lt; &quot; - &quot; &lt;&lt; iter->first &lt;&lt; &quot; [&quot;&lt;&lt; capsuleTypes[iter->first]&lt;&lt; &quot;]\n&quot;;
+            }
+            this->method->sendData(ss.str());
+        }
+        else if (cmd.size() > 2 &amp;&amp; cmd[0] == &quot;show&quot; &amp;&amp; cmd[1] == &quot;capsule&quot;) {
+
+            printf(&quot;capsule:%s|type:%s\n&quot;, cmd[1].c_str(), capsuleTypes[cmd[2]].c_str());
+            if (capsuleTypes[cmd[2]] == &quot;&quot;) {
+                printf(&quot;error: %s\n&quot;, capsuleTypes[cmd[2]].c_str());
+                return;
+            }
+            std::string capsuleType = capsuleTypes[cmd[2]];
+            ss  &lt;&lt; &quot;Capsule: &quot; &lt;&lt; cmd[2];
+            ss  &lt;&lt; &quot; type: &quot; &lt;&lt; capsuleTypes[cmd[2]] &lt;&lt; &quot;\n&quot;;
+            ss  &lt;&lt; &quot;List of triggers:\n&quot;;
+            if (capsuleType == &quot;Gen&quot;) {
+                ss &lt;&lt; &quot; - &quot; &lt;&lt; &quot;generate()\n&quot;;
+                this->method->sendData(ss.str());
+            }
+        }
+
+    }*/</body>
+              </effect>
+              <trigger xmi:id="_-XTkA6mnEeiKStjlGKlK2g" port="_-XTj9amnEeiKStjlGKlK2g">
+                <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+              </trigger>
+            </transition>
+            <transition xmi:id="_-XTkBKmnEeiKStjlGKlK2g" name="register capsules" source="_-XTkC6mnEeiKStjlGKlK2g" target="_-XTkC6mnEeiKStjlGKlK2g">
+              <effect xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkBamnEeiKStjlGKlK2g">
+                <language>C++</language>
+                <body>std::stringstream ss;
+    ss &lt;&lt; msg->signal.getSrcPort()->slot->name &lt;&lt; &quot;:&quot; &lt;&lt; msg->signal.getSrcPort()->slot->capsuleIndex;
+    printf(&quot;capsule name: %s at port %d\n&quot;, ss.str().c_str(), (int)msg->sapIndex0_);
+    capsules[ss.str()] = msg->sapIndex0_;
+    capsuleTypes[ss.str()] = msg->signal.getSrcPort()->slot->capsuleClass->name;</body>
+              </effect>
+              <trigger xmi:id="_-XTkBqmnEeiKStjlGKlK2g" port="_-XTj8amnEeiKStjlGKlK2g">
+                <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_PQtAwOzeEeSRtqCWFwOf8g"/>
+              </trigger>
+            </transition>
+            <transition xmi:id="_-XTkB6mnEeiKStjlGKlK2g" name="events periodically sent" source="_-XTkC6mnEeiKStjlGKlK2g" target="_-XTkC6mnEeiKStjlGKlK2g">
+              <effect xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkCKmnEeiKStjlGKlK2g" name="Effect" isReentrant="false">
+                <language>C++</language>
+                <body>unsigned size = this->eventQueue.size();
+for (unsigned int i = 0; i &lt; size; i++) {
+	this->method->sendData(this->eventQueue.back());
+	this->eventQueue.pop_back();
+}</body>
+              </effect>
+              <trigger xmi:id="_-XTkCamnEeiKStjlGKlK2g" port="_-XTj96mnEeiKStjlGKlK2g">
+                <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+              </trigger>
+            </transition>
+            <subvertex xmi:type="uml:Pseudostate" xmi:id="_-XTkCqmnEeiKStjlGKlK2g">
+              <name xsi:nil="true"/>
+            </subvertex>
+            <subvertex xmi:type="uml:State" xmi:id="_-XTkC6mnEeiKStjlGKlK2g" name="OBSERVING"/>
+          </region>
+        </ownedBehavior>
+        <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkDKmnEeiKStjlGKlK2g" name="listCapsuleMessage" specification="_-XTkD6mnEeiKStjlGKlK2g">
+          <language>C++</language>
+          <body>std::string sourceName = evt.getSourceName();
+if (sourceName == &quot;Counter&quot;) {
+	evt.setParam(&quot;0&quot;, &quot;timer1_timeout&quot;);
+}
+return evt;</body>
+        </ownedBehavior>
+        <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkDamnEeiKStjlGKlK2g" name="triggerCapsuleMessage" specification="_-XTkEqmnEeiKStjlGKlK2g">
+          <language>C++</language>
+          <body>std::map&lt;std::string, size_t>::iterator iter;
+std::string instanceName = evt.getCapsuleInstance(); // name of the instance
+std::string capsuleType = &quot;&quot;;     // name of the capsule
+std::string opName    = evt.getParam(&quot;operation&quot;);
+int portIndex = -1;
+for(iter=capsules.begin(); iter!=capsules.end(); ++iter) {
+if (iter->first == instanceName) {
+portIndex = capsules[iter->first];
+capsuleType = capsuleTypes[iter->first];
+break;
+}
+}
+// For debugging purpose
+  printf(&quot;instanceName = %s, capsuleType = %s, portIndex = %d&quot;,      instanceName.c_str(),      capsuleType.c_str(),      (int)portIndex);
+if (portIndex == -1) {
+printf(&quot;Problem with instanceName = %s&quot;, instanceName.c_str());evt.setParam(&quot;success&quot;, 0);
+return evt;
+}
+if (capsuleType == &quot;Counter&quot;) {
+if (opName == &quot;timer1_timeout&quot;) {
+observation.Counter_timer1_timeout().sendAt(portIndex);
+evt.setParam(&quot;success&quot;, 1);
+}
+}
+return evt;</body>
+        </ownedBehavior>
+        <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_-XTkDqmnEeiKStjlGKlK2g" name="to_bool" specification="_-XTkFamnEeiKStjlGKlK2g">
+          <language>C++</language>
+          <body>return strcmp(s.c_str(),&quot;0&quot;) != 0 &amp;&amp; strcmp(s.c_str(), &quot;false&quot;) != 0;</body>
+        </ownedBehavior>
+        <ownedOperation xmi:id="_-XTkD6mnEeiKStjlGKlK2g" name="listCapsuleMessage" concurrency="guarded" method="_-XTkDKmnEeiKStjlGKlK2g">
+          <ownedParameter xmi:id="_-XTkEKmnEeiKStjlGKlK2g" name="evt">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedParameter>
+          <ownedParameter xmi:id="_-XTkEamnEeiKStjlGKlK2g" name="response" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedParameter>
+        </ownedOperation>
+        <ownedOperation xmi:id="_-XTkEqmnEeiKStjlGKlK2g" name="triggerCapsuleMessage" concurrency="guarded" method="_-XTkDamnEeiKStjlGKlK2g">
+          <ownedParameter xmi:id="_-XTkE6mnEeiKStjlGKlK2g" name="evt">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedParameter>
+          <ownedParameter xmi:id="_-XTkFKmnEeiKStjlGKlK2g" name="response" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedParameter>
+        </ownedOperation>
+        <ownedOperation xmi:id="_-XTkFamnEeiKStjlGKlK2g" name="to_bool" concurrency="guarded" method="_-XTkDqmnEeiKStjlGKlK2g">
+          <ownedParameter xmi:id="_-XTkFqmnEeiKStjlGKlK2g" name="s">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedParameter>
+          <ownedParameter xmi:id="_-XTkF6mnEeiKStjlGKlK2g" name="result" direction="return">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+          </ownedParameter>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_-XTkGKmnEeiKStjlGKlK2g" name="internal">
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkGamnEeiKStjlGKlK2g" name="Event" fileName=""/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkGqmnEeiKStjlGKlK2g" name="CLIUtils"/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkG6mnEeiKStjlGKlK2g" name="Serializer"/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkHKmnEeiKStjlGKlK2g" name="Method"/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkHamnEeiKStjlGKlK2g" name="Text" fileName=""/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkHqmnEeiKStjlGKlK2g" name="Socket"/>
+        <packagedElement xmi:type="uml:Artifact" xmi:id="_-XTkH6mnEeiKStjlGKlK2g" name="Config"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_-XTkIKmnEeiKStjlGKlK2g" name="EventObj"/>
+      <profileApplication xmi:id="_-XTkIamnEeiKStjlGKlK2g">
+        <eAnnotations xmi:id="_-XTkIqmnEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
+        </eAnnotations>
+        <appliedProfile href="pathmap://UML_RT_PROFILE/uml-rt.profile.uml#_1h74oEeVEeO0lv5O1DTHOQ"/>
+      </profileApplication>
+      <profileApplication xmi:id="_-XTkI6mnEeiKStjlGKlK2g">
+        <eAnnotations xmi:id="_-XTkJKmnEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/cppproperties#/"/>
+        </eAnnotations>
+        <appliedProfile href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
+      </profileApplication>
+      <profileApplication xmi:id="_-XTkJamnEeiKStjlGKlK2g">
+        <eAnnotations xmi:id="_-XTkJqmnEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/statemachine#/"/>
+        </eAnnotations>
+        <appliedProfile href="pathmap://UML_RT_PROFILE/UMLRealTimeSM-addendum.profile.uml#_KLcn0FDtEeOA4ecmvfqvaw"/>
+      </profileApplication>
+      <profileApplication xmi:id="_-XTkJ6mnEeiKStjlGKlK2g">
+        <eAnnotations xmi:id="_-XTkKKmnEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_Kv8EIKFXEeS_KNX0nfvIVQ"/>
+        </eAnnotations>
+        <appliedProfile href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#ActionLanguage"/>
+      </profileApplication>
+    </packagedElement>
+    <profileApplication xmi:id="_RwBo46mkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo5KmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/uml-rt.profile.uml#_1h74oEeVEeO0lv5O1DTHOQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_RwBo5amkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo5qmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/statemachine#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/UMLRealTimeSM-addendum.profile.uml#_KLcn0FDtEeOA4ecmvfqvaw"/>
+    </profileApplication>
+    <profileApplication xmi:id="_RwBo56mkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo6KmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/cppproperties#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLRealTime:Capsule xmi:id="_Tl0s4KmkEeiKStjlGKlK2g" base_Class="_Tjd8cKmkEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_W-cOgKmkEeiKStjlGKlK2g" isWired="false" base_Port="_W-NlAKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTPseudostate xmi:id="_bPRxkKmkEeiKStjlGKlK2g" base_Pseudostate="_bPNgIKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTState xmi:id="_bPaUcKmkEeiKStjlGKlK2g" base_State="_bPXRIKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTRegion xmi:id="_bPd-0KmkEeiKStjlGKlK2g" base_Region="_bPKc0KmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTStateMachine xmi:id="_bPnv0KmkEeiKStjlGKlK2g" base_StateMachine="_bO9BcKmkEeiKStjlGKlK2g"/>
+  <UMLRealTime:Capsule xmi:id="_-XUyAKmnEeiKStjlGKlK2g" base_Class="_-XTj8KmnEeiKStjlGKlK2g"/>
+  <UMLRealTime:ProtocolContainer xmi:id="_-XUyAamnEeiKStjlGKlK2g" base_Package="_-XTj46mnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTMessageSet xmi:id="_-XVZEKmnEeiKStjlGKlK2g" base_Interface="_-XTj56mnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTMessageSet xmi:id="_-XVZEamnEeiKStjlGKlK2g" base_Interface="_-XTj6KmnEeiKStjlGKlK2g" rtMsgKind="out"/>
+  <UMLRealTime:RTMessageSet xmi:id="_-XWAIKmnEeiKStjlGKlK2g" base_Interface="_-XTj7amnEeiKStjlGKlK2g" rtMsgKind="inOut"/>
+  <UMLRealTime:Protocol xmi:id="_-XWAIamnEeiKStjlGKlK2g" base_Collaboration="_-XTj5KmnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_-XWnMKmnEeiKStjlGKlK2g" isNotification="true" isPublish="true" isWired="false" base_Port="_-XTj8amnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_-XWnMamnEeiKStjlGKlK2g" isWired="false" base_Port="_-XTj9KmnEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTPseudostate xmi:id="_-XWnMqmnEeiKStjlGKlK2g" base_Pseudostate="_-XTkCqmnEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTState xmi:id="_-XXOQKmnEeiKStjlGKlK2g" base_State="_-XTkC6mnEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTRegion xmi:id="_-XXOQamnEeiKStjlGKlK2g" base_Region="_-XTj-6mnEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTStateMachine xmi:id="_-XX1UKmnEeiKStjlGKlK2g" base_StateMachine="_-XTj-qmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_-XZDcKmnEeiKStjlGKlK2g" headerPreface="#include &quot;Method.hh&quot;&#xA;#include &quot;Socket.hh&quot;&#xA;#include &quot;Serializer.hh&quot;&#xA;#include &quot;Text.hh&quot;&#xA;#include &quot;CLIUtils.hh&quot;&#xA;#include &quot;Config.hh&quot;&#xA;#include &lt;deque>" base_Class="_-XTj8KmnEeiKStjlGKlK2g" privateDeclarations="Method* method;&#xA;Serializer* serializer;&#xA;std::map&lt;std::string, size_t> capsules;&#xA;std::map&lt;std::string, std::string> capsuleTypes;&#xA;Config config;"/>
+  <UMLRealTime:RTPort xmi:id="_-XZqgKmnEeiKStjlGKlK2g" isWired="false" base_Port="_-XTj9amnEeiKStjlGKlK2g"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_-XaRkKmnEeiKStjlGKlK2g" headerPreface="#include &quot;Event.hh&quot;" implementationPreface="" base_Class="_-XTkIKmnEeiKStjlGKlK2g" publicDeclarations="Event event;"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-XaRkamnEeiKStjlGKlK2g" base_Artifact="_-XTkGamnEeiKStjlGKlK2g" includeFile="/*&#xA; * Event.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef EVENT_HH_&#xA;#define EVENT_HH_&#xA;&#xA;#include &lt;map>&#xA;#include &lt;iostream>&#xA;#include &lt;string.h>&#xA;#include &lt;sstream>&#xA;#include &lt;stdio.h>&#xA;#include &lt;stdlib.h>&#xA;#include &lt;vector>&#xA;&#xA;class Event {&#xA;&#xA;public:&#xA;typedef enum {&#xA;&#x9;&#x9;Signal,&#xA;&#x9;&#x9;Method,&#xA;&#x9;&#x9;ActionCode,&#xA;&#x9;&#x9;Transition,&#xA;&#x9;&#x9;State,&#xA;&#x9;&#x9;Capsule,&#xA;&#x9;&#x9;Attribute,&#xA;&#x9;&#x9;Timer,&#xA;&#x9;&#x9;UnknownSource, Command&#xA;&#x9;} EventSource;&#xA;&#xA;&#x9;typedef enum {&#xA;&#x9;&#x9;SendSignal, ReceiveSignal, DeferSignal, RecallSignal, CancelSignal, // Signal events&#xA;&#x9;&#x9;MethodCall,&#xA;&#x9;&#x9;MethodCallReceive,&#xA;&#x9;&#x9;MethodStartExecute,&#xA;&#x9;&#x9;MethodReturn,&#xA;&#x9;&#x9;MethodFailed,&#xA;&#x9;&#x9;MethodReturnReceived, // Method events&#xA;&#x9;&#x9;ActionStart,&#xA;&#x9;&#x9;ActionEnd, // Action code events&#xA;&#x9;&#x9;TransitionStart,&#xA;&#x9;&#x9;TransitionEnd, // Transition events&#xA;&#x9;&#x9;StateEntryStart,&#xA;&#x9;&#x9;StateEntryEnd,&#xA;&#x9;&#x9;StateExitStart,&#xA;&#x9;&#x9;StateExitEnd,&#xA;&#x9;&#x9;StateIdleStart,&#xA;&#x9;&#x9;StateIdleEnd, // State events&#xA;&#x9;&#x9;CapsuleInstantiate,&#xA;&#x9;&#x9;CapsuleFree, // Capsule events&#xA;&#x9;&#x9;AttributeInstantiate,&#xA;&#x9;&#x9;AttributeFree,&#xA;&#x9;&#x9;AttributeChange, // Attribute events&#xA;&#x9;&#x9;TimerStart,&#xA;&#x9;&#x9;TimerSet,&#xA;&#x9;&#x9;TimerCancel,&#xA;&#x9;&#x9;TimerTimeout, // Timer events&#xA;&#x9;&#x9;UnknownKind, List, Show, Trigger&#xA;&#x9;} EventKind;&#xA;&#xA;private:&#xA;&#x9;std::string capsuleInstance;&#xA;&#x9;std::string sourceName;&#xA;&#x9;std::string eventId;&#xA;&#x9;long seconds;&#xA;&#x9;long nanoseconds;&#xA;&#x9;EventSource eventSource;&#xA;&#x9;EventKind eventKind;&#xA;&#x9;std::map&lt;std::string, std::string> params;&#xA;&#xA;public:&#xA;&#x9;Event(std::string capsuleInstance = &quot;&quot;, std::string sourceName = &quot;&quot;,&#xA;&#x9;&#x9;&#x9;EventSource eventSource = UnknownSource, EventKind eventKind =&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;UnknownKind, long seconds = 0, long nanoseconds = 0);&#xA;&#x9;const std::string getCapsuleInstance() const;&#xA;&#x9;void setCapsuleInstance(const std::string capsuleInstance);&#xA;&#x9;const std::string getSourceName() const;&#xA;&#x9;void setSourceName(const std::string sourceName);&#xA;&#x9;const EventSource getEventSource() const;&#xA;&#x9;void setEventSource(const Event::EventSource source);&#xA;&#x9;const EventKind getEventKind() const;&#xA;&#x9;void setEventKind(const Event::EventKind kind);&#xA;&#x9;const long getSeconds() const;&#xA;&#x9;const long getNanoseconds() const;&#xA;&#x9;void setTimestamp();&#xA;&#x9;void setTimestamp(const long seconds, const long nanoseconds = 0);&#xA;&#x9;void setSeconds(const long seconds);&#xA;&#x9;void setNanoseconds(const long nanoseconds = 0);&#xA;&#x9;void setEventId(const std::string eventId);&#xA;&#x9;const std::string getEventId() const;&#xA;&#x9;void generateEventId();&#xA;&#x9;const std::map&lt;std::string, std::string> getParams() const;&#xA;&#x9;const std::string getParam(std::string key) const;&#xA;&#x9;void setParams(const std::map&lt;std::string, std::string> params);&#xA;&#x9;void setParam(const std::string key, const std::string value);&#xA;&#x9;void setParam(const std::string key, const int value);&#xA;&#x9;void clearParams();&#xA;};&#xA;&#xA;#endif /* EVENT_HH_ */" sourceFile="/*&#xA; * Event.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Event.hh&quot;&#xA;&#xA;#include &lt;string>&#xA;#include &lt;sstream>&#xA;#include &lt;time.h>&#xA;#include &lt;sys/time.h>&#xA;#include &lt;stdio.h>&#xA;#include &lt;stdlib.h>&#xA;&#xA;Event::Event(std::string capsuleInstance, std::string sourceName,&#xA;&#x9;&#x9;EventSource eventSource, EventKind eventKind, long seconds,&#xA;&#x9;&#x9;long nanoseconds) {&#xA;&#xA;&#x9;this->generateEventId();&#xA;&#x9;this->setCapsuleInstance(capsuleInstance);&#xA;&#x9;this->setSourceName(sourceName);&#xA;&#x9;this->setEventSource(eventSource);&#xA;&#x9;this->setEventKind(eventKind);&#xA;}&#xA;&#xA;const std::string Event::getCapsuleInstance() const {&#xA;&#x9;return this->capsuleInstance;&#xA;}&#xA;&#xA;void Event::setCapsuleInstance(const std::string capsuleInstance) {&#xA;&#x9;this->capsuleInstance = capsuleInstance;&#xA;}&#xA;&#xA;const std::string Event::getSourceName() const {&#xA;&#x9;return this->sourceName;&#xA;}&#xA;&#xA;void Event::setSourceName(const std::string sourceName) {&#xA;&#x9;this->sourceName = sourceName;&#xA;}&#xA;&#xA;const Event::EventSource Event::getEventSource() const {&#xA;&#x9;return this->eventSource;&#xA;}&#xA;&#xA;void Event::setEventSource(const Event::EventSource source) {&#xA;&#x9;this->eventSource = source;&#xA;}&#xA;&#xA;const Event::EventKind Event::getEventKind() const {&#xA;&#x9;return this->eventKind;&#xA;}&#xA;&#xA;void Event::setEventKind(const Event::EventKind kind) {&#xA;&#x9;this->eventKind = kind;&#xA;}&#xA;&#xA;const long Event::getSeconds() const {&#xA;&#x9;return this->seconds;&#xA;}&#xA;&#xA;const long Event::getNanoseconds() const {&#xA;&#x9;return this->nanoseconds;&#xA;}&#xA;&#xA;void Event::setTimestamp() {&#xA;&#xA;&#x9;long seconds, nanoseconds;&#xA;&#xA;&#x9;struct timeval tp;&#xA;&#x9;gettimeofday(&amp;tp, NULL);&#xA;&#xA;&#x9;seconds = tp.tv_sec;&#xA;&#x9;nanoseconds = tp.tv_usec * 1000;&#xA;&#xA;&#x9;this->setTimestamp(seconds, nanoseconds);&#xA;&#xA;}&#xA;&#xA;void Event::setTimestamp(const long seconds, const long nanoseconds) {&#xA;&#x9;setSeconds(seconds);&#xA;&#x9;this->setNanoseconds(nanoseconds);&#xA;&#x9;this->seconds = seconds;&#xA;&#x9;this->nanoseconds = nanoseconds;&#xA;}&#xA;&#xA;void Event::setSeconds(const long seconds) {&#xA;&#x9;this->seconds = seconds;&#xA;}&#xA;void Event::setNanoseconds(const long nanoseconds) {&#xA;&#x9;this->nanoseconds = nanoseconds;&#xA;}&#xA;&#xA;const std::string Event::getEventId() const {&#xA;&#x9;return this->eventId;&#xA;}&#xA;&#xA;void Event::setEventId(const std::string eventId) {&#xA;&#x9;this->eventId = eventId;&#xA;}&#xA;&#xA;void Event::generateEventId() {&#xA;&#xA;&#x9;long seconds, nanoseconds;&#xA;&#xA;&#x9;struct timeval tp;&#xA;&#x9;gettimeofday(&amp;tp, NULL);&#xA;&#xA;&#x9;seconds = tp.tv_sec;&#xA;&#x9;nanoseconds = tp.tv_usec * 1000;&#xA;&#xA;&#x9;std::stringstream ss;&#xA;&#x9;int r;&#xA;&#x9;r = random();&#xA;&#xA;&#x9;ss &lt;&lt; seconds &lt;&lt; nanoseconds &lt;&lt; r;&#xA;&#x9;this->eventId = ss.str();&#xA;}&#xA;&#xA;const std::map&lt;std::string, std::string> Event::getParams() const {&#xA;&#x9;return params;&#xA;}&#xA;&#xA;const std::string Event::getParam(std::string key) const {&#xA;&#x9;bool n = this->params.count(key);&#xA;&#x9;return (n) ? this->params.at(key) : &quot;&quot;;&#xA;}&#xA;&#xA;void Event::setParams(const std::map&lt;std::string, std::string> params) {&#xA;&#x9;this->params = params;&#xA;}&#xA;&#xA;void Event::setParam(const std::string key, const std::string value) {&#xA;&#x9;if (key.length() >= 1)&#xA;&#x9;&#x9;this->params[key] = value;&#xA;}&#xA;&#xA;void Event::setParam(const std::string key, const int value) {&#xA;&#x9;std::stringstream v;&#xA;&#x9;v &lt;&lt; value;&#xA;&#x9;this->setParam(key, v.str());&#xA;}&#xA;&#xA;void Event::clearParams() {&#xA;&#x9;this->params.clear();&#xA;}"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-Xa4oKmnEeiKStjlGKlK2g" base_Artifact="_-XTkGqmnEeiKStjlGKlK2g" includeFile="/*&#xA; * CLIUtils.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef CLIUTILS_HH_&#xA;#define CLIUTILS_HH_&#xA;&#xA;#include&lt;string>&#xA;#include&lt;vector>&#xA;&#xA;namespace CLIUtils {&#xA;&#xA;std::string trim(std::string str);&#xA;std::vector&lt;std::string> tokenizeCommand(const std::string cmd);&#xA;&#xA;}&#xA;&#xA;&#xA;&#xA;#endif /* CLIUTILS_HH_ */" sourceFile="/*&#xA; * CLIUtils.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;CLIUtils.hh&quot;&#xA;&#xA;#include&lt;string>&#xA;#include&lt;vector>&#xA;&#xA;namespace CLIUtils {&#xA;&#xA;std::string trim(std::string str) {&#xA;&#x9;size_t strBegin = str.find_first_not_of(&quot; \n\r\t&quot;);&#xA;&#x9;if (strBegin == std::string::npos)&#xA;&#x9;&#x9;return &quot;&quot;; // no content&#xA;&#xA;&#x9;size_t strEnd = str.find_last_not_of(&quot; \n\r\t&quot;);&#xA;&#x9;size_t strRange = strEnd - strBegin + 1;&#xA;&#x9;return str.substr(strBegin, strRange);&#xA;}&#xA;&#xA;std::vector&lt;std::string> tokenizeCommand(const std::string cmd) {&#xA;&#x9;std::vector&lt;std::string> cmdTokens;&#xA;&#xA;&#x9;std::string command = trim(cmd);&#xA;&#xA;&#x9;if (command.length() == 0)&#xA;&#x9;&#x9;return cmdTokens;&#xA;&#xA;&#x9;std::string tempS = &quot;&quot;;&#xA;&#x9;bool newVar = false;&#xA;&#x9;bool quotation = false;&#xA;&#xA;&#x9;for (unsigned int i = 0; i &lt; command.length(); i++) {&#xA;&#xA;&#x9;&#x9;char c = command[i];&#xA;&#x9;&#x9;bool isSpaceOrEOL = (c == ' ' || c == '\n');&#xA;&#xA;&#x9;&#x9;if (isSpaceOrEOL) {&#xA;&#xA;&#x9;&#x9;&#x9;if (!newVar)&#xA;&#x9;&#x9;&#x9;&#x9;continue;&#xA;&#xA;&#x9;&#x9;&#x9;if (!quotation) {&#xA;&#x9;&#x9;&#x9;&#x9;newVar = false;&#xA;&#x9;&#x9;&#x9;&#x9;cmdTokens.push_back(trim(tempS));&#xA;&#x9;&#x9;&#x9;&#x9;tempS = &quot;&quot;;&#xA;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;tempS = tempS + c;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;} else if (c == '&quot;') {&#xA;&#x9;&#x9;&#x9;if (!quotation) {&#xA;&#x9;&#x9;&#x9;&#x9;// open a quotation&#xA;&#x9;&#x9;&#x9;&#x9;quotation = true;&#xA;&#x9;&#x9;&#x9;&#x9;if (newVar) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;cmdTokens.push_back(trim(tempS));&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;tempS = &quot;&quot;;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;newVar = true;&#xA;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;quotation = false;&#xA;&#x9;&#x9;&#x9;&#x9;newVar = false;&#xA;&#x9;&#x9;&#x9;&#x9;cmdTokens.push_back(trim(tempS));&#xA;&#x9;&#x9;&#x9;&#x9;tempS = &quot;&quot;;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;newVar = true;&#xA;&#x9;&#x9;&#x9;tempS = tempS + c;&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#x9;if (newVar)&#xA;&#x9;&#x9;cmdTokens.push_back(trim(tempS));&#xA;&#xA;&#x9;return cmdTokens;&#xA;}&#xA;&#xA;}&#xA;"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-Xa4oamnEeiKStjlGKlK2g" base_Artifact="_-XTkG6mnEeiKStjlGKlK2g" includeFile="/*&#xA; * Serializer.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef SERIALIZER_HH_&#xA;#define SERIALIZER_HH_&#xA;&#xA;#include &lt;map>&#xA;#include &lt;string>&#xA;#include &quot;Event.hh&quot;&#xA;&#xA;class Serializer {&#xA;&#xA;public:&#xA;&#x9;Serializer();&#xA;&#x9;virtual ~Serializer();&#xA;&#x9;virtual void configure(std::map&lt;std::string, std::string> configList) = 0;&#xA;&#x9;virtual const std::string serialize(const Event event) const = 0;&#xA;&#x9;virtual Event parse(const std::string data) const = 0;&#xA;&#x9;virtual const std::string getConfig(&#xA;&#x9;&#x9;&#x9;std::map&lt;std::string, std::string> configList,&#xA;&#x9;&#x9;&#x9;std::string key) const;&#xA;};&#xA;&#xA;#endif /* SERIALIZER_HH_ */" sourceFile="/*&#xA; * Serializer.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Serializer.hh&quot;&#xA;&#xA;Serializer::Serializer() {&#xA;}&#xA;&#xA;Serializer::~Serializer() {&#xA;}&#xA;&#xA;const std::string Serializer::getConfig(&#xA;&#x9;&#x9;std::map&lt;std::string, std::string> configList, std::string key) const {&#xA;&#x9;bool n = configList.count(key);&#xA;&#x9;return (n) ? configList.at(key) : &quot;&quot;;&#xA;}"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-Xa4oqmnEeiKStjlGKlK2g" base_Artifact="_-XTkHKmnEeiKStjlGKlK2g" includeFile="/*&#xA; * Method.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef METHOD_HH_&#xA;#define METHOD_HH_&#xA;&#xA;#include &lt;map>&#xA;#include &lt;string>&#xA;&#xA;class Method {&#xA;&#xA;public:&#xA;&#x9;Method();&#xA;&#x9;virtual ~Method();&#xA;&#x9;virtual void configure(std::map&lt;std::string, std::string> configList) = 0;&#xA;&#x9;virtual const bool canConnect() const;&#xA;&#x9;virtual int connect() = 0;&#xA;&#x9;virtual void disconnect() = 0;&#xA;&#x9;virtual std::string read() = 0;&#xA;&#x9;virtual void sendData(std::string) = 0;&#xA;&#x9;virtual const std::string getConfig(&#xA;&#x9;&#x9;&#x9;std::map&lt;std::string, std::string> configList,&#xA;&#x9;&#x9;&#x9;std::string key) const;&#xA;};&#xA;&#xA;#endif /* METHOD_HH_ */&#xA;" sourceFile="/*&#xA; * Method.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Method.hh&quot;&#xA;#include &lt;stdio.h>&#xA;&#xA;Method::Method() {&#xA;}&#xA;&#xA;Method::~Method() {&#xA;}&#xA;&#xA;const bool Method::canConnect() const {&#xA;&#x9;return false;&#xA;}&#xA;&#xA;const std::string Method::getConfig(&#xA;&#x9;&#x9;std::map&lt;std::string, std::string> configList, std::string key) const {&#xA;&#x9;bool n = configList.count(key);&#xA;&#x9;return (n) ? configList.at(key) : &quot;&quot;;&#xA;}"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-XbfsKmnEeiKStjlGKlK2g" base_Artifact="_-XTkHamnEeiKStjlGKlK2g" includeFile="/*&#xA; * Text.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef TEXT_HH_&#xA;#define TEXT_HH_&#xA;&#xA;#include &quot;Serializer.hh&quot;&#xA;#include &quot;Event.hh&quot;&#xA;#include &lt;string>&#xA;#include &lt;stdlib.h>&#xA;#include &lt;unistd.h>&#xA;&#xA;class Text: public Serializer {&#xA;&#xA;private:&#xA;&#x9;std::string format;&#xA;&#xA;&#x9;// separators&#xA;&#x9;char separator;&#xA;&#x9;char paramSeparator;&#xA;&#x9;char keyValueSeparator;&#xA;&#xA;&#x9;std::vector&lt;std::string> fields;&#xA;&#x9;unsigned int fieldNumber;&#xA;&#x9;const std::vector&lt;std::string> split(const std::string data,&#xA;&#x9;&#x9;&#x9;const char separator) const;&#xA;&#xA;protected:&#xA;&#x9;const std::string getField(const std::string field,&#xA;&#x9;&#x9;&#x9;const Event&amp; event) const;&#xA;&#x9;void setField(const std::string field, const std::string value,&#xA;&#x9;&#x9;&#x9;Event&amp; event) const;&#xA;&#xA;public:&#xA;&#x9;Text();&#xA;&#x9;virtual ~Text();&#xA;&#x9;virtual void configure(std::map&lt;std::string, std::string> configList);&#xA;&#x9;virtual const std::string serialize(const Event event) const;&#xA;&#x9;const std::string serializeParams(const Event event) const;&#xA;&#x9;virtual Event parse(const std::string data) const;&#xA;&#x9;void parseParameters(Event&amp; event, const std::string data) const;&#xA;&#x9;void setFormat(const std::string format);&#xA;&#x9;const std::string getFormat() const;&#xA;&#x9;void setSeparator(const char separator);&#xA;&#x9;void setParamSeparator(const char paramSeparator);&#xA;&#x9;void setKeyValueSeparator(const char keyValueSeparator);&#xA;};&#xA;&#xA;#endif /* TEXT_HH_ */" sourceFile="/*&#xA; * Text.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Text.hh&quot;&#xA;&#xA;#include &quot;Event.hh&quot;&#xA;&#xA;#include &lt;string.h>&#xA;#include &lt;sstream>&#xA;#include &lt;iostream>&#xA;#include &lt;sstream>&#xA;#include &lt;stdio.h>&#xA;#include &lt;stdlib.h>&#xA;#include &lt;vector>&#xA;#include &lt;algorithm>&#xA;&#xA;Text::Text() :&#xA;&#x9;&#x9;Serializer() {&#xA;&#x9;this->setSeparator('|');&#xA;&#x9;this->setParamSeparator(';');&#xA;&#x9;this->setKeyValueSeparator(':');&#xA;&#x9;this->setFormat(&#xA;&#x9;&#x9;&#x9;&quot;eventId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|params&quot;);&#xA;}&#xA;&#xA;Text::~Text() {&#xA;}&#xA;&#xA;void Text::configure(std::map&lt;std::string, std::string> configList) {&#xA;&#x9;std::string separator, paramSeparator, keyValueSeparator, format;&#xA;&#xA;&#x9;separator = this->getConfig(configList, &quot;text.separator&quot;);&#xA;&#x9;paramSeparator = this->getConfig(configList, &quot;text.paramSeparator&quot;);&#xA;&#x9;keyValueSeparator = this->getConfig(configList, &quot;text.keyValueSeparator&quot;);&#xA;&#x9;format = this->getConfig(configList, &quot;text.format&quot;);&#xA;&#xA;&#x9;if (!separator.empty())&#xA;&#x9;&#x9;this->setSeparator(separator[0]);&#xA;&#xA;&#x9;if (!paramSeparator.empty())&#xA;&#x9;&#x9;this->setParamSeparator(paramSeparator[0]);&#xA;&#xA;&#x9;if (!keyValueSeparator.empty())&#xA;&#x9;&#x9;this->setKeyValueSeparator(keyValueSeparator[0]);&#xA;&#xA;&#x9;if (!format.empty())&#xA;&#x9;&#x9;this->setFormat(format);&#xA;&#xA;}&#xA;&#xA;void Text::setFormat(const std::string format) {&#xA;&#x9;this->format = format;&#xA;&#x9;std::vector&lt;std::string> v = this->split(format, this->separator);&#xA;&#xA;&#x9;if (!v.size())&#xA;&#x9;&#x9;return;&#xA;&#xA;&#x9;this->fields.clear();&#xA;&#x9;this->fields = v;&#xA;&#x9;this->fieldNumber = this->fields.size();&#xA;}&#xA;&#xA;const std::string Text::getFormat() const {&#xA;&#x9;return this->format;&#xA;}&#xA;&#xA;void Text::setSeparator(const char separator) {&#xA;&#x9;this->separator = separator;&#xA;}&#xA;&#xA;void Text::setParamSeparator(const char paramSeparator) {&#xA;&#x9;this->paramSeparator = paramSeparator;&#xA;}&#xA;&#xA;void Text::setKeyValueSeparator(const char keyValueSeparator) {&#xA;&#x9;this->keyValueSeparator = keyValueSeparator;&#xA;}&#xA;&#xA;const std::string Text::serialize(Event event) const {&#xA;&#xA;&#x9;char fieldSeparator = this->separator;&#xA;&#xA;// results&#xA;&#x9;std::stringstream out;&#xA;&#xA;&#x9;std::vector&lt;std::string>::iterator it1;&#xA;&#x9;std::vector&lt;std::string> v = this->fields;&#xA;&#xA;&#x9;for (it1 = v.begin(); it1 != v.end(); ++it1) {&#xA;&#x9;&#x9;std::string field = *it1;&#xA;&#x9;&#x9;std::transform(field.begin(), field.end(), field.begin(), ::tolower);&#xA;&#x9;&#x9;out &lt;&lt; this->getField(field, event) &lt;&lt; fieldSeparator;&#xA;&#x9;}&#xA;&#xA;&#x9;return out.str();&#xA;}&#xA;&#xA;const std::string Text::serializeParams(Event event) const {&#xA;&#xA;// results&#xA;&#x9;std::stringstream out;&#xA;&#xA;// params&#xA;&#x9;std::map&lt;std::string, std::string>::const_iterator it2;&#xA;&#x9;std::map&lt;std::string, std::string> params = event.getParams();&#xA;&#xA;&#x9;if (params.empty())&#xA;&#x9;&#x9;return out.str();&#xA;&#xA;&#x9;it2 = params.begin();&#xA;&#x9;out &lt;&lt; it2->first &lt;&lt; this->keyValueSeparator &lt;&lt; it2->second;&#xA;&#x9;++it2;&#xA;&#xA;&#x9;for (; it2 != params.end(); ++it2) {&#xA;&#x9;&#x9;out &lt;&lt; this->paramSeparator &lt;&lt; it2->first &lt;&lt; this->keyValueSeparator&#xA;&#x9;&#x9;&#x9;&#x9;&lt;&lt; it2->second;&#xA;&#x9;}&#xA;&#xA;&#x9;return out.str();&#xA;}&#xA;&#xA;Event Text::parse(const std::string data) const {&#xA;&#xA;&#x9;char fieldSeparator = this->separator;&#xA;&#xA;&#x9;std::vector&lt;std::string> values = this->split(data, fieldSeparator);&#xA;&#x9;Event event;&#xA;&#xA;&#x9;if (values.size() &lt; fieldNumber) {&#xA;&#x9;&#x9;std::cout &lt;&lt; &quot;Error in parsing event stream, only &quot; &lt;&lt; values.size()&#xA;&#x9;&#x9;&#x9;&#x9;&lt;&lt; &quot; are parsed \n&quot;;&#xA;&#x9;&#x9;return event;&#xA;&#x9;}&#xA;&#xA;&#x9;std::vector&lt;std::string>::iterator it;&#xA;&#x9;std::vector&lt;std::string> v = this->fields;&#xA;&#x9;int i = 0;&#xA;&#xA;&#x9;for (it = v.begin(); it != v.end(); ++it) {&#xA;&#x9;&#x9;std::string field = *it;&#xA;&#x9;&#x9;std::transform(field.begin(), field.end(), field.begin(), ::tolower);&#xA;&#x9;&#x9;this->setField(field, values[i], event);&#xA;&#x9;&#x9;i++;&#xA;&#x9;}&#xA;&#xA;&#x9;return event;&#xA;}&#xA;&#xA;void Text::parseParameters(Event&amp; event, const std::string data) const {&#xA;&#xA;&#x9;std::vector&lt;std::string> v = this->split(data, this->paramSeparator);&#xA;&#x9;std::string temp;&#xA;&#xA;&#x9;if (v.size() == 0)&#xA;&#x9;&#x9;return;&#xA;&#xA;&#x9;event.clearParams();&#xA;&#xA;&#x9;for (unsigned i = 0; i &lt; v.size(); i++) {&#xA;&#xA;&#x9;&#x9;std::string::size_type sepIndex = 0;&#xA;&#x9;&#x9;std::string key, value;&#xA;&#xA;&#x9;&#x9;temp = v[i];&#xA;&#xA;&#x9;&#x9;sepIndex = temp.find(this->keyValueSeparator, 0);&#xA;&#x9;&#x9;key = temp.substr(0, sepIndex);&#xA;&#x9;&#x9;value = temp.substr(sepIndex + 1, temp.length());&#xA;&#xA;&#x9;&#x9;event.setParam(key, value);&#xA;&#xA;&#x9;}&#xA;}&#xA;&#xA;const std::vector&lt;std::string> Text::split(const std::string data,&#xA;&#x9;&#x9;const char separator) const {&#xA;&#xA;&#x9;std::vector&lt;std::string> v;&#xA;&#x9;std::string temp = &quot;&quot;;&#xA;&#x9;bool newField = false;&#xA;&#xA;&#x9;for (unsigned int i = 0; i &lt; data.length(); i++) {&#xA;&#x9;&#x9;if (data[i] == separator) {&#xA;&#x9;&#x9;&#x9;newField = false;&#xA;&#x9;&#x9;&#x9;v.push_back(temp);&#xA;&#x9;&#x9;&#x9;temp = &quot;&quot;;&#xA;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;temp = temp + (data[i]);&#xA;&#x9;&#x9;&#x9;newField = true;&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#x9;if (newField)&#xA;&#x9;&#x9;v.push_back(temp);&#xA;&#xA;&#x9;return v;&#xA;}&#xA;&#xA;// The functions below have to be overriden when extending the observer&#xA;const std::string Text::getField(const std::string field,&#xA;&#x9;&#x9;const Event&amp; event) const {&#xA;&#xA;&#x9;std::stringstream ss; // for conversion purpose&#xA;&#xA;&#x9;if (field == &quot;eventid&quot;)&#xA;&#x9;&#x9;return event.getEventId();&#xA;&#x9;else if (field == &quot;sourcename&quot;)&#xA;&#x9;&#x9;return event.getSourceName();&#xA;&#x9;else if (field == &quot;capsuleinstance&quot;)&#xA;&#x9;&#x9;return event.getCapsuleInstance();&#xA;&#x9;else if (field == &quot;eventsource&quot;) {&#xA;&#x9;&#x9;ss &lt;&lt; event.getEventSource();&#xA;&#x9;&#x9;return ss.str();&#xA;&#x9;} else if (field == &quot;eventkind&quot;) {&#xA;&#x9;&#x9;ss &lt;&lt; event.getEventKind();&#xA;&#x9;&#x9;return ss.str();&#xA;&#x9;} else if (field == &quot;seconds&quot;) {&#xA;&#x9;&#x9;ss &lt;&lt; event.getSeconds();&#xA;&#x9;&#x9;return ss.str();&#xA;&#x9;} else if (field == &quot;nanoseconds&quot;) {&#xA;&#x9;&#x9;ss &lt;&lt; event.getNanoseconds();&#xA;&#x9;&#x9;return ss.str();&#xA;&#x9;} else if (field == &quot;params&quot;) {&#xA;&#x9;&#x9;return this->serializeParams(event);&#xA;&#x9;}&#xA;&#xA;&#x9;return &quot;&quot;;&#xA;}&#xA;&#xA;void Text::setField(const std::string field, const std::string value,&#xA;&#x9;&#x9;Event&amp; event) const {&#xA;&#xA;&#x9;std::stringstream ss; // for conversion purpose&#xA;&#xA;&#x9;if (field == &quot;eventid&quot;)&#xA;&#x9;&#x9;event.setEventId(value);&#xA;&#x9;else if (field == &quot;sourcename&quot;)&#xA;&#x9;&#x9;event.setSourceName(value);&#xA;        else if (field == &quot;capsuleinstance&quot;)&#xA;                event.setCapsuleInstance(value);&#xA;&#x9;else if (field == &quot;eventsource&quot;) {&#xA;&#x9;&#x9;event.setEventSource((Event::EventSource) (atoi(value.c_str())));&#xA;&#x9;} else if (field == &quot;eventkind&quot;) {&#xA;&#x9;&#x9;event.setEventKind((Event::EventKind) (atoi(value.c_str())));&#xA;&#x9;} else if (field == &quot;seconds&quot;) {&#xA;&#x9;&#x9;event.setSeconds(atol(value.c_str()));&#xA;&#x9;} else if (field == &quot;nanoseconds&quot;) {&#xA;&#x9;&#x9;event.setNanoseconds(atol(value.c_str()));&#xA;&#x9;} else if (field == &quot;params&quot;) {&#xA;&#x9;&#x9;this->parseParameters(event, value);&#xA;&#x9;}&#xA;}"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-XbfsamnEeiKStjlGKlK2g" base_Artifact="_-XTkHqmnEeiKStjlGKlK2g" includeFile="/*&#xA; * Socket.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef SOCKET_HH_&#xA;#define SOCKET_HH_&#xA;&#xA;#include &lt;arpa/inet.h>&#xA;#include &quot;Method.hh&quot;&#xA;#include &lt;netinet/in.h>&#xA;#include &lt;sys/select.h>&#xA;#include &lt;map>&#xA;#include &lt;string>&#xA;&#xA;class Socket: public Method {&#xA;&#xA;private:&#xA;&#x9;int port;&#xA;&#x9;std::string address;&#xA;&#xA;&#x9;fd_set master;    // master file descriptor list&#xA;&#x9;fd_set read_fds;  // temp file descriptor list for select()&#xA;&#x9;int fdmax;        // maximum file descriptor number&#xA;&#xA;&#x9;int listener;     // listening socket descriptor&#xA;&#x9;struct sockaddr_storage remoteaddr; // client address&#xA;&#x9;socklen_t addrlen;&#xA;&#xA;&#x9;char remoteIP[INET6_ADDRSTRLEN];&#xA;&#xA;&#x9;struct timeval tv;&#xA;&#xA;public:&#xA;&#x9;Socket();&#xA;&#x9;virtual ~Socket();&#xA;&#x9;virtual void configure(std::map&lt;std::string, std::string> configList);&#xA;&#x9;virtual const bool canConnect() const;&#xA;&#x9;virtual int connect();&#xA;&#x9;virtual void disconnect();&#xA;&#x9;virtual std::string read();&#xA;&#x9;virtual void sendData(std::string data);&#xA;&#xA;&#x9;const int getPort() const;&#xA;&#x9;void setPort(const int port);&#xA;&#xA;&#x9;const std::string getAddress() const;&#xA;&#x9;void setAddress(const std::string address);&#xA;};&#xA;&#xA;#endif /* SOCKET_HH_ */" sourceFile="/*&#xA; * Socket.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Socket.hh&quot;&#xA;&#xA;#include &lt;stdio.h>&#xA;#include &lt;stdlib.h>&#xA;#include &lt;string.h>&#xA;#include &lt;unistd.h>&#xA;#include &lt;sys/types.h>&#xA;#include &lt;sys/socket.h>&#xA;#include &lt;netinet/in.h>&#xA;#include &lt;arpa/inet.h>&#xA;#include &lt;netdb.h>&#xA;#include &lt;sstream>&#xA;&#xA;// get sockaddr, IPv4 or IPv6:&#xA;void *get_in_addr(struct sockaddr *sa) {&#xA;&#x9;if (sa->sa_family == AF_INET) {&#xA;&#x9;&#x9;return &amp;(((struct sockaddr_in*) sa)->sin_addr);&#xA;&#x9;}&#xA;&#xA;&#x9;return &amp;(((struct sockaddr_in6*) sa)->sin6_addr);&#xA;}&#xA;&#xA;Socket::Socket() :&#xA;&#x9;&#x9;Method() {&#xA;&#x9;this->setPort(8080);&#xA;&#x9;this->setAddress(&quot;localhost&quot;);&#xA;}&#xA;&#xA;Socket::~Socket() {&#xA;}&#xA;&#xA;void Socket::configure(std::map&lt;std::string, std::string> configList) {&#xA;&#xA;&#x9;std::string port, address;&#xA;&#x9;port = this->getConfig(configList, &quot;port&quot;);&#xA;&#x9;address = this->getConfig(configList, &quot;address&quot;);&#xA;&#xA;&#x9;if (!port.empty())&#xA;&#x9;&#x9;this->setPort(atoi(port.c_str()));&#xA;&#xA;&#x9;if (!address.empty())&#xA;&#x9;&#x9;this->setAddress(address);&#xA;&#xA;&#x9;printf(&quot;address: %s, port: %d\n&quot;, getAddress().c_str(), getPort());&#xA;}&#xA;&#xA;const bool Socket::canConnect() const {&#xA;&#x9;return true;&#xA;}&#xA;&#xA;int Socket::connect() {&#xA;&#xA;&#x9;int rv, result = -1;&#xA;&#x9;struct addrinfo hints, *ai, *p;&#xA;&#x9;int yes = 1;   // for setsockopt&#xA;&#xA;&#x9;std::stringstream port;&#xA;&#x9;port &lt;&lt; this->getPort();&#xA;&#xA;&#x9;tv.tv_sec = 0;&#xA;&#x9;tv.tv_usec = 0;&#xA;&#xA;&#x9;FD_ZERO(&amp;master);    // clear the master and temp sets&#xA;&#x9;FD_ZERO(&amp;read_fds);&#xA;&#xA;&#x9;// get us a socket and bind it&#xA;&#x9;memset(&amp;hints, 0, sizeof hints);&#xA;&#x9;hints.ai_family = AF_UNSPEC;&#xA;&#x9;hints.ai_socktype = SOCK_STREAM;&#xA;&#x9;hints.ai_flags = AI_PASSIVE;&#xA;&#x9;if ((rv = getaddrinfo(NULL, port.str().c_str(), &amp;hints, &amp;ai)) != 0) {&#xA;&#x9;&#x9;fprintf(stderr, &quot;selectserver: %s\n&quot;, gai_strerror(rv));&#xA;&#x9;&#x9;exit(1);&#xA;&#x9;}&#xA;&#xA;&#x9;for (p = ai; p != NULL; p = p->ai_next) {&#xA;&#x9;&#x9;listener = socket(p->ai_family, p->ai_socktype, p->ai_protocol);&#xA;&#x9;&#x9;if (listener &lt; 0) {&#xA;&#x9;&#x9;&#x9;continue;&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;// lose the pesky &quot;address already in use&quot; error message&#xA;&#x9;&#x9;setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &amp;yes, sizeof(int));&#xA;&#xA;&#x9;&#x9;if (bind(listener, p->ai_addr, p->ai_addrlen) &lt; 0) {&#xA;&#x9;&#x9;&#x9;close(listener);&#xA;&#x9;&#x9;&#x9;continue;&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;break;&#xA;&#x9;}&#xA;&#xA;&#x9;&#x9;// if we got here, it means we didn't get bound&#xA;&#x9;if (p == NULL) {&#xA;&#x9;&#x9;fprintf(stderr, &quot;selectserver: failed to bind\n&quot;);&#xA;&#x9;&#x9;exit(2);&#xA;&#x9;}&#xA;&#xA;&#x9;freeaddrinfo(ai); // all done with this&#xA;&#xA;&#x9;// listen&#xA;&#x9;if (listen(listener, 10) == -1) {&#xA;&#x9;&#x9;perror(&quot;listen&quot;);&#xA;&#x9;&#x9;exit(3);&#xA;&#x9;}&#xA;&#xA;&#x9;// add the listener to the master set&#xA;&#x9;FD_SET(listener, &amp;master);&#xA;&#xA;&#x9;// keep track of the biggest file descriptor&#xA;&#x9;fdmax = listener; // so far, it's this one&#xA;&#xA;&#x9;return result;&#xA;&#xA;}&#xA;&#xA;void Socket::disconnect() {&#xA;}&#xA;&#xA;std::string Socket::read() {&#xA;&#xA;&#x9;// main loop&#xA;&#x9;read_fds = master; // copy it&#xA;&#x9;int rc = select(fdmax + 1, &amp;read_fds, NULL, NULL, &amp;tv);&#xA;&#x9;if (rc == -1) {&#xA;&#x9;&#x9;perror(&quot;select&quot;);&#xA;&#x9;&#x9;exit(4);&#xA;&#x9;}&#xA;&#xA;&#x9;tv.tv_sec = 0;&#xA;&#x9;tv.tv_usec = 0;&#xA;&#xA;&#x9;if (rc == 0) {&#xA;&#x9;&#x9;//   printf(&quot;timeout\n&quot;);&#xA;&#x9;&#x9;return &quot;&quot;;&#xA;&#x9;}&#xA;&#xA;&#x9;int i = 0;&#xA;&#xA;&#x9;// run through the existing connections looking for data to read&#xA;&#x9;for (i = 0; i &lt;= fdmax; i++) {&#xA;&#x9;&#x9;if (FD_ISSET(i, &amp;read_fds)) { // we got one!!&#xA;&#x9;&#x9;&#x9;if (i == listener) {&#xA;&#x9;&#x9;&#x9;&#x9;// handle new connections&#xA;&#x9;&#x9;&#x9;&#x9;addrlen = sizeof remoteaddr;&#xA;&#x9;&#x9;&#x9;&#x9;int newfd = accept(listener, (struct sockaddr *) &amp;remoteaddr,&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&amp;addrlen);&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;char remoteIP[INET6_ADDRSTRLEN];&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;if (newfd == -1) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;perror(&quot;accept&quot;);&#xA;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;FD_SET(newfd, &amp;master); // add to master set&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (newfd > fdmax) {    // keep track of the max&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;fdmax = newfd;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;printf(&quot;new connection from %s on &quot;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&quot;socket %d\n&quot;,&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;inet_ntop(remoteaddr.ss_family,&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;get_in_addr((struct sockaddr*) &amp;remoteaddr),&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;remoteIP, INET6_ADDRSTRLEN), newfd);&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;char buf[256];    // buffer for client data&#xA;&#x9;&#x9;&#x9;&#x9;int nbytes;&#xA;&#x9;&#x9;&#x9;&#x9;// handle data from a client&#xA;&#x9;&#x9;&#x9;&#x9;if ((nbytes = recv(i, buf, sizeof buf, 0)) &lt;= 0) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;// got error or connection closed by client&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;if (nbytes == 0) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// connection closed&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;printf(&quot;socket %d hung up\n&quot;, i);&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;perror(&quot;recv&quot;);&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;close(i); // bye!&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;FD_CLR(i, &amp;master); // remove from master set&#xA;&#x9;&#x9;&#x9;&#x9;} else {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;std::string str(buf, buf + nbytes - 2);&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;return str;&#xA;//    printf(&quot;new data: %s\n&quot;, buf);&#xA;//    // we got some data from a client&#xA;//    int j = 0;&#xA;//    for(j = 0; j &lt;= fdmax; j++) {&#xA;//        // send to everyone!&#xA;//        if (FD_ISSET(j, &amp;master)) {&#xA;//            // except the listener and ourselves&#xA;//            if (j != listener &amp;&amp; j != i) {&#xA;//                if (send(j, buf, nbytes, 0) == -1) {&#xA;//                    perror(&quot;send&quot;);&#xA;//                }&#xA;//            }&#xA;//        }&#xA;//    }&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;} // END handle data from client&#xA;&#x9;&#x9;} // END got new incoming connection&#xA;&#x9;} // END looping through file descriptors&#xA;&#x9;return &quot;&quot;;&#xA;}&#xA;&#xA;void Socket::sendData(std::string data) {&#xA;&#x9;int j = 0;&#xA;&#x9;for (j = 0; j &lt;= fdmax; j++) {&#xA;&#x9;&#x9;// send to everyone&#xA;&#x9;&#x9;if (FD_ISSET(j, &amp;master)) {&#xA;&#x9;&#x9;&#x9;// no exception&#xA;&#x9;&#x9;&#x9;if (j != listener) {&#xA;&#x9;&#x9;&#x9;&#x9;if (write(j, data.c_str(), data.length()) == -1) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;//    perror(&quot;does not work\n&quot;);&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;&#xA;const int Socket::getPort() const {&#xA;&#x9;return this->port;&#xA;}&#xA;&#xA;void Socket::setPort(const int port) {&#xA;&#x9;this->port = port;&#xA;}&#xA;&#xA;const std::string Socket::getAddress() const {&#xA;&#x9;return this->address;&#xA;}&#xA;&#xA;void Socket::setAddress(const std::string address) {&#xA;&#x9;this->address = address;&#xA;}"/>
+  <RTCppProperties:ArtifactProperties xmi:id="_-XbfsqmnEeiKStjlGKlK2g" base_Artifact="_-XTkH6mnEeiKStjlGKlK2g" includeFile="/*&#xA; * Config.hh&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#ifndef CONFIG_HH_&#xA;#define CONFIG_HH_&#xA;&#xA;#include &lt;string>&#xA;#include &lt;map>&#xA;&#xA;class Config {&#xA;&#xA;private:&#xA;&#x9;std::string configFileName;&#xA;&#x9;std::string fieldSeparator;&#xA;&#x9;std::string commentStr;&#xA;&#x9;std::string getConfigPath();&#xA;&#x9;std::map&lt;std::string, std::string> configList;&#xA;&#xA;public:&#xA;&#x9;Config();&#xA;&#x9;~Config();&#xA;&#x9;int load();&#xA;&#x9;void append(std::string key, std::string value);&#xA;&#x9;std::string get(std::string key);&#xA;&#x9;void setConfigFileName(const std::string configFileName);&#xA;&#x9;const std::string getConfigFileName() const;&#xA;&#xA;&#x9;void setFieldSeparator(const std::string fieldSeparator);&#xA;&#x9;const std::string getFieldSeparator() const;&#xA;&#xA;&#x9;void setCommentStr(const std::string commentStr);&#xA;&#x9;const std::string getCommentStr() const;&#xA;&#xA;&#x9;const std::map&lt;std::string, std::string> getConfigList() const;&#xA;};&#xA;&#xA;#endif /* CONFIG_HH_ */" sourceFile="/*&#xA; * Config.cc&#xA; *&#xA; *  Created on: Jun 29, 2017&#xA; *      Author: nicolas&#xA; */&#xA;&#xA;#include &quot;Config.hh&quot;&#xA;&#xA;#include &lt;stdio.h>&#xA;#include &lt;fstream>&#xA;#include &lt;iostream>&#xA;#include &lt;unistd.h>&#xA;&#xA;using namespace std;&#xA;&#xA;Config::Config() {&#xA;&#x9;this->setConfigFileName(&quot;config&quot;);&#xA;&#x9;this->setFieldSeparator(&quot;=&quot;);&#xA;&#x9;this->setCommentStr(&quot;#&quot;);&#xA;}&#xA;&#xA;Config::~Config() {&#xA;}&#xA;&#xA;int Config::load() {&#xA;&#xA;&#x9;int result = 0;&#xA;&#x9;std::string prefix = &quot;&quot;;&#xA;&#x9;std::string configPath = this->getConfigPath();&#xA;&#x9;std::ifstream configFile(configPath.c_str());&#xA;&#x9;std::string line;&#xA;&#xA;&#x9;if (configFile.is_open()) {&#xA;&#x9;&#x9;while (std::getline(configFile, line)) {&#xA;&#xA;&#x9;&#x9;&#x9;std::string key, value;&#xA;&#xA;&#x9;&#x9;&#x9;// skip the space and comment line&#xA;&#x9;&#x9;&#x9;std::string::size_type nonSpaceCharIndex = line.find_first_not_of(&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&quot; \f\t\v&quot;);&#xA;&#x9;&#x9;&#x9;if (nonSpaceCharIndex == std::string::npos)&#xA;&#x9;&#x9;&#x9;&#x9;continue; // line is empty, skp it&#xA;&#xA;&#x9;&#x9;&#x9;if (this->commentStr.find(line[nonSpaceCharIndex])&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;!= std::string::npos)&#xA;&#x9;&#x9;&#x9;&#x9;continue; // skip the line , it is a comment line&#xA;&#xA;&#x9;&#x9;&#x9;// Check if it is a definition of a specific rule&#xA;&#x9;&#x9;&#x9;std::string::size_type prefixIndex = line.find(&quot;[&quot;,&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;nonSpaceCharIndex);&#xA;&#x9;&#x9;&#x9;if (prefixIndex != std::string::npos) {&#xA;&#xA;&#x9;&#x9;&#x9;&#x9;std::string::size_type valueNonSpaceCharIndex =&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;line.find_first_not_of(&quot; \f\t\v&quot;, prefixIndex + 1);&#xA;&#x9;&#x9;&#x9;&#x9;std::string p = line.substr(valueNonSpaceCharIndex);&#xA;&#x9;&#x9;&#x9;&#x9;p.erase(p.find_last_not_of(&quot; \f\t\v&quot;));&#xA;&#x9;&#x9;&#x9;&#x9;p.erase(p.find_last_not_of(&quot; \f\t\v&quot;) + 1);&#xA;&#x9;&#x9;&#x9;&#x9;prefix = p;&#xA;&#x9;&#x9;&#x9;&#x9;continue;&#xA;&#x9;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;&#x9;// extract key value&#xA;&#x9;&#x9;&#x9;std::string::size_type sepIndex = line.find(&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;this->getFieldSeparator(), nonSpaceCharIndex);&#xA;&#x9;&#x9;&#x9;if (sepIndex == std::string::npos)&#xA;&#x9;&#x9;&#x9;&#x9;continue; // the line doesn't contain the seperator&#xA;&#xA;&#x9;&#x9;&#x9;key = line.substr(nonSpaceCharIndex, sepIndex - nonSpaceCharIndex);&#xA;&#x9;&#x9;&#x9;key.erase(key.find_last_not_of(&quot; \f\t\v&quot;) + 1);&#xA;&#xA;&#x9;&#x9;&#x9;if (key.empty())&#xA;&#x9;&#x9;&#x9;&#x9;continue; // the kwy should have value&#xA;&#xA;&#x9;&#x9;&#x9;if (sepIndex + 1 == line.length())&#xA;&#x9;&#x9;&#x9;&#x9;continue; // there is no value&#xA;&#xA;/// extract the value&#xA;&#x9;&#x9;&#x9;std::string::size_type valueNonSpaceCharIndex =&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;line.find_first_not_of(&quot; \f\t\v&quot;, sepIndex + 1);&#xA;&#xA;&#x9;&#x9;&#x9;if (valueNonSpaceCharIndex == std::string::npos)&#xA;&#x9;&#x9;&#x9;&#x9;continue; // there is no value&#xA;&#xA;&#x9;&#x9;&#x9;std::string::size_type valueLastNonSpaceCharIndex =&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;line.find_last_not_of(&quot; \f\t\v&quot;);&#xA;&#x9;&#x9;&#x9;value = line.substr(valueNonSpaceCharIndex,&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;valueLastNonSpaceCharIndex - valueNonSpaceCharIndex + 1);&#xA;&#x9;&#x9;&#x9;if (!prefix.empty())&#xA;&#x9;&#x9;&#x9;&#x9;key = prefix + &quot;.&quot; + key;&#xA;&#x9;&#x9;&#x9;this->append(key, value);&#xA;&#x9;&#x9;&#x9;printf(&quot;%s=%s\n&quot;, key.c_str(), value.c_str());&#xA;&#x9;&#x9;&#x9;result = result + 1;&#xA;&#x9;&#x9;}&#xA;&#x9;} else {&#xA;&#x9;&#x9;std::cerr &lt;&lt; &quot;Error in reading configuration file from &quot; &lt;&lt; configPath&#xA;&#x9;&#x9;&#x9;&#x9;&lt;&lt; std::endl;&#xA;&#x9;&#x9;result = -1;&#xA;&#x9;}&#xA;&#x9;configFile.close();&#xA;&#x9;return result;&#xA;}&#xA;&#xA;void Config::append(std::string key, std::string value) {&#xA;&#x9;if (!key.empty())&#xA;&#x9;&#x9;this->configList[key] = value;&#xA;}&#xA;&#xA;std::string Config::get(std::string key) {&#xA;&#x9;bool n = this->configList.count(key);&#xA;&#x9;return (n) ? this->configList.at(key) : &quot;&quot;;&#xA;}&#xA;&#xA;/**&#xA; * Resolve the full path from the exec path&#xA; */&#xA;std::string Config::getConfigPath() {&#xA;&#xA;&#x9;char result[255];&#xA;&#x9;std::string path;&#xA;&#xA;&#x9;ssize_t len = ::readlink(&quot;/proc/self/exe&quot;, result, sizeof(result));&#xA;&#x9;if (len != -1) {&#xA;&#x9;&#x9;path = std::string(result);&#xA;&#x9;}&#xA;&#xA;// find the last &quot;/&quot; position&#xA;&#x9;size_t n = path.rfind('/');&#xA;&#xA;// remove the last fragment of the path&#xA;&#x9;path = (n > 0) ? path.substr(0, n) : &quot;&quot;;&#xA;&#xA;// return the full path&#xA;&#x9;return (path != &quot;&quot;) ?&#xA;&#x9;&#x9;&#x9;path + &quot;/&quot; + this->configFileName : this->configFileName;&#xA;}&#xA;&#xA;void Config::setConfigFileName(const std::string configFileName) {&#xA;&#x9;this->configFileName = configFileName;&#xA;}&#xA;&#xA;const std::string Config::getConfigFileName() const {&#xA;&#x9;return this->configFileName;&#xA;}&#xA;&#xA;void Config::setFieldSeparator(const std::string fieldSeparator) {&#xA;&#x9;this->fieldSeparator = fieldSeparator;&#xA;}&#xA;&#xA;const std::string Config::getFieldSeparator() const {&#xA;&#x9;return this->fieldSeparator;&#xA;}&#xA;&#xA;void Config::setCommentStr(const std::string commentStr) {&#xA;&#x9;this->commentStr = commentStr;&#xA;}&#xA;&#xA;const std::string Config::getCommentStr() const {&#xA;&#x9;return this->commentStr;&#xA;}&#xA;&#xA;const std::map&lt;std::string, std::string> Config::getConfigList() const {&#xA;&#x9;return this->configList;&#xA;}"/>
+  <RTCppProperties:AttributeProperties xmi:id="_-XcGwKmnEeiKStjlGKlK2g" type="std::deque&lt;std::string>" base_Property="_-XTj9qmnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_-XcGwamnEeiKStjlGKlK2g" isWired="false" base_Port="_-XTj96mnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-XcGwqmnEeiKStjlGKlK2g" type="Event" base_Parameter="_-XTkEKmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-XcGw6mnEeiKStjlGKlK2g" type="Event" base_Parameter="_-XTkEamnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-Xct0KmnEeiKStjlGKlK2g" type="Event" base_Parameter="_-XTkE6mnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-Xct0amnEeiKStjlGKlK2g" type="Event" base_Parameter="_-XTkFKmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-Xct0qmnEeiKStjlGKlK2g" type="std::string" base_Parameter="_-XTkFqmnEeiKStjlGKlK2g"/>
+  <UMLRealTime:CapsulePart xmi:id="_-Zmp8KmnEeiKStjlGKlK2g" base_Property="_-XgYMKmnEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_-Zq7YKmnEeiKStjlGKlK2g" isNotification="true" isWired="false" base_Port="_-ZnRAKmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-ZxpEKmnEeiKStjlGKlK2g" type="Event::EventSource" base_Parameter="_-Zvz4KmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-Z6zAKmnEeiKStjlGKlK2g" type="Event::EventKind" base_Parameter="_-Z5k4KmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-aBgsKmnEeiKStjlGKlK2g" type="const char *" base_Parameter="_-aA5oKmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-aNt8KmnEeiKStjlGKlK2g" type="const char *" base_Parameter="_-aMf0KmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-aWQ0KmnEeiKStjlGKlK2g" type="const char *" base_Parameter="_-aVpwKmnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-adlkKmnEeiKStjlGKlK2g" type="const char *" base_Parameter="_-ac-gamnEeiKStjlGKlK2g"/>
+  <RTCppProperties:ParameterProperties xmi:id="_-anWkKmnEeiKStjlGKlK2g" type="const char *" base_Parameter="_-amvgKmnEeiKStjlGKlK2g"/>
+</xmi:XMI>

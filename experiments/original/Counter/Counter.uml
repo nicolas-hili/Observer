@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:UMLRTStateMachines="http://www.eclipse.org/papyrus/umlrt/statemachine" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_RwBo4KmkEeiKStjlGKlK2g" name="Counter">
+    <eAnnotations xmi:id="_RwBo4amkEeiKStjlGKlK2g" source="http://www.eclipse.org/papyrus-rt/language/1.0.0">
+      <details xmi:id="_RwBo4qmkEeiKStjlGKlK2g" key="language" value="umlrt-cpp"/>
+    </eAnnotations>
+    <eAnnotations xmi:id="_dZoT0KmlEeiKStjlGKlK2g" source="UMLRT_Default_top">
+      <details xmi:id="_dZph8KmlEeiKStjlGKlK2g" key="top_name" value="Counter"/>
+    </eAnnotations>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Tjd8cKmkEeiKStjlGKlK2g" name="Counter" classifierBehavior="_bO9BcKmkEeiKStjlGKlK2g" isActive="true">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="_W-NlAKmkEeiKStjlGKlK2g" name="timer1" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+        <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:id="_3TzMQKmkEeiKStjlGKlK2g" name="counter">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedAttribute>
+      <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_bO9BcKmkEeiKStjlGKlK2g" name="CounterSM" isReentrant="false">
+        <region xmi:id="_bPKc0KmkEeiKStjlGKlK2g" name="Region">
+          <transition xmi:id="_bPbikKmkEeiKStjlGKlK2g" name="Initial" source="_bPNgIKmkEeiKStjlGKlK2g" target="_bPXRIKmkEeiKStjlGKlK2g">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_qH9dEKmkEeiKStjlGKlK2g" name="Effect" isReentrant="false">
+              <language>C++</language>
+              <body>printf(&quot;Counter Capsule Is Started\n&quot;);
+timer1.informEvery(UMLRTTimespec(1,0),4);
+counter=0;
+</body>
+            </effect>
+          </transition>
+          <transition xmi:id="_NyjRQKmlEeiKStjlGKlK2g" name="count" source="_bPXRIKmkEeiKStjlGKlK2g" target="_bPXRIKmkEeiKStjlGKlK2g">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_Qtta0KmlEeiKStjlGKlK2g" name="Effect" isReentrant="false">
+              <language>C++</language>
+              <body>counter++;</body>
+            </effect>
+            <trigger xmi:id="_VHih0KmlEeiKStjlGKlK2g" port="_W-NlAKmkEeiKStjlGKlK2g">
+              <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
+            </trigger>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_bPNgIKmkEeiKStjlGKlK2g"/>
+          <subvertex xmi:type="uml:State" xmi:id="_bPXRIKmkEeiKStjlGKlK2g" name="State1">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="__mzkQKmkEeiKStjlGKlK2g" name="Entry" isReentrant="false">
+              <language>C++</language>
+              <body>printf(&quot;Counter value is %d\n&quot;,counter);
+</body>
+            </entry>
+          </subvertex>
+        </region>
+      </ownedBehavior>
+    </packagedElement>
+    <profileApplication xmi:id="_RwBo46mkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo5KmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/uml-rt.profile.uml#_1h74oEeVEeO0lv5O1DTHOQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_RwBo5amkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo5qmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/statemachine#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_RT_PROFILE/UMLRealTimeSM-addendum.profile.uml#_KLcn0FDtEeOA4ecmvfqvaw"/>
+    </profileApplication>
+    <profileApplication xmi:id="_RwBo56mkEeiKStjlGKlK2g">
+      <eAnnotations xmi:id="_RwBo6KmkEeiKStjlGKlK2g" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/cppproperties#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLRealTime:Capsule xmi:id="_Tl0s4KmkEeiKStjlGKlK2g" base_Class="_Tjd8cKmkEeiKStjlGKlK2g"/>
+  <UMLRealTime:RTPort xmi:id="_W-cOgKmkEeiKStjlGKlK2g" isWired="false" base_Port="_W-NlAKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTPseudostate xmi:id="_bPRxkKmkEeiKStjlGKlK2g" base_Pseudostate="_bPNgIKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTState xmi:id="_bPaUcKmkEeiKStjlGKlK2g" base_State="_bPXRIKmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTRegion xmi:id="_bPd-0KmkEeiKStjlGKlK2g" base_Region="_bPKc0KmkEeiKStjlGKlK2g"/>
+  <UMLRTStateMachines:RTStateMachine xmi:id="_bPnv0KmkEeiKStjlGKlK2g" base_StateMachine="_bO9BcKmkEeiKStjlGKlK2g"/>
+</xmi:XMI>
