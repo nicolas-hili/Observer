@@ -77,7 +77,7 @@ public class ObserverUpdate {
 			Boolean isSource = file.getName().endsWith("cc");
 			Boolean isInclude = file.getName().endsWith("hh");
 			
-			if (!isSource || isInclude)
+			if (!isSource && !isInclude)
 				continue;
 			
 			String artifactName = file.getName().substring(0, file.getName().length()-3);
