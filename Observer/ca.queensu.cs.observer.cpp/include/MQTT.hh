@@ -23,8 +23,9 @@ private:
 	std::string password;
 	std::string subTopic;
 	std::string pubTopic;
-
 	MQTTClient * client;
+
+	std::string getTopic(std::string data);
 
 	static std::queue<std::string> inQueue;
 	static char * generateClientID ( const int len );

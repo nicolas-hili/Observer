@@ -144,27 +144,12 @@ public class ObservableCapsuleFlatModel2Cpp extends FlatModel2Cpp {
 		
 		for (String definition: definitions)
 			func.add(new UserCode (definition));
-		func.add(new UserCode(
-				"std::stringstream ss;"
-			+	"\n"
-			+	"ss << this->slot->containerClass->name;"
-			+	"\n"
-			+	"ss << \".\";"
-			+	"\n"
-			+	"ss << this->getName();"
-			+	"\n"
-			+	"ss << \":\";"
-			+	"\n"
-			+	"ss << this->getIndex();"
-			+	"\n"
-		));
-		
 		
 		func.add(new UserCode(
 				"EventObj eobj1;\n" +
 				"Event e1;\n" +
 				"e1.setSourceName(\""+sourceState.getName()+"\");\n" +
-				"e1.setCapsuleInstance(ss.str().c_str());\n" +
+				"e1.setCapsuleInstance(this->slot->name);\n" +
 				"e1.setTimestamp();\n" +
 				"e1.setEventSource(Event::State);\n" +
 				"e1.setEventKind(Event::StateExitEnd);\n" +
@@ -187,7 +172,7 @@ public class ObservableCapsuleFlatModel2Cpp extends FlatModel2Cpp {
 				"EventObj eobj2;\n" +
 				"Event e2;\n" +
 				"e2.setSourceName(\""+targetState.getName()+"\");\n" +
-				"e2.setCapsuleInstance(ss.str().c_str());\n" +
+				"e2.setCapsuleInstance(this->slot->name);\n" +
 				"e2.setTimestamp();\n" +
 				"e2.setEventSource(Event::State);\n" +
 				"e2.setEventKind(Event::StateEntryStart);\n" +

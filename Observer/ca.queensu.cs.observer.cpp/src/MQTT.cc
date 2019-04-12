@@ -19,6 +19,8 @@
 #include <unistd.h>
 #include <sstream>
 #include <math.h>
+#include <iterator>
+#include <regex>
 
 std::queue<std::string> MQTT::inQueue;
 
@@ -146,9 +148,24 @@ std::string MQTT::read() {
 	return "";
 }
 
+std::string MQTT::getTopic(std::string data) {
+	//[FIXME] support different data pattern
+	static std::regex splitter("\\|");
+	std::vector<std::string> tokens;
+
+	std::copy( std::sregex_token_iterator(data.begin(), data.end(), splitter, -1),
+			  std::sregex_token_iterator(),
+			  std::back_inserter(tokens));
+
+	std::string stateName = tokens[1];
+	std::string capsuleFQN = tokens[2];
+	std::replace(capsuleFQN.begin(), capsuleFQN.end(), '.', '/');
+	return pubTopic + std::string("/") + capsuleFQN + std::string("/") + stateName;
+}
+
 void MQTT::sendData(std::string data) {
 	if(client != NULL)
-		MQTTClient_publish(*client, pubTopic.c_str(), data.length(), data.c_str(), 0, 0, NULL);
+		MQTTClient_publish(*client, getTopic(data).c_str(), data.length(), data.c_str(), 0, 0, NULL);
 }
 
 const std::string MQTT::getPort() const {
