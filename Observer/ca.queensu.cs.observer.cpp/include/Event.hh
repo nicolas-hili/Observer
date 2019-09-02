@@ -20,7 +20,7 @@
 class Event {
 
 public:
-typedef enum {
+  typedef enum EventSource {
 		Signal,
 		Method,
 		ActionCode,
@@ -33,7 +33,7 @@ typedef enum {
 		Command
 	} EventSource;
 
-	typedef enum {
+	typedef enum EventKind {
 		SendSignal, ReceiveSignal, DeferSignal, RecallSignal, CancelSignal, // Signal events
 		MethodCall,
 		MethodCallReceive,
@@ -83,14 +83,14 @@ public:
 					UnknownKind, long seconds = 0, long nanoseconds = 0);
 	const std::string getCapsuleInstance() const;
 	void setCapsuleInstance(const std::string capsuleInstance);
-	const std::string getSourceName() const;
+	std::string getSourceName() const;
 	void setSourceName(const std::string sourceName);
-	const EventSource getEventSource() const;
+	EventSource getEventSource() const;
 	void setEventSource(const Event::EventSource source);
-	const EventKind getEventKind() const;
+	EventKind getEventKind() const;
 	void setEventKind(const Event::EventKind kind);
-	const long getSeconds() const;
-	const long getNanoseconds() const;
+	long getSeconds() const;
+	long getNanoseconds() const;
 	void setTimestamp();
 	void setTimestamp(const long seconds, const long nanoseconds = 0);
 	void setSeconds(const long seconds);
@@ -98,7 +98,7 @@ public:
 	void setEventId(const std::string eventId);
 	const std::string getEventId() const;
 	void generateEventId();
-	const double getCpuTick() const;
+	double getCpuTick() const;
 	void setCpuTick(double tick = 0.0);
 	static double currentCpuTick();
 	const std::map<std::string, std::string> getParams() const;

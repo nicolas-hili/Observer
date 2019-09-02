@@ -74,10 +74,14 @@ public class SocketClient extends Thread {
 	}
 	
 	public void write(String data) {
+		
+		byte[] message = data.getBytes();
+				
 		if (connected) {
 			System.out.println("write data:" + data);
 			try {
-				outToServer.writeBytes(data + "\r\n");
+				outToServer.writeInt(message.length);
+				outToServer.write(message);
 			} catch (IOException e) {
 				connected = false;
 			}

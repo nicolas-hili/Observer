@@ -30,6 +30,7 @@ Event::Event(std::string capsuleInstance, std::string sourceName,
 	this->setEventSource(eventSource);
 	this->setEventKind(eventKind);
 	this->setCpuTick();
+  this->setTimestamp(seconds, nanoseconds);
 }
 
 const std::string Event::getCapsuleInstance() const {
@@ -40,7 +41,7 @@ void Event::setCapsuleInstance(const std::string capsuleInstance) {
 	this->capsuleInstance = capsuleInstance;
 }
 
-const std::string Event::getSourceName() const {
+std::string Event::getSourceName() const {
 	return this->sourceName;
 }
 
@@ -48,7 +49,7 @@ void Event::setSourceName(const std::string sourceName) {
 	this->sourceName = sourceName;
 }
 
-const Event::EventSource Event::getEventSource() const {
+Event::EventSource Event::getEventSource() const {
 	return this->eventSource;
 }
 
@@ -56,7 +57,7 @@ void Event::setEventSource(const Event::EventSource source) {
 	this->eventSource = source;
 }
 
-const Event::EventKind Event::getEventKind() const {
+Event::EventKind Event::getEventKind() const {
 	return this->eventKind;
 }
 
@@ -64,11 +65,11 @@ void Event::setEventKind(const Event::EventKind kind) {
 	this->eventKind = kind;
 }
 
-const long Event::getSeconds() const {
+long Event::getSeconds() const {
 	return this->seconds;
 }
 
-const long Event::getNanoseconds() const {
+long Event::getNanoseconds() const {
 	return this->nanoseconds;
 }
 
@@ -126,7 +127,7 @@ void Event::generateEventId() {
 	this->eventId = ss.str();
 }
 
-const double Event::getCpuTick() const {
+double Event::getCpuTick() const {
 	return this->cpuTick;
 }
 

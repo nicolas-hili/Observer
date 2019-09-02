@@ -1,12 +1,12 @@
 /*
- * Text.hh
+ * Serializer implementation
  *
  *  Created on: Jun 29, 2017
  *      Author: nicolas
  */
 
-#ifndef TEXT_HH_
-#define TEXT_HH_
+#ifndef SERIALIZER_IMPL_HH_
+#define SERIALIZER_IMPL_HH_
 
 #include "Serializer.hh"
 #include "Event.hh"
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-class Text: public Serializer {
+class SerializerImpl: public Serializer {
 
 private:
 	std::string format;
@@ -36,8 +36,8 @@ protected:
 			Event& event) const;
 
 public:
-	Text();
-	virtual ~Text();
+	SerializerImpl();
+	virtual ~SerializerImpl();
 	virtual void configure(std::map<std::string, std::string> configList);
 	virtual const std::string serialize(const Event event) const;
 	const std::string serializeParams(const Event event) const;
@@ -50,4 +50,4 @@ public:
 	void setKeyValueSeparator(const char keyValueSeparator);
 };
 
-#endif /* TEXT_HH_ */
+#endif /* SERIALIZER_IMPL_HH_ */

@@ -1,12 +1,12 @@
 /*
- * Socket.hh
+ * Method implementation for socket
  *
  *  Created on: Jun 29, 2017
  *      Author: nicolas
  */
 
-#ifndef SOCKET_HH_
-#define SOCKET_HH_
+#ifndef METHOD_IMPL_HH_
+#define METHOD_IMPL_HH_
 
 #include <arpa/inet.h>
 #include "Method.hh"
@@ -15,7 +15,7 @@
 #include <map>
 #include <string>
 
-class Socket: public Method {
+class MethodImpl: public Method {
 
 private:
 	int port;
@@ -34,20 +34,20 @@ private:
 	struct timeval tv;
 
 public:
-	Socket();
-	virtual ~Socket();
+	MethodImpl();
+	virtual ~MethodImpl();
 	virtual void configure(std::map<std::string, std::string> configList);
-	virtual const bool canConnect() const;
+	virtual bool canConnect() const;
 	virtual int connect();
 	virtual void disconnect();
 	virtual std::string read();
 	virtual void sendData(std::string data);
 
-	const int getPort() const;
+	int getPort() const;
 	void setPort(const int port);
 
 	const std::string getAddress() const;
 	void setAddress(const std::string address);
 };
 
-#endif /* SOCKET_HH_ */
+#endif /* METHOD_IMPL_HH_ */

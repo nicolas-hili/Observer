@@ -11,7 +11,7 @@
  *     Nicolas Hili <hili@cs.queensu.ca>
  ******************************************************************************/
 
-#include "Text.hh"
+#include "SerializerImpl.hh"
 
 #include "Event.hh"
 
@@ -24,7 +24,7 @@
 #include <vector>
 #include <algorithm>
 
-Text::Text() :
+SerializerImpl::SerializerImpl() :
 		Serializer() {
 	this->setSeparator('|');
 	this->setParamSeparator(';');
@@ -33,10 +33,10 @@ Text::Text() :
 			"eventId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|cpuTick|params");
 }
 
-Text::~Text() {
+SerializerImpl::~SerializerImpl() {
 }
 
-void Text::configure(std::map<std::string, std::string> configList) {
+void SerializerImpl::configure(std::map<std::string, std::string> configList) {
 	std::string separator, paramSeparator, keyValueSeparator, format;
 
 	separator = this->getConfig(configList, "text.separator");
@@ -58,7 +58,7 @@ void Text::configure(std::map<std::string, std::string> configList) {
 
 }
 
-void Text::setFormat(const std::string format) {
+void SerializerImpl::setFormat(const std::string format) {
 	this->format = format;
 	std::vector<std::string> v = this->split(format, this->separator);
 
@@ -70,23 +70,23 @@ void Text::setFormat(const std::string format) {
 	this->fieldNumber = this->fields.size();
 }
 
-const std::string Text::getFormat() const {
+const std::string SerializerImpl::getFormat() const {
 	return this->format;
 }
 
-void Text::setSeparator(const char separator) {
+void SerializerImpl::setSeparator(const char separator) {
 	this->separator = separator;
 }
 
-void Text::setParamSeparator(const char paramSeparator) {
+void SerializerImpl::setParamSeparator(const char paramSeparator) {
 	this->paramSeparator = paramSeparator;
 }
 
-void Text::setKeyValueSeparator(const char keyValueSeparator) {
+void SerializerImpl::setKeyValueSeparator(const char keyValueSeparator) {
 	this->keyValueSeparator = keyValueSeparator;
 }
 
-const std::string Text::serialize(Event event) const {
+const std::string SerializerImpl::serialize(Event event) const {
 
 	char fieldSeparator = this->separator;
 
@@ -105,7 +105,7 @@ const std::string Text::serialize(Event event) const {
 	return out.str();
 }
 
-const std::string Text::serializeParams(Event event) const {
+const std::string SerializerImpl::serializeParams(Event event) const {
 
 // results
 	std::stringstream out;
@@ -129,7 +129,7 @@ const std::string Text::serializeParams(Event event) const {
 	return out.str();
 }
 
-Event Text::parse(const std::string data) const {
+Event SerializerImpl::parse(const std::string data) const {
 
 	char fieldSeparator = this->separator;
 
@@ -156,7 +156,7 @@ Event Text::parse(const std::string data) const {
 	return event;
 }
 
-void Text::parseParameters(Event& event, const std::string data) const {
+void SerializerImpl::parseParameters(Event& event, const std::string data) const {
 
 	std::vector<std::string> v = this->split(data, this->paramSeparator);
 	std::string temp;
@@ -182,7 +182,7 @@ void Text::parseParameters(Event& event, const std::string data) const {
 	}
 }
 
-const std::vector<std::string> Text::split(const std::string data,
+const std::vector<std::string> SerializerImpl::split(const std::string data,
 		const char separator) const {
 
 	std::vector<std::string> v;
@@ -206,7 +206,7 @@ const std::vector<std::string> Text::split(const std::string data,
 }
 
 // The functions below have to be overriden when extending the observer
-const std::string Text::getField(const std::string field,
+const std::string SerializerImpl::getField(const std::string field,
 		const Event& event) const {
 
 	std::stringstream ss; // for conversion purpose
@@ -239,7 +239,7 @@ const std::string Text::getField(const std::string field,
 	return "";
 }
 
-void Text::setField(const std::string field, const std::string value,
+void SerializerImpl::setField(const std::string field, const std::string value,
 		Event& event) const {
 
 	std::stringstream ss; // for conversion purpose

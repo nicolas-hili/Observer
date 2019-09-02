@@ -20,7 +20,7 @@ Method::Method() {
 Method::~Method() {
 }
 
-const bool Method::canConnect() const {
+bool Method::canConnect() const {
 	return false;
 }
 
@@ -28,4 +28,8 @@ const std::string Method::getConfig(
 		std::map<std::string, std::string> configList, std::string key) const {
 	bool n = configList.count(key);
 	return (n) ? configList.at(key) : "";
+}
+
+void Method::configure(std::map<std::string, std::string> configList) {
+  (void)configList;
 }

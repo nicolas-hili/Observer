@@ -11,7 +11,7 @@
  *     Nicolas Hili <hili@cs.queensu.ca>
  ******************************************************************************/
 
-#include "Socket.hh"
+#include "MethodImpl.hh"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,16 +33,16 @@ void *get_in_addr(struct sockaddr *sa) {
 	return &(((struct sockaddr_in6*) sa)->sin6_addr);
 }
 
-Socket::Socket() :
+MethodImpl::MethodImpl() :
 		Method() {
 	this->setPort(8080);
 	this->setAddress("localhost");
 }
 
-Socket::~Socket() {
+MethodImpl::~MethodImpl() {
 }
 
-void Socket::configure(std::map<std::string, std::string> configList) {
+void MethodImpl::configure(std::map<std::string, std::string> configList) {
 
 	std::string port, address;
 	port = this->getConfig(configList, "socket.port");
@@ -57,11 +57,11 @@ void Socket::configure(std::map<std::string, std::string> configList) {
 	printf("address: %s, port: %d\n", getAddress().c_str(), getPort());
 }
 
-const bool Socket::canConnect() const {
+bool MethodImpl::canConnect() const {
 	return true;
 }
 
-int Socket::connect() {
+int MethodImpl::connect() {
 
 	int rv, result = -1;
 	struct addrinfo hints, *ai, *p;
@@ -127,10 +127,10 @@ int Socket::connect() {
 
 }
 
-void Socket::disconnect() {
+void MethodImpl::disconnect() {
 }
 
-std::string Socket::read() {
+std::string MethodImpl::read() {
 
 	// main loop
 	read_fds = master; // copy it
@@ -189,9 +189,10 @@ std::string Socket::read() {
 					close(i); // bye!
 					FD_CLR(i, &master); // remove from master set
 				} else {
-					std::string str(buf, buf + nbytes - 2);
-					return str;
-//    printf("new data: %s\n", buf);
+       //   printf("new data: %d\n", nbytes);
+					std::string str(buf, buf + nbytes);
+          return str;
+			//		return buf;
 //    // we got some data from a client
 //    int j = 0;
 //    for(j = 0; j <= fdmax; j++) {
@@ -212,7 +213,7 @@ std::string Socket::read() {
 	return "";
 }
 
-void Socket::sendData(std::string data) {
+void MethodImpl::sendData(std::string data) {
 	int j = 0;
 	for (j = 0; j <= fdmax; j++) {
 		// send to everyone
@@ -227,18 +228,18 @@ void Socket::sendData(std::string data) {
 	}
 }
 
-const int Socket::getPort() const {
+int MethodImpl::getPort() const {
 	return this->port;
 }
 
-void Socket::setPort(const int port) {
+void MethodImpl::setPort(const int port) {
 	this->port = port;
 }
 
-const std::string Socket::getAddress() const {
+const std::string MethodImpl::getAddress() const {
 	return this->address;
 }
 
-void Socket::setAddress(const std::string address) {
+void MethodImpl::setAddress(const std::string address) {
 	this->address = address;
 }

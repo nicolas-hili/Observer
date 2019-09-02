@@ -14,67 +14,67 @@
 #include "Observer.hh"
 #include "Config.hh"
 #include "Method.hh"
-#include "Socket.hh"
-#include "SharedMem.hh"
 #include "Serializer.hh"
-#include "Text.hh"
 #include "Event.hh"
 #include <stdio.h>
-#include <dlfcn.h>
-#include <iostream>
 
-int main () {
-    Config config;
-    printf("number of entries: %i\n", config.load());
+Observer::Observer() {
+  this->method = NULL;
+  this->serializer = NULL;
+}
 
-    Serializer* serializer;
-    serializer = new Text();
-    serializer->configure(config.getConfigList());
+Observer::~Observer() {
+  if (this->method != NULL)
+    free(this->method);
+  
+  if (this->serializer != NULL)
+    free(this->serializer);
+}
 
-    Method* method;
-    method = new SharedMem();
-    //method = new Socket();
-    method->configure(config.getConfigList());
-    (static_cast<SharedMem *> (method))->setMode(Client);
-   // ((SharedMem) method).setMode(Client);
-    //method->
-    method->connect();
-    printf("connection: %d\n", method->connect());
+void Observer::setMethod(Method * method) {
+  this->method = method;
+}
 
-    // testing the serializer
-    Event eventIn, eventOut;
-    std::string strIn, strOut;
+void Observer::setSerializer(Serializer * serializer) {
+  this->serializer = serializer;
+}
 
-/*    eventIn.setSourceName("source name");
-    eventIn.setParam("key1", "value1");
-    eventIn.setParam("key2", "value2");
-    eventIn.setParam("key3", "value3"); */
-    /*eventIn.setEventSource(Event::EventSource::Command);
-    eventIn.setEventKind(Event::EventKind::List);
-    strIn = serializer->serialize(eventIn);
+int Observer::connect() {
+  return this->method->connect();
+}
 
-    eventOut = serializer->parse(strIn);
-    strOut = serializer->serialize(eventOut);
+bool Observer::canConnect() {
+  return this->method->canConnect();
+}
 
-    printf("%s\n", strIn.c_str());
-    printf("%s\n", strOut.c_str());
+void Observer::disconnect() {
+  this->method->disconnect();
+}
 
+void Observer::configure() {
+  printf("number of entries: %i\n", config.load());
+  this->method->configure(config.getConfigList());
+  this->serializer->configure(config.getConfigList());
+}
 
-    // Test list function
-    method->sendData(strOut);*/
+std::string Observer::read() {
+  return this->method->read();
+}
 
-        while (true) {
-		std::string event = method->read();
-		if (event != ""){
-			std::cout << event;
-		}
-    }
+void Observer::sendData(const Event event) const {
+  std::string strOut = this->serializer->serialize(event);
+  this->method->sendData(strOut);
+}
 
-    method->disconnect();
-    free(serializer);
-    free(method);
+void Observer::sendData(const std::string data) const {
+  this->method->sendData(data);
+}
 
+const std::string Observer::serialize(const Event event) const {
+  return this->serializer->serialize(event);
+}
 
-    return 0;
+Event Observer::parse(const std::string data) const {
+  return this->serializer->parse(data);
 }
 

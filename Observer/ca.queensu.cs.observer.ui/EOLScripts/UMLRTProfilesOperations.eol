@@ -114,8 +114,11 @@ operation UMLRTModel!Property getUMLRTStereotype() : Any {
 operation UMLRTModel!Parameter getUMLRTStereotype(umlrtModel:Any) : Any {
 
        // var appliedStreotypeDetail=UMLRTModel!RTMessageSet.all.selectOne(p|p.base_Parameter=self );
-		var appliedStreotypeDetail=UMLRTModel!ParameterProperties.all.selectOne(p|p.base_Parameter=self );
-		return appliedStreotypeDetail;
+//       	self.println();
+       	return self.stereotypeApplications.first();
+       	
+//		var appliedStreotypeDetail=UMLRTModel!ParameterProperties.all.selectOne(p|p.base_Parameter=self );
+//		return appliedStreotypeDetail;
 }
 
 

@@ -1,9 +1,28 @@
 /*
-    
-    Developers:
-    Mojtaba Bagherzadeh(mojtaba@cs.queensu.ca): Initial development
-	Nicolas Hili (hili@cs.queensu.ca): General improvement
-
+ *   
+ * Developers:
+ * Mojtaba Bagherzadeh(mojtaba@cs.queensu.ca): Initial development
+ * Nicolas Hili (hili@cs.queensu.ca): General improvement
+ *
+ * Before using this EOL script in standalone, make sure to set the three following parameters
+ * (Open "Run/Run Configurations.../", select "EOL Program", create a configuration, and open the "parameters" tab)
+ *
+ * @param
+ * observerPath: String
+ * Set the path to the Observer UML library. It must be prefixed by any valid Eclipse URI scheme (file:, platform:/resource, and platform:plugin).
+ * Examples: "file:<ObserverPath>/libraries/observer.uml" for absolute URI
+ *			 "platform:resource/ca.queensu.cs.observer/libraries/observer.uml" for Eclipse-based URI 
+ *
+ * @param
+ * method: String
+ * Set the method to be used. It must refer to the directory containing both source and include files.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.methods.socket>/cpplib" to use the TCP/IP Socket communication addon
+ *
+ * @param
+ * serializer: String
+ * Set the serializer to be used. It must refer to a valid Eclipse project accessible through the following URI scheme:
+ * Set the serializer to be used. It must refer to the directory containing both source and include files.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.serializers.text>/cpplib" to use the Text serializer addon
 */
 
 import "UMLRTQuery.eol";
@@ -15,6 +34,14 @@ import "DetailTracing.eol";
 
 var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
 var ecoreUtil = emfTool.ecoreUtil;
+
+var fileSystemTool = new Native("org.eclipse.epsilon.eol.tools.FileSystemTool");
+
+var methodCC : String = fileSystemTool.getContents(method + '/src/MethodImpl.cc');
+var methodHH : String = fileSystemTool.getContents(method + '/include/MethodImpl.hh');
+
+var serializerCC : String = fileSystemTool.getContents(serializer + '/src/SerializerImpl.cc');
+var serializerHH : String = fileSystemTool.getContents(serializer + '/include/SerializerImpl.hh');
 
 //-----------------------------intialize variables........................................//
 
@@ -50,8 +77,6 @@ var libURI = UMLRTModel.resource.uri.createURI("platform:/plugin/org.eclipse.uml
 var libResource = UMLRTModel.resource.resourceSet.createResource(libURI);
 libResource.load(null);
 UMLRTModel.resource.resourceSet.resources.add(libResource);
-	
-
 
 var observerURI; 
 var observerCapsule: UMLRTModel!Class;
@@ -61,7 +86,7 @@ if (observerPath.isDefined()) {
 	observerURI = UMLRTModel.resource.uri.createURI(observerPath);
 }
 else {
-	observerURI = UMLRTModel.resource.uri.createURI("platform:/ca.queensu.cs.observer/libraries/observer.uml");
+	observerURI = UMLRTModel.resource.uri.createURI("platform:/resource/ca.queensu.cs.observer/libraries/observer.uml");
 }
 
 var observerResource = UMLRTModel.resource.resourceSet.createResource(observerURI);
@@ -101,7 +126,6 @@ allStateMachines.getAllRegions().getAllStates().size().println("Number of states
 
 var observerPackage;
 
-
 //----------------------------main loop of the transformation........................................//
 transaction{
 
@@ -115,6 +139,10 @@ transaction{
 		
 		"-> Deletion of the Observer capsule part in Top".println();
 		delete topCapsule.ownedAttributes->selectOne(p | p.name == observerCapsule.name.toLowerCase());
+		
+		"-> Deletion of the MethodImpl and SerializerImpl artifacts".println();
+		delete modelroot.packagedElement->selectOne(p | p.name == 'MethodImpl');
+		delete modelroot.packagedElement->selectOne(p | p.name == 'SerializerImpl');
 		
 		// Un-instumenting the capsule	
 		for (capsule in allClasses) {
@@ -142,7 +170,6 @@ transaction{
 	
 	"--\nStart (re-)building".println();
 	
-	
 	"-> Load observer".println();
 	var copied = ecoreUtil.copyAll(observerResource.getContents());
 	for(iterator in copied) {
@@ -154,6 +181,7 @@ transaction{
 		}
 	}
 	observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
+	var observerInternalPackage = observerPackage.packagedElement->selectOne(c | c.name == "internal");
 
 	observerCapsule  = observerPackage.packagedElement->selectOne(c | c.name == "Observer" );
 	observerProtocol = observerPackage.packagedElement->selectOne(c | c.name == "Observation").packagedElement.first();
@@ -182,6 +210,27 @@ transaction{
 	observerProperty.aggregation = (UMLRTModel!AggregationKind#composite);
 	observerProperty.applyUMLRTStereotype(modelroot);
 	
+	"Done.\n".println();
+	
+	"-> Add the serializer artifact".println();
+	var serializerArtifact = new UMLRTModel!Artifact();
+	serializerArtifact.name = 'SerializerImpl';
+	modelroot.getPackagedElements().add(serializerArtifact);
+	var serializerStereotype : Stereotype = serializerArtifact.applyUMLRTStereotype(modelroot);
+	serializerArtifact.setValue(serializerStereotype, "includeFile", serializerHH);
+	serializerArtifact.setValue(serializerStereotype, "sourceFile", serializerCC);
+	"Done.\n".println();
+	
+	"-> Add the method artifact".println();
+	var methodArtifact = new UMLRTModel!Artifact();
+	methodArtifact.name = 'MethodImpl';
+	modelroot.getPackagedElements().add(methodArtifact);
+	var methodStereotype : Stereotype = methodArtifact.applyUMLRTStereotype(modelroot);
+	methodArtifact.setValue(methodStereotype, "includeFile", methodHH);
+	methodArtifact.setValue(methodStereotype, "sourceFile", methodCC);
+	"Done.\n".println();
+	
+	// Add stereotype
 
 	// Instrument capsules	
 	for (capsule in allClasses) {
@@ -199,7 +248,7 @@ transaction{
 		capsule.refineStructure();
 		capsule.refineStateMachine(stateMachine);
 		
-	}
+	} 
 
 	"-> Instrumentation of the Observer capsule".println();
 	observerCapsule.instrumentObserver();
@@ -233,7 +282,7 @@ operation  Class refineStructure() {
 
 	/* Add Observer port to all observable capsules */
 	self.addPortToCapsules(observationPortName, observerProtocol, false, 1, 1, "SAP");
-		
+	
 	/* Add sendEvent method */
 	self.addSendEventMethod();
 	
