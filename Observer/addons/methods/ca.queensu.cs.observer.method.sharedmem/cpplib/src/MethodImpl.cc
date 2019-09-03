@@ -1,11 +1,17 @@
-/*
- * SharedMem.cc
+/*******************************************************************************
+ * Copyright (c) 2016-2017 School of Computing -- Queen's University
  *
- *  Created on: Jun 28, 2016
- *      Author: mojtaba
- */
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Mojtaba Bagherzadeh <mojtaba@cs.queensu.ca>
+ *     Nicolas Hili <hili@cs.queensu.ca>
+ ******************************************************************************/
 
-#include "SharedMem.hh"
+#include "MethodImpl.hh"
 #include <boost/lexical_cast.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
@@ -16,8 +22,7 @@
 
 using namespace boost::interprocess;
 
-SharedMem::SharedMem() : Method() {
-
+MethodImpl::MethodImpl() : Method() {
 	sharedDeque=0;
 	sharedDequeCmd=0;
 
@@ -28,18 +33,18 @@ SharedMem::SharedMem() : Method() {
 	this->setQueueName("EventQ");
 	this->setSize(9999999);
 	this->setWithLock(true);
-	this->setStatus(Status::Initialized);
-  this->setMode(Mode::Server);
+	this->setStatus(MethodImpl::Initialized);
+  this->setMode(MethodImpl::Server);
 }
 
-SharedMem::~SharedMem() {
-	if (this->getMode() == Mode::Server) {
+MethodImpl::~MethodImpl() {
+	if (this->getMode() == MethodImpl::Server) {
     shared_memory_object::remove(this->name.c_str());
     shared_memory_object::remove(this->nameCmd.c_str());
   }
 }
 
-void SharedMem::configure(std::map<std::string, std::string> configList) {
+void MethodImpl::configure(std::map<std::string, std::string> configList) {
 
   std::string name, qName, withLock, size, mode;
 
@@ -71,13 +76,13 @@ void SharedMem::configure(std::map<std::string, std::string> configList) {
       this->isWithLock());
 }
 
-const bool SharedMem::canConnect() const {
-  return true;
+bool MethodImpl::canConnect() const {
+	return true;
 }
 
-int SharedMem::connect() {
+int MethodImpl::connect() {
 
-	if (this->getMode() == Mode::Server) {
+	if (this->getMode() == MethodImpl::Server) {
 
 		try {
       // Remove it if it is already created before
@@ -109,17 +114,17 @@ int SharedMem::connect() {
 
 			this->areaMutex    = new named_mutex(create_only, (this->getName()).c_str());
 			this->areaMutexCmd = new named_mutex(create_only, (this->getNameCmd()).c_str());
-			this->setStatus(Status::Ready);
+			this->setStatus(MethodImpl::Ready);
 			return 0;
 
 		}
 		catch(boost::interprocess::interprocess_exception &ex) {
       printf("The Error happened in  shared memory setup:\n");
-      this->setStatus(Status::Failed);
+      this->setStatus(MethodImpl::Failed);
       return -1;
 		}
   }
-	if (this->getMode() == Mode::Client) {
+	if (this->getMode() == MethodImpl::Client) {
 
 		try {
 			this->observerSegment=managed_shared_memory(open_only, this->getName().c_str());
@@ -128,7 +133,7 @@ int SharedMem::connect() {
 			this->sharedDeque = observerSegment.find<ShmStringDeque>(this->getQueueName().c_str()).first;
 			this->sharedDequeCmd = observerSegment.find<ShmStringDeque>(this->getQueueNameCmd().c_str()).first;
 			//this->sharedDeque = segment.find<ShmStringVector>("MyVector").first;
-			this->setStatus(Status::Ready);
+			this->setStatus(MethodImpl::Ready);
 			// Create the mutex
 			this->areaMutex = new named_mutex(open_only, (this->getName()).c_str());
 			this->areaMutexCmd = new named_mutex(open_only, (this->getNameCmd()).c_str());
@@ -136,7 +141,7 @@ int SharedMem::connect() {
 		}
 		catch (boost::interprocess::interprocess_exception &ex) {
 			printf("The Error happened in  shared memory setup:\n");
-			this->setStatus(Status::Failed);
+			this->setStatus(MethodImpl::Failed);
 			return -1;
 		}
 
@@ -149,89 +154,89 @@ int SharedMem::connect() {
   return -1;
 }
 
-void SharedMem::disconnect() {
+void MethodImpl::disconnect() {
   // nothing here for now
 }
 
 
-std::string SharedMem::read() {
-	if (this->getMode() == Mode::Server) {
+std::string MethodImpl::read() {
+	if (this->getMode() == MethodImpl::Server) {
     return safePopBackStringCmd();
   }
-  else if (this->getMode() == Mode::Client) {
+  else if (this->getMode() == MethodImpl::Client) {
     return safePopBackString();
   }
   return "";
 }
 
-void SharedMem::sendData(std::string data) {
-	if (this->getMode() == Mode::Server) {
+void MethodImpl::sendData(std::string data) {
+	if (this->getMode() == MethodImpl::Server) {
     safePushBackString(data);
   }
-  else if (this->getMode() == Mode::Client) {
+  else if (this->getMode() == MethodImpl::Client) {
     safePushBackStringCmd(data);
   }
 }
 
-const std::string& SharedMem::getName() {
+const std::string& MethodImpl::getName() {
 		return this->name;
 }
 
-const std::string& SharedMem::getNameCmd() {
+const std::string& MethodImpl::getNameCmd() {
 		return this->nameCmd;
 }
 
-void SharedMem::setName(const std::string& name) {
+void MethodImpl::setName(const std::string& name) {
 	this->name = name;
 	this->nameCmd = name + "Cmd";
 }
 
-const size_t SharedMem::getSize() const {
+size_t MethodImpl::getSize() const {
   return this->size;
 }
 
-void SharedMem::setSize(const size_t size) {
+void MethodImpl::setSize(const size_t size) {
   this->size = size;
 }
 
-const std::string& SharedMem::getQueueName() const {
+const std::string& MethodImpl::getQueueName() const {
 	return queueName;
 }
 
-const std::string& SharedMem::getQueueNameCmd() const {
+const std::string& MethodImpl::getQueueNameCmd() const {
 	return queueNameCmd;
 }
 
-void SharedMem::setQueueName(const std::string& queueName) {
+void MethodImpl::setQueueName(const std::string& queueName) {
 	this->queueName = queueName;
 	this->queueNameCmd = queueName + "Cmd";
 }
 
-Status SharedMem::getStatus() const {
+MethodImpl::Status MethodImpl::getStatus() const {
 	return status;
 }
 
-void SharedMem::setStatus(Status status) {
+void MethodImpl::setStatus(Status status) {
 	this->status = status;
 }
 
-Mode SharedMem::getMode() const {
+MethodImpl::Mode MethodImpl::getMode() const {
 	return mode;
 }
 
-void SharedMem::setMode(Mode mode) {
+void MethodImpl::setMode(Mode mode) {
 	this->mode = mode;
 }
 
-bool SharedMem::isWithLock() const {
+bool MethodImpl::isWithLock() const {
 	return withLock;
 }
 
-void SharedMem::setWithLock(bool withLock) {
+void MethodImpl::setWithLock(bool withLock) {
 	this->withLock = withLock;
 }
 
-std::string SharedMem::popFrontString() {
+std::string MethodImpl::popFrontString() {
 
 	if (!this->sharedDeque->empty()) {
 		const CharAllocator charallocator (observerSegment.get_segment_manager());
@@ -245,7 +250,7 @@ std::string SharedMem::popFrontString() {
   }
 }
 
-std::string SharedMem::popBackString() {
+std::string MethodImpl::popBackString() {
 
 	if (!this->sharedDeque->empty()) {
 		const CharAllocator charallocator (observerSegment.get_segment_manager());
@@ -259,7 +264,7 @@ std::string SharedMem::popBackString() {
   }
 }
 
-std::string SharedMem::popBackStringCmd() {
+std::string MethodImpl::popBackStringCmd() {
 
 	if (!this->sharedDequeCmd->empty()) {
 		const CharAllocator charallocator (observerSegment.get_segment_manager());
@@ -273,7 +278,7 @@ std::string SharedMem::popBackStringCmd() {
   }
 }
 
-std::string SharedMem::getData(size_t index) {
+std::string MethodImpl::getData(size_t index) {
 
 	if(this->sharedDeque->size() > index) {
     const CharAllocator charallocator (observerSegment.get_segment_manager());
@@ -286,21 +291,21 @@ std::string SharedMem::getData(size_t index) {
   }
 }
 
-int SharedMem::safeGetQueueSize() {
+int MethodImpl::safeGetQueueSize() {
 	{
     scoped_lock<named_mutex> lock(*areaMutex);
 	  return this->sharedDeque->size();
   }
 }
 
-std::string SharedMem::safePopFrontString() {
+std::string MethodImpl::safePopFrontString() {
 	{
     scoped_lock<named_mutex> lock(*areaMutex);
 	  return this->popFrontString();
   }
 }
 
-std::string SharedMem::safePopBackString()
+std::string MethodImpl::safePopBackString()
 {
 	{
     scoped_lock<named_mutex> lock(*areaMutex);
@@ -308,7 +313,7 @@ std::string SharedMem::safePopBackString()
   }
 }
 
-std::string SharedMem::safePopBackStringCmd()
+std::string MethodImpl::safePopBackStringCmd()
 {
 	{
     scoped_lock<named_mutex> lock(*areaMutexCmd);
@@ -316,24 +321,24 @@ std::string SharedMem::safePopBackStringCmd()
   }
 }
 
-std::string SharedMem::safeGetData(size_t index)
+std::string MethodImpl::safeGetData(size_t index)
 {
 	{scoped_lock<named_mutex> lock(*areaMutex);
 	return this->getData(index);}
 }
 
-int SharedMem::getQueueSize() {
+int MethodImpl::getQueueSize() {
   return this->sharedDeque->size();
 }
 
-void SharedMem::pushBackString(std::string data) {
+void MethodImpl::pushBackString(std::string data) {
 	const CharAllocator charallocator (observerSegment.get_segment_manager());
 	ShmString tempString(charallocator);
 	tempString = data.c_str();
 	this->sharedDeque->push_back(tempString);
 }
 
-void SharedMem::safePushFrontString(std::string data) {
+void MethodImpl::safePushFrontString(std::string data) {
 	const CharAllocator charallocator (observerSegment.get_segment_manager());
 	ShmString tempString(charallocator);
 	tempString=data.c_str();
@@ -343,14 +348,14 @@ void SharedMem::safePushFrontString(std::string data) {
   }
 }
 
-void SharedMem::pushFrontString(std::string data) {
+void MethodImpl::pushFrontString(std::string data) {
 	const CharAllocator charallocator (observerSegment.get_segment_manager());
 	ShmString tempString(charallocator);
 	tempString=data.c_str();
 	this->sharedDeque->push_front(tempString);
 }
 
-void SharedMem::safePushBackString(std::string data) {
+void MethodImpl::safePushBackString(std::string data) {
 	const CharAllocator charallocator (observerSegment.get_segment_manager());
 	ShmString tempString(charallocator);
 	tempString=data.c_str();
@@ -360,7 +365,7 @@ void SharedMem::safePushBackString(std::string data) {
   }
 }
 
-void SharedMem::safePushBackStringCmd(std::string data) {
+void MethodImpl::safePushBackStringCmd(std::string data) {
 	const CharAllocator charallocator (observerSegment.get_segment_manager());
 	//const CharAllocator charallocatorcmd (observerSegmentCmd.get_segment_manager());
 	ShmString tempStringCmd(charallocator);
