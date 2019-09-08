@@ -33,8 +33,7 @@ void *get_in_addr(struct sockaddr *sa) {
 	return &(((struct sockaddr_in6*) sa)->sin6_addr);
 }
 
-MethodImpl::MethodImpl() :
-		Method() {
+MethodImpl::MethodImpl() : Method() {
 	this->setPort(8080);
 	this->setAddress("localhost");
 }
