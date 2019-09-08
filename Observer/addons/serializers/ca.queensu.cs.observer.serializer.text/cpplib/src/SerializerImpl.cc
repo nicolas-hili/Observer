@@ -105,7 +105,7 @@ const std::string SerializerImpl::serialize(Event event) const {
       continue;
     }
 
-		out << this->getField(field, event) << fieldSeparator;
+		out << event.getField(field) << fieldSeparator;
 	}
 
 	return out.str();
@@ -161,7 +161,7 @@ Event SerializerImpl::parse(const std::string data) const {
       continue;
     }
 
-		this->setField(field, values[i], event);
+		event.setField(field, values[i]);
 		i++;
 	}
 
@@ -215,60 +215,4 @@ const std::vector<std::string> SerializerImpl::split(const std::string data,
 		v.push_back(temp);
 
 	return v;
-}
-
-// The functions below have to be overriden when extending the observer
-const std::string SerializerImpl::getField(const std::string field,
-		const Event& event) const {
-
-	std::stringstream ss; // for conversion purpose
-
-	if (field == "eventid")
-		return event.getEventId();
-	else if (field == "sourcename")
-		return event.getSourceName();
-	else if (field == "capsuleinstance")
-		return event.getCapsuleInstance();
-	else if (field == "eventsource") {
-		ss << event.getEventSource();
-		return ss.str();
-	} else if (field == "eventkind") {
-		ss << event.getEventKind();
-		return ss.str();
-	} else if (field == "seconds") {
-		ss << event.getSeconds();
-		return ss.str();
-	} else if (field == "nanoseconds") {
-		ss << event.getNanoseconds();
-		return ss.str();
-	} else if (field == "cputick") {
-		ss << event.getCpuTick();
-		return ss.str();
-	}
-
-	return "";
-}
-
-void SerializerImpl::setField(const std::string field, const std::string value,
-		Event& event) const {
-
-	std::stringstream ss; // for conversion purpose
-
-	if (field == "eventid")
-		event.setEventId(value);
-	else if (field == "sourcename")
-		event.setSourceName(value);
-	else if (field == "capsuleinstance")
-		event.setCapsuleInstance(value);
-	else if (field == "eventsource") {
-		event.setEventSource((Event::EventSource) (atoi(value.c_str())));
-	} else if (field == "eventkind") {
-		event.setEventKind((Event::EventKind) (atoi(value.c_str())));
-	} else if (field == "seconds") {
-		event.setSeconds(atol(value.c_str()));
-	} else if (field == "nanoseconds") {
-		event.setNanoseconds(atol(value.c_str()));
-	} else if (field == "cputick") {
-		event.setCpuTick(atol(value.c_str()));
-	}
 }

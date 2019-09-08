@@ -30,12 +30,6 @@ private:
 	const std::vector<std::string> split(const std::string data,
 			const char separator) const;
 
-protected:
-	const std::string getField(const std::string field,
-			const Event& event) const;
-	void setField(const std::string field, const std::string value,
-			Event& event) const;
-
 public:
 	SerializerImpl();
 	virtual ~SerializerImpl();

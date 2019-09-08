@@ -107,6 +107,8 @@ public:
 	void setParam(const std::string key, const std::string value);
 	void setParam(const std::string key, const int value);
 	void clearParams();
+  void setField(const std::string field, const std::string value);
+  const std::string getField(const std::string field) const;
 };
 
 #endif /* EVENT_HH_ */

@@ -170,3 +170,57 @@ void Event::setParam(const std::string key, const int value) {
 void Event::clearParams() {
 	this->params.clear();
 }
+
+// The functions below have to be overriden when extending the fields of the observer
+const std::string Event::getField(const std::string field) const {
+
+	std::stringstream ss; // for conversion purpose
+
+	if (field == "eventid")
+		return this->getEventId();
+	else if (field == "sourcename")
+		return this->getSourceName();
+	else if (field == "capsuleinstance")
+		return this->getCapsuleInstance();
+	else if (field == "eventsource") {
+		ss << this->getEventSource();
+		return ss.str();
+	} else if (field == "eventkind") {
+		ss << this->getEventKind();
+		return ss.str();
+	} else if (field == "seconds") {
+		ss << this->getSeconds();
+		return ss.str();
+	} else if (field == "nanoseconds") {
+		ss << this->getNanoseconds();
+		return ss.str();
+	} else if (field == "cputick") {
+		ss << this->getCpuTick();
+		return ss.str();
+	}
+
+	return "";
+}
+
+void Event::setField(const std::string field, const std::string value) {
+
+	std::stringstream ss; // for conversion purpose
+
+	if (field == "eventid")
+		this->setEventId(value);
+	else if (field == "sourcename")
+		this->setSourceName(value);
+	else if (field == "capsuleinstance")
+		this->setCapsuleInstance(value);
+	else if (field == "eventsource") {
+		this->setEventSource((Event::EventSource) (atoi(value.c_str())));
+	} else if (field == "eventkind") {
+		this->setEventKind((Event::EventKind) (atoi(value.c_str())));
+	} else if (field == "seconds") {
+		this->setSeconds(atol(value.c_str()));
+	} else if (field == "nanoseconds") {
+		this->setNanoseconds(atol(value.c_str()));
+	} else if (field == "cputick") {
+		this->setCpuTick(atol(value.c_str()));
+	}
+}
