@@ -12,6 +12,10 @@ int main (void) {
   Event eventIn, eventOut;
   std::string strIn, strOut;
 
+  // Add parameters
+  eventOut.setParam("param1", "test");
+  eventOut.setParam("param2", "0");
+
   // Serialize eventOut
   strOut = serializer.serialize(eventOut);
   std::cout << strOut << std::endl;

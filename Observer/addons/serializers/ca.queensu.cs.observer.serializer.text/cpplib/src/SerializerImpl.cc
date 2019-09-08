@@ -99,6 +99,12 @@ const std::string SerializerImpl::serialize(Event event) const {
 	for (it1 = v.begin(); it1 != v.end(); ++it1) {
 		std::string field = *it1;
 		std::transform(field.begin(), field.end(), field.begin(), ::tolower);
+
+    if (field == "params") {
+      out << this->serializeParams(event) << fieldSeparator;
+      continue;
+    }
+
 		out << this->getField(field, event) << fieldSeparator;
 	}
 
@@ -149,6 +155,12 @@ Event SerializerImpl::parse(const std::string data) const {
 	for (it = v.begin(); it != v.end(); ++it) {
 		std::string field = *it;
 		std::transform(field.begin(), field.end(), field.begin(), ::tolower);
+
+    if (field == "params") {
+      this->parseParameters(event, values[i]);
+      continue;
+    }
+
 		this->setField(field, values[i], event);
 		i++;
 	}
@@ -232,8 +244,6 @@ const std::string SerializerImpl::getField(const std::string field,
 	} else if (field == "cputick") {
 		ss << event.getCpuTick();
 		return ss.str();
-	} else if (field == "params") {
-		return this->serializeParams(event);
 	}
 
 	return "";
@@ -260,7 +270,5 @@ void SerializerImpl::setField(const std::string field, const std::string value,
 		event.setNanoseconds(atol(value.c_str()));
 	} else if (field == "cputick") {
 		event.setCpuTick(atol(value.c_str()));
-	} else if (field == "params") {
-		this->parseParameters(event, value);
 	}
 }
