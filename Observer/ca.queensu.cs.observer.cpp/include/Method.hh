@@ -20,7 +20,7 @@ public:
 	virtual bool canConnect() const;
 	virtual int connect() = 0;
 	virtual void disconnect() = 0;
-	virtual std::string read() = 0;
+	virtual std::string readData() = 0;
 	virtual void sendData(std::string data) = 0;
 	virtual const std::string getConfig(
 			std::map<std::string, std::string> configList,

@@ -40,7 +40,7 @@ public:
 	virtual bool canConnect() const;
 	virtual int connect();
 	virtual void disconnect();
-	virtual std::string read();
+	virtual std::string readData();
 	virtual void sendData(std::string data);
 
 	int getPort() const;

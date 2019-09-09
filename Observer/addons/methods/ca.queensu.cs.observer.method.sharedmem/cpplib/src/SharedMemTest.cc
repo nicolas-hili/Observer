@@ -6,7 +6,7 @@ int main (void) {
   method.connect();
 
   while (true) {
-		std::string event = method.read();
+		std::string event = method.readData();
 		if (event.length() > 2){
 			printf("%s\n", event.c_str());
 		}

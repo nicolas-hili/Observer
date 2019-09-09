@@ -159,7 +159,7 @@ void MethodImpl::disconnect() {
 }
 
 
-std::string MethodImpl::read() {
+std::string MethodImpl::readData() {
 	if (this->getMode() == MethodImpl::Server) {
     return safePopBackStringCmd();
   }

@@ -129,7 +129,7 @@ int MethodImpl::connect() {
 void MethodImpl::disconnect() {
 }
 
-std::string MethodImpl::read() {
+std::string MethodImpl::readData() {
 
 	// main loop
 	read_fds = master; // copy it
