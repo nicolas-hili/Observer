@@ -159,6 +159,9 @@ public class ObserverUpdate {
 				if (srcFile.getName().equals("Observer.cc"))
 					continue;
 				
+				if (srcFile.getName().equals("ObserverTest.cc"))
+					continue;
+				
 				files.add(srcFile);				
 				
 			}
@@ -166,6 +169,9 @@ public class ObserverUpdate {
 			for (final File headerFile : observerIncludeFolder.listFiles()) {
 
 				if (headerFile.getName().equals("Observer.hh"))
+					continue;
+				
+				if (headerFile.getName().equals("ObserverTest.hh"))
 					continue;
 				
 				files.add(headerFile);
