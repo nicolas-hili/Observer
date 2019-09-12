@@ -75,20 +75,20 @@ Serialization methods can be registered and are displayed in the preference page
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="c++ header file" type="string">
+         <attribute name="cpp_include_file" type="string">
             <annotation>
                <documentation>
-                  This attribute allows you to add the c++ header file of the new serialization method. This file should inherits from the Method.hh file defined in the Observer capsule.
+                  This attribute allows you to add the c++ include file of the new serialization method. This file should inherits from the Method.hh file defined in the Observer capsule.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="c++ include file" type="string">
+         <attribute name="cpp_source_file" type="string">
             <annotation>
                <documentation>
-                  This attribute allows you to add the c++ include file of the new serialization method. This file should inherits from the Method.cc file defined in the Observer capsule.
+                  This attribute allows you to add the c++ source file of the new serialization method.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="ca.queensu.cs.observer.communications">
+      <communication
+            cpp_include_file="cpplib/include/MethodImpl.hh"
+            cpp_source_file="cpplib/src/MethodImpl.cc"
+            description="This is the configuration page for the Socket serialization format"
+            label="Socket"
+            name="socket"
+            preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage">
+         <attribute
+               default_value="8080"
+               is_required="true"
+               label="Port of the TCP connection"
+               name="Port"
+               type="Integer">
+         </attribute>
+      </communication>
+   </extension>
+
+</plugin>

@@ -44,13 +44,18 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		PreferenceManager pmngr= PlatformUI.getWorkbench().getPreferenceManager();
 		
-		IPreferenceNode root = pmngr.find(PAPYRUSRT_PREFERENCE_PAGE_ID
+		IPreferenceNode serializationRoot = pmngr.find(PAPYRUSRT_PREFERENCE_PAGE_ID
 				+ "/" + OBSERVER_PREFERENCE_PAGE_ID
 				+ "/" + SERIALIZATION_PREFERENCE_PAGE_ID);
-		createPreferencePageSubNodes(root);
+		createSerializationPreferencePageSubNodes(serializationRoot);
+		
+		IPreferenceNode communicationRoot = pmngr.find(PAPYRUSRT_PREFERENCE_PAGE_ID
+				+ "/" + OBSERVER_PREFERENCE_PAGE_ID
+				+ "/" + COMMUNICATION_PREFERENCE_PAGE_ID);
+		createCommunicationPreferencePageSubNodes(communicationRoot);
 	}
 	
-	public void createPreferencePageSubNodes(IPreferenceNode root) {
+	public void createSerializationPreferencePageSubNodes(IPreferenceNode root) {
 		
 		IConfigurationElement[] configs = this.getSerializationConfig();
 		for (IConfigurationElement config: configs) {
@@ -71,6 +76,36 @@ public class Activator extends AbstractUIPlugin {
 				if (o instanceof PreferencePage) {
 					// Node creation
 					IPreferenceNode node = new ObserverNode(name, o, config, "ser_");
+					root.add(node);	
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+public void createCommunicationPreferencePageSubNodes(IPreferenceNode root) {
+		
+		IConfigurationElement[] configs = this.getCommunicationConfig();
+		for (IConfigurationElement config: configs) {
+			
+			String name = config.getAttribute("name");
+			String label = config.getAttribute("label");
+			String description = config.getAttribute("description");
+			if (config.getAttribute("preference_page") == null)
+				continue;
+			
+			try {
+				ObserverPreferencePage o = (ObserverPreferencePage)config.createExecutableExtension("preference_page");
+				o.setPrefix("com_");
+				o.setTitle(label);
+				o.setDescription(description);
+				o.setPreferenceStore(Activator.getDefault().getPreferenceStore());
+				o.setConfig(config);
+				if (o instanceof PreferencePage) {
+					// Node creation
+					IPreferenceNode node = new ObserverNode(name, o, config, "com_");
 					root.add(node);	
 				}
 			} catch (CoreException e) {
@@ -103,6 +138,18 @@ public class Activator extends AbstractUIPlugin {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		
 		IConfigurationElement[] config = registry.getConfigurationElementsFor("ca.queensu.cs.observer.serializations");
+		
+		
+		if (config == null)
+			return new IConfigurationElement[0];
+		
+		return config;
+	}
+	
+	public IConfigurationElement[] getCommunicationConfig() {
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		
+		IConfigurationElement[] config = registry.getConfigurationElementsFor("ca.queensu.cs.observer.communications");
 		
 		
 		if (config == null)

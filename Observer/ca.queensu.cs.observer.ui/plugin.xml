@@ -271,63 +271,6 @@
       </page>
    </extension>
    <extension
-         point="ca.queensu.cs.observer.serializations">
-      <serialization
-            description="This is the configuration page for the XML method"
-            label="XML"
-            name="xml"
-            preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage"
-            restriction="Requires the Boost library">
-         <attribute
-               default_value="|"
-               is_required="false"
-               label="separator"
-               name="separator"
-               type="Char">
-         </attribute>
-         <attribute
-               default_value=";"
-               is_required="false"
-               label="parameter separator"
-               name="paramSeparator"
-               type="Char">
-         </attribute>
-         <attribute
-               default_value=":"
-               is_required="false"
-               label="key value separator"
-               name="keyValueSeparator"
-               type="Char">
-         </attribute>
-         <attribute
-               default_value="eventId|sourceName|eventSource|eventKind|seconds|nanoseconds|params"
-               is_required="true"
-               label="format"
-               name="format"
-               type="List">
-         </attribute>
-      </serialization>
-      <serialization
-            label="Text"
-            name="text">
-      </serialization>
-      <serialization
-            label="CTF"
-            name="ctf">
-      </serialization>
-      <serialization
-            label="JSON"
-            name="json">
-      </serialization>
-   </extension>
-   <extension
-         point="ca.queensu.cs.observer.communications">
-      <communication
-            label="TCP (Client Socket)"
-            name="TCPClient">
-      </communication>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="ca.queensu.cs.observer.ui.preferences.ObserverPreferenceInitializer">

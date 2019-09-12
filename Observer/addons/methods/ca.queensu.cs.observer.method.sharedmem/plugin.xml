@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="ca.queensu.cs.observer.communications">
+      <communication
+            cpp_include_file="cpplib/include/MethodImpl.hh"
+            cpp_source_file="cpplib/src/MethodImpl.cc"
+            label="Shared Memory"
+            name="sharedmem"
+            preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage">
+         <attribute
+               default_value="EventArea"
+               is_required="true"
+               label="Name"
+               name="name"
+               type="String">
+         </attribute>
+         <attribute
+               default_value="EventQ"
+               is_required="true"
+               label="Queue Name"
+               name="qName"
+               type="String">
+         </attribute>
+         <attribute
+               default_value="9999999"
+               is_required="true"
+               label="Size of the queue"
+               name="size"
+               type="Integer">
+         </attribute>
+         <attribute
+               default_value="true"
+               is_required="true"
+               label="Whether lock is used or not"
+               name="qithLock"
+               type="Boolean">
+         </attribute>
+         <attribute
+               default_value="0"
+               is_required="true"
+               label="0 = client ; 1 = server"
+               name="mode"
+               type="Integer">
+         </attribute>
+      </communication>
+   </extension>
+
+</plugin>

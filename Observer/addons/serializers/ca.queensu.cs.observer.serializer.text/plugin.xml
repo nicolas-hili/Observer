@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="ca.queensu.cs.observer.serializations">
+         <serialization
+               cpp_include_file="cpplib/include/SerializerImpl.hh"
+               cpp_source_file="cpplib/include/SerializerImpl.hh"
+               description="This is the configuration page for the Text serialization format"
+               label="Text"
+               name="text"
+               preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage"
+               restriction="No extra library is required">
+         <attribute
+               default_value="|"
+               is_required="false"
+               label="separator"
+               name="separator"
+               type="Char">
+         </attribute>
+         <attribute
+               default_value=";"
+               is_required="false"
+               label="parameter separator"
+               name="paramSeparator"
+               type="Char">
+         </attribute>
+         <attribute
+               default_value=":"
+               is_required="false"
+               label="key value separator"
+               name="keyValueSeparator"
+               type="Char">
+         </attribute>
+         <attribute
+               default_value="eventId|sourceName|eventSource|eventKind|seconds|nanoseconds|params"
+               is_required="true"
+               label="format"
+               name="format"
+               type="List">
+         </attribute>
+      </serialization>
+   </extension>
+
+</plugin>

@@ -41,6 +41,22 @@ public class ObserverPreferenceInitializer extends AbstractPreferenceInitializer
 				}
 			}
 		}
+		
+		configs = Activator.getDefault().getCommunicationConfig();
+		for (IConfigurationElement config: configs) {
+			
+			String communicationName = config.getAttribute("name");
+			
+			IConfigurationElement[] attributeConfigs = config.getChildren("attribute");
+			for (IConfigurationElement attributeConfig : attributeConfigs) {
+				String name = attributeConfig.getAttribute("name");
+				String defaultValue = attributeConfig.getAttribute("default_value");
+				if (defaultValue != null && !defaultValue.isEmpty()) {
+					store.setDefault("com_" + communicationName + "_" + name,
+							defaultValue);
+				}
+			}
+		}
 	}
 
 }

@@ -55,6 +55,9 @@ Communication methods can be registered and are displayed in the preference page
          </documentation>
       </annotation>
       <complexType>
+      	 <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="attribute"/>
+         </choice>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
@@ -82,20 +85,20 @@ Communication methods can be registered and are displayed in the preference page
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="c++ header file" type="string">
+         <attribute name="cpp_include_file" type="string">
             <annotation>
                <documentation>
-                  This attribute allows you to add the c++ header file of the new communication method. This file should inherits from the Method.hh file defined in the Observer capsule.
+                  This attribute allows you to add the c++ include file of the new communication method. This file should inherits from the Method.hh file defined in the Observer capsule.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="c++ include file" type="string">
+         <attribute name="cpp_source_file" type="string">
             <annotation>
                <documentation>
-                  This attribute allows you to add the c++ include file of the new communication method. This file should inherits from the Method.cc file defined in the Observer capsule.
+                  This attribute allows you to add the c++ source file of the new communication method.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
@@ -110,6 +113,65 @@ Communication methods can be registered and are displayed in the preference page
                <appinfo>
                   <meta.attribute kind="java" basedOn="org.eclipse.jface.preference.FieldEditorPreferencePage:"/>
                </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+   
+   <element name="attribute">
+      <annotation>
+         <documentation>
+            Defines an attribute used by the Observer preference page as well as the code generator in order to generate the config page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Attribute name. Must be unique.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="type" use="required">
+            <annotation>
+               <documentation>
+                  A primitive type used by the attribute.
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="String">
+                  </enumeration>
+                  <enumeration value="Integer">
+                  </enumeration>
+                  <enumeration value="Boolean">
+                  </enumeration>
+                  <enumeration value="Char">
+                  </enumeration>
+                  <enumeration value="List">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="default_value" type="string">
+            <annotation>
+               <documentation>
+                  The default value. This field is optional. The default value should be formatted according to the defined type.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="is_required" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Whether a value for this attribute is required or not.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="label" type="string">
+            <annotation>
+               <documentation>
+                  Label associated to the attribute. Used in the preference page.
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

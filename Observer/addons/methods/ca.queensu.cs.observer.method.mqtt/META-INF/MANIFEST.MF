@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MQTT addon for the Observer
-Bundle-SymbolicName: ca.queensu.cs.observer.method.mqtt
+Bundle-SymbolicName: ca.queensu.cs.observer.method.mqtt;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: ca.queensu.cs.observer.ui;bundle-version="1.0.0"

@@ -123,7 +123,7 @@ public class ObserverRootPreferencePage extends FieldEditorPreferencePage implem
 
 	
 
-	private String[][] getCommunicationMethods() {
+/*	private String[][] getCommunicationMethods() {
 		
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		
@@ -132,7 +132,7 @@ public class ObserverRootPreferencePage extends FieldEditorPreferencePage implem
 		if (config == null)
 			return new String[0][];
 		
-		String[][] serializations = new String[config.length][];
+		String[][] communications = new String[config.length][];
 		
 		for (int i = 0; i < config.length; i++) {
 			
@@ -145,11 +145,11 @@ public class ObserverRootPreferencePage extends FieldEditorPreferencePage implem
 				e.getAttribute("name")
 			};
 			
-			serializations[i] = val;
+			communications[i] = val;
 		}
 		
-		return serializations;
-	}
+		return communications;
+	} */
 
 	@Override
 	public void dispose() {
@@ -177,7 +177,7 @@ public class ObserverRootPreferencePage extends FieldEditorPreferencePage implem
 	@Override
 	protected void createFieldEditors() {
 		
-		CheckboxGroupFieldEditor serialization= new CheckboxGroupFieldEditor(
+/*		CheckboxGroupFieldEditor serialization= new CheckboxGroupFieldEditor(
 				"SERIALIZATION", "&Serialization methods (at least one has to be chosen)", 2,
 				Activator.getDefault().getSerializationMethods(),
 	          getFieldEditorParent(), true);
@@ -189,6 +189,7 @@ public class ObserverRootPreferencePage extends FieldEditorPreferencePage implem
 		
 		addField(serialization);
 		addField(method);
+		*/
 		
 		
 	}

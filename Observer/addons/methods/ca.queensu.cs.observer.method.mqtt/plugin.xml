@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="ca.queensu.cs.observer.communications">
+      <communication
+            cpp_include_file="cpplib/include/MethodImpl.hh"
+            cpp_source_file="cpplib/src/MethodImpl.cc"
+            description="This is the configuration page for the MQTT communication method"
+            label="MQTT"
+            name="mqtt"
+            preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage">
+         <attribute
+               default_value="1883"
+               is_required="true"
+               label="Port of the TCP communication"
+               name="port"
+               type="Integer">
+         </attribute>
+         <attribute
+               default_value="mqtt.jahed.ca"
+               is_required="true"
+               label="MQTT address"
+               name="address"
+               type="String">
+         </attribute>
+         <attribute
+               is_required="false"
+               label="Username for basic autentication"
+               name="username"
+               type="String">
+         </attribute>
+         <attribute
+               is_required="false"
+               label="Password for basic autentication"
+               name="password"
+               type="String">
+         </attribute>
+         <attribute
+               default_value="observer_out"
+               is_required="true"
+               label="Publisher Topic"
+               name="pubTopic"
+               type="String">
+         </attribute>
+         <attribute
+               default_value="observer_in"
+               is_required="true"
+               label="Subscriber topic"
+               name="subTopic"
+               type="String">
+         </attribute>
+      </communication>
+   </extension>
+
+</plugin>
