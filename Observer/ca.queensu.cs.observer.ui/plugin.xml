@@ -309,52 +309,6 @@
       </initializer>
    </extension>
    <extension
-         point="org.eclipse.ui.views">
-      <view
-            category="org.eclipse.papyrusrt.views.category"
-            class="ca.queensu.cs.observer.ui.views.ObserverExplorer"
-            icon="img/observer.png"
-            id="ca.queensu.cs.observer.ui.observerExplorer"
-            name="Observer Explorer"
-            restorable="true">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="ca.queensu.cs.observer.ui.providers.ObserverExplorerContentProvider"
-            id="ca.queensu.cs.observer.ui.observerExplorer.navigatorContent"
-            labelProvider="ca.queensu.cs.observer.ui.providers.ObserverExplorerLabelProvider"
-            name="Observer Explorer Navigator Content"
-            priority="normal">
-         <triggerPoints>
-            <instanceof
-                  value="org.eclipse.uml2.uml.Model">
-            </instanceof>
-            <instanceof
-                  value="org.eclipse.uml2.uml.Class">
-            </instanceof>
-            <instanceof
-                  value="org.eclipse.uml2.uml.Property">
-            </instanceof>
-            <instanceof
-                  value="ca.queensu.cs.observer.ui.providers.wrappers.CapsulePartWrapper">
-            </instanceof></triggerPoints>
-         <possibleChildren>
-            <instanceof
-                  value="org.eclipse.uml2.uml.Class">
-            </instanceof>
-            <instanceof
-                  value="org.eclipse.uml2.uml.Property">
-            </instanceof>
-            <instanceof
-                  value="ca.queensu.cs.observer.ui.providers.wrappers.CapsulePartWrapper">
-            </instanceof>
-         </possibleChildren>
-      </navigatorContent>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
             viewerId="ca.queensu.cs.observer.ui.observerExplorer">
