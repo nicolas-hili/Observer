@@ -23,20 +23,11 @@ import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.papyrus.infra.tools.util.PlatformHelper;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
 
 public class ObserverPropertyTester extends PropertyTester {
 
-	/* Is observer loaded property name */
-	private static final String IS_OBSERVER_LOADED_PROPERTY = "isObserverLoaded";
-	
-	/* Is not observer loaded property name */
-	private static final String IS_NOT_OBSERVER_LOADED_PROPERTY = "isNotObserverLoaded";
-	
 	/* Is capsule observed property name */
 	private static final String IS_CAPSULE_OBSERVED = "isCapsuleObserved";
 	
@@ -66,10 +57,6 @@ public class ObserverPropertyTester extends PropertyTester {
 			return false;
 		
 		switch (property) {
-		case IS_OBSERVER_LOADED_PROPERTY:
-			return isObserverLoaded((Element)eobj) == asBoolean(expectedValue, true);
-		case IS_NOT_OBSERVER_LOADED_PROPERTY:
-			return isNotObserverLoaded((Element)eobj) == asBoolean(expectedValue, true);
 		case IS_CAPSULE_OBSERVED:
 			return isCapsuleObserved((Element)eobj) == asBoolean(expectedValue, true);
 		case IS_NOT_CAPSULE_OBSERVED:
@@ -82,30 +69,6 @@ public class ObserverPropertyTester extends PropertyTester {
 			return false;
 		}
 		
-	}
-	
-	private Package getObserverPackage(Model model) {
-		PackageableElement pe = model.getPackagedElement("Observation");
-		if (pe != null && pe instanceof org.eclipse.uml2.uml.Package)
-			return (Package)pe;
-		return null;
-	}
-	
-	private boolean isObserverLoaded(Element element) {
-		assert element == null  || !(element instanceof Model) : "Element should be an instance of org.eclipse.uml2.uml.Model";
-		
-		Package observerPackage = getObserverPackage((Model)element);
-
-		return (observerPackage != null);
-		
-	}
-
-	private boolean isNotObserverLoaded(Element element) {
-		assert element == null  || !(element instanceof Model) : "Element should be an instance of org.eclipse.uml2.uml.Model";
-		
-		Package observerPackage = getObserverPackage((Model)element);
-
-		return (observerPackage == null);
 	}
 
 	private boolean isCapsuleObserved(Element element) {
