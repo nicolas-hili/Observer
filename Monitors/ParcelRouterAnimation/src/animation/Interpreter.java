@@ -16,7 +16,7 @@ public class Interpreter extends Thread {
 	
 	private View view;
 	
-	boolean debug = false;
+	boolean debug = true;
 	
 	Model model = new Model();
 	
@@ -52,7 +52,7 @@ public class Interpreter extends Thread {
 			
 			String[] fields = event.split("[|]");
 
-    		if (fields.length < 8	) {
+    		if (fields.length < 9	) {
     			//System.err.println("malformed event");
     			continue;
     		}
@@ -62,15 +62,17 @@ public class Interpreter extends Thread {
     		String eventSource = fields[3];
     		String eventKind= fields[4];
     		
-    		String[] p = fields[7].split(";");
+    		String[] p = fields[8].split(";");
     		Map<String, String> params = new HashMap<String, String> ();
     		
     		for (String param : p) {
     			String[] keyValue = param.split(":");
+    			if (keyValue.length < 2)
+    				continue;
     			params.put(keyValue[0], keyValue[1]);
     		}
-    		String capsuleName = params.get("capsuleName");
-
+    		//String capsuleName = params.get("capsuleName");
+    		String capsuleName = params.get("SenderCapsule");
     		int chute = 0, 
     				parcel = 0,
     				stage = 0,
