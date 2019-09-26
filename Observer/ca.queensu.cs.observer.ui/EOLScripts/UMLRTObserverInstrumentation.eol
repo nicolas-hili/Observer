@@ -14,15 +14,25 @@
  *			 "platform:resource/ca.queensu.cs.observer/libraries/observer.uml" for Eclipse-based URI 
  *
  * @param
- * method: String
- * Set the method to be used. It must refer to the directory containing both source and include files.
- * Example: "<absolutePathTo_ca.queensu.cs.observer.methods.socket>/cpplib" to use the TCP/IP Socket communication addon
+ * method_src: String
+ * Absolute path to the source file of method to be used.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.methods.socket>/cpplib/src/MethodImpl.cc" to use the TCP/IP Socket communication addon
+ *
+  * @param
+ * method_include: String
+ * Absolute path to the include file of method to be used.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.methods.socket>/cpplib/include/MethodImpl.hh" to use the TCP/IP Socket communication addon
  *
  * @param
- * serializer: String
- * Set the serializer to be used. It must refer to a valid Eclipse project accessible through the following URI scheme:
- * Set the serializer to be used. It must refer to the directory containing both source and include files.
- * Example: "<absolutePathTo_ca.queensu.cs.observer.serializers.text>/cpplib" to use the Text serializer addon
+ * serializer_src: String
+ * Absolute path to the source file of serializer to be used.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.serializers.text>/cpplib/src/SerializerImpl.cc" to use the text serialization addon
+ *
+ * @param
+ * serializer_include: String
+ * Absolute path to the include file of serializer to be used.
+ * Example: "<absolutePathTo_ca.queensu.cs.observer.serializers.text>/cpplib/include/SerializerImpl.hh" to use the text serialization addon
+ *
 */
 
 import "UMLRTQuery.eol";
@@ -37,11 +47,11 @@ var ecoreUtil = emfTool.ecoreUtil;
 
 var fileSystemTool = new Native("org.eclipse.epsilon.eol.tools.FileSystemTool");
 
-var methodCC : String = fileSystemTool.getContents(method + '/src/MethodImpl.cc');
-var methodHH : String = fileSystemTool.getContents(method + '/include/MethodImpl.hh');
+var methodCC : String = fileSystemTool.getContents(method_src);
+var methodHH : String = fileSystemTool.getContents(method_include);
 
-var serializerCC : String = fileSystemTool.getContents(serializer + '/src/SerializerImpl.cc');
-var serializerHH : String = fileSystemTool.getContents(serializer + '/include/SerializerImpl.hh');
+var serializerCC : String = fileSystemTool.getContents(serializer_src);
+var serializerHH : String = fileSystemTool.getContents(serializer_include);
 
 //-----------------------------intialize variables........................................//
 
@@ -254,6 +264,8 @@ transaction{
 	observerCapsule.instrumentObserver();
 
 	"Done.\n--".println();
+	
+	return modelroot;
 	/*triggerCount.println("Number of triggers: ");
 	addedTrigger.println("Number of added triggers: ");
 	allClasses.size().println("Number of classes before instrument: ");

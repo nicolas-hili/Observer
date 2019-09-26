@@ -5,7 +5,7 @@
          point="ca.queensu.cs.observer.serializations">
          <serialization
                cpp_include_file="cpplib/include/SerializerImpl.hh"
-               cpp_source_file="cpplib/include/SerializerImpl.hh"
+               cpp_source_file="cpplib/src/SerializerImpl.cc"
                description="This is the configuration page for the Text serialization format"
                label="Text"
                name="text"
