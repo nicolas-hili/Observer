@@ -30,16 +30,6 @@
             id="ca.queensu.cs.observer.ui.unobserveCapsule"
             name="Un-observe">
       </command>
-      <command
-            description="Un-observe the capsule part"
-            id="ca.queensu.cs.observer.ui.unobserveCapsulePart"
-            name="Un-observe">
-      </command>
-      <command
-            description="Observe the capsule part"
-            id="ca.queensu.cs.observer.ui.observeCapsulePart"
-            name="Observe">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -209,6 +199,14 @@
       <attribute
             name="serialization">
       </attribute>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         id="ca.queensu.cs.observer.capsule.marker"
+         name="Unobserve marker"
+         point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
       </persistent>

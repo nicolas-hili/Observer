@@ -17,6 +17,8 @@ package ca.queensu.cs.observer.ui.commands;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.papyrus.emf.facet.util.ui.internal.exported.handler.HandlerUtils;
@@ -38,58 +40,23 @@ public class UnobserveCapsuleHandler extends ObserveHandler {
 		
 		Element eobj = PlatformHelper.getAdapter(element, Element.class);
 		
+		
 		if (eobj == null || !(eobj instanceof Class))
 			return null;
 		
-		Class capsule = (Class)eobj;
+		IResource iresource = getIResource(eobj.eResource());
+		
+		if (iresource == null)
+			return null;
+		
 		try {
-			TransactionalEditingDomain editingDomain = getEditingDomain(capsule);
-			unapplyObservableCapsuleStereotype(capsule, editingDomain);
-			removeObserverPort(capsule, editingDomain);
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
+			iresource.createMarker(MARKER);
+		} catch (NullPointerException e) {
+			// does nothing
+		}
+		catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
-		
 		return null;
 	}
-	
-	private void removeObserverPort(Class capsule, TransactionalEditingDomain editingDomain) {
-		Port sapPort = getObserverPort(capsule);
-		if (sapPort == null)
-			return;
-		
-		editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
-			
-			@Override
-			protected void doExecute() {
-				sapPort.destroy();
-			}
-		});
-	}
-
-	private void unapplyObservableCapsuleStereotype(Class capsule, TransactionalEditingDomain editingDomain) {
-		Stereotype stereotype = capsule.getAppliedStereotype("Observation::ObservableCapsule");
-		unapplyObservableStereotype(capsule, stereotype, editingDomain);
-	}
-
-	private Port getObserverPort(Class capsule) {
-		
-		Collaboration observerProtocol = getObserverProtocol(capsule.getModel());
-		
-		for (Property property : capsule.getAllAttributes()) {
-
-			if (!RTPortUtils.isRTPort(property))
-				continue;
-			
-			Port port = (Port)property;
-			
-			if (observerProtocol.equals(port.getType())) {
-				return port;
-			}
-		}
-		return null;
-	}
-
 }

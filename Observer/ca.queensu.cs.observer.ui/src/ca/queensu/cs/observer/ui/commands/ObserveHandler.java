@@ -16,19 +16,22 @@
 package ca.queensu.cs.observer.ui.commands;
 
 import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.emf.transaction.RecordingCommand;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.papyrus.infra.core.resource.ModelSet;
 import org.eclipse.papyrus.infra.core.services.ServiceException;
 import org.eclipse.papyrus.infra.emf.utils.ServiceUtilsForResource;
-import org.eclipse.uml2.uml.Collaboration;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.Stereotype;
 
 public abstract class ObserveHandler extends AbstractHandler {
+	
+
+	/* The Marker id */
+	protected static final String MARKER = "ca.queensu.cs.observer.capsule.marker";
+	
 	
 	protected ModelSet getModelSet(Element element) throws ServiceException {
 		return ServiceUtilsForResource.getInstance().getModelSet(element.eResource());
@@ -38,48 +41,29 @@ public abstract class ObserveHandler extends AbstractHandler {
 		return ServiceUtilsForResource.getInstance().getTransactionalEditingDomain(element.eResource());
 	}
 	
-	protected void applyObservableStereotype(Element element, Stereotype stereotype, TransactionalEditingDomain editingDomain) {
-		editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
-		
-			@Override
-			protected void doExecute() {
-				element.applyStereotype(stereotype);
-			}
-		});
-	}
-	
-	protected void unapplyObservableStereotype(Element element, Stereotype stereotype, TransactionalEditingDomain editingDomain) {
-		editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
-		
-			@Override
-			protected void doExecute() {
-			element.unapplyStereotype(stereotype);
-			}
-		});
-	}
-	
-	protected Collaboration getObserverProtocol(Model model) {
-		
-		Package observerPackage = getObserverPackage(model);
-		if (observerPackage == null)
+	/**
+	 * Convenience method returning the IResource corresponding to a Resource
+	 *
+	 * @param resource
+	 *            The Resource from which the corresponding IResource has to be retrieved
+	 * @return the IResource corresponding to the Resource
+	 */
+	protected IResource getIResource(Resource resource) {
+		if (resource == null) {
 			return null;
-		
-		Package observerProtocolPackage = (Package)observerPackage.getPackagedElement("Observation");
-		
-		for (PackageableElement pe: observerProtocolPackage.getPackagedElements()) {
-			if (pe.getName().equalsIgnoreCase("Observation") && pe instanceof Collaboration) {
-				return (Collaboration)pe;
+		}
+		String uriPath = resource.getURI().toPlatformString(true);
+		if (uriPath == null) {
+			return null;
+		}
+		IResource iresource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uriPath));
+		if (iresource != null) {
+			if (iresource.exists()) {
+				return iresource;
 			}
 		}
-		
 		return null;
 	}
 	
-	protected Package getObserverPackage(Model model) {
-		PackageableElement pe = model.getPackagedElement("Observation");
-		if (pe != null && pe instanceof org.eclipse.uml2.uml.Package)
-			return (Package)pe;
-		return null;
-	}
 
 }

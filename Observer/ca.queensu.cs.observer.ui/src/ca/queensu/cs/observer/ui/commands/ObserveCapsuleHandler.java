@@ -20,16 +20,12 @@ package ca.queensu.cs.observer.ui.commands;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.emf.transaction.RecordingCommand;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.papyrus.emf.facet.util.ui.internal.exported.handler.HandlerUtils;
-import org.eclipse.papyrus.infra.core.services.ServiceException;
 import org.eclipse.papyrus.infra.tools.util.PlatformHelper;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Collaboration;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Port;
-import org.eclipse.uml2.uml.Stereotype;
 
 public class ObserveCapsuleHandler extends ObserveHandler {
 
@@ -42,43 +38,19 @@ public class ObserveCapsuleHandler extends ObserveHandler {
 		if (eobj == null || !(eobj instanceof Class))
 			return null;
 		
-		Class capsule = (Class)eobj;
+		IResource iresource = getIResource(eobj.eResource());
+		if (iresource == null)
+			return null;
+		
 		try {
-			TransactionalEditingDomain editingDomain = getEditingDomain(capsule);
-			applyObservableCapsuleStereotype(capsule, editingDomain);
-			createObserverPort(capsule, editingDomain);
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
+			iresource.deleteMarkers(MARKER, false, IResource.DEPTH_ZERO);
+		}
+		catch (NullPointerException e) {
+			// does nothing
+		}
+		catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
-		
 		return null;
 	}
-	
-	private void applyObservableCapsuleStereotype(Class capsule, TransactionalEditingDomain editingDomain) {
-		Stereotype stereotype = capsule.getApplicableStereotype("Observation::ObservableCapsule");
-		applyObservableStereotype(capsule, stereotype, editingDomain);
-	}
-	
-	private void createObserverPort(Class capsule, TransactionalEditingDomain editingDomain) {
-		Collaboration observerProtocol = getObserverProtocol(capsule.getModel());
-		editingDomain.getCommandStack().execute(new RecordingCommand(editingDomain) {
-			
-			@Override
-			protected void doExecute() {
-				Port port = capsule.createOwnedPort("observation", observerProtocol);
-				Stereotype RTPort = port.getApplicableStereotype("UMLRealTime::RTPort");
-				port.applyStereotype(RTPort);
-				port.setIsBehavior(true);
-				port.setIsConjugated(false);
-				port.setIsService(false);
-				port.setValue(RTPort, "isWired", "false");
-				port.setValue(RTPort, "isPublish", "false");
-				port.setValue(RTPort, "isNotification", "true");
-				port.setType(observerProtocol);
-			}
-		});
-	}
-
 }
