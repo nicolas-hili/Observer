@@ -21,16 +21,6 @@
             name="Generate Observable Code">
       </command>
       <command
-            description="Load the Observer Capsule"
-            id="ca.queensu.cs.observer.ui.loadObserver"
-            name="Load observer capsule">
-      </command>
-      <command
-            description="Unload the Observer Capsule"
-            id="ca.queensu.cs.observer.ui.unloadObserver"
-            name="Unload observer capsule">
-      </command>
-      <command
             description="Observe the capsule"
             id="ca.queensu.cs.observer.ui.observeCapsule"
             name="Observe">
@@ -50,11 +40,6 @@
             id="ca.queensu.cs.observer.ui.observeCapsulePart"
             name="Observe">
       </command>
-      <command
-            description="Make the transition triggerable"
-            id="ca.queensu.cs.observer.ui.makeTransitionTriggerable"
-            name="Make triggerable">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -72,40 +57,6 @@
             locationURI="popup:org.eclipse.papyrus.views.modelexplorer.modelexplorer.popup">
          <menu
                label="Observer">
-               <command
-               commandId="ca.queensu.cs.observer.ui.loadObserver"
-               style="push">
-                  <visibleWhen
-                        checkEnabled="false">
-                     <and>
-                        <count
-                              value="1">
-                        </count>
-                        <test
-                              forcePluginActivation="true"
-                              property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                              value="Model">
-                        </test>
-                     </and>
-                  </visibleWhen>
-         </command>
-         <command
-               commandId="ca.queensu.cs.observer.ui.unloadObserver"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <and>
-                  <count
-                        value="1">
-                  </count>
-                  <test
-                        forcePluginActivation="true"
-                        property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                        value="Model">
-                  </test>
-               </and>
-            </visibleWhen>
-         </command>
          <command
                commandId="ca.queensu.cs.observer.ui.observeCapsule"
                style="push">
@@ -140,23 +91,6 @@
                </and>
             </visibleWhen>
          </command>
-         <command
-               commandId="ca.queensu.cs.observer.ui.makeTransitionTriggerable"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <and>
-                  <count
-                        value="1">
-                  </count>
-                  <test
-                        forcePluginActivation="true"
-                        property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                        value="Transition">
-                  </test>
-               </and>
-            </visibleWhen>
-         </command>
          <menu
                label="Select communication method">
             <dynamic
@@ -179,48 +113,6 @@
       <handler
             commandId="ca.queensu.cs.observer.ui.generateObservableCode"
             class="ca.queensu.cs.observer.ui.commands.GenerateObservableCodeHandler">
-      </handler>
-      <handler
-            class="ca.queensu.cs.observer.ui.commands.LoadObserverHandler"
-            commandId="ca.queensu.cs.observer.ui.loadObserver">
-         <enabledWhen>
-            <and>
-               <count
-                     value="1">
-               </count>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                     value="Model">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="ca.queensu.cs.observer.ui.observerPropertyTester.isNotObserverLoaded"
-                     value="true">
-               </test>
-            </and>
-         </enabledWhen>
-      </handler>
-      <handler
-            class="ca.queensu.cs.observer.ui.commands.UnloadObserverHandler"
-            commandId="ca.queensu.cs.observer.ui.unloadObserver">
-         <enabledWhen>
-         	<and>
-               <count
-                     value="1">
-               </count>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                     value="Model">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="ca.queensu.cs.observer.ui.observerPropertyTester.isObserverLoaded"
-                     value="true">
-               </test>
-            </and>
-         </enabledWhen>
       </handler>
       <handler
             class="ca.queensu.cs.observer.ui.commands.ObserveCapsuleHandler"
@@ -260,22 +152,6 @@
                      forcePluginActivation="true"
                      property="ca.queensu.cs.observer.ui.observerPropertyTester.isCapsuleObserved"
                      value="true">
-               </test>
-            </and>
-         </enabledWhen>
-      </handler>
-      <handler
-            class="ca.queensu.cs.observer.ui.commands.MakeTransitionTriggerableHandler"
-            commandId="ca.queensu.cs.observer.ui.makeTransitionTriggerable">
-         <enabledWhen>
-            <and>
-               <count
-                     value="1">
-               </count>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.papyrusrt.codegen.papyrus.internal.propertytester.eClass"
-                     value="Transition">
                </test>
             </and>
          </enabledWhen>
