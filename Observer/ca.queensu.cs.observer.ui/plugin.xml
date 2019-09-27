@@ -87,6 +87,23 @@
                   class="ca.queensu.cs.observer.ui.commands.SelectCommunicationMethodContributionItem"
                   id="ca.queensu.cs.observer.ui.selectCommunicationMethodMenu">
             </dynamic>
+            <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <test
+                           property="org.eclipse.papyrus.views.modelexplorer.tester.eClass"
+                           value="uml::Package">
+                     </test>
+                     <iterate
+                           ifEmpty="false"
+                           operator="and">
+                        <test
+                              property="org.eclipse.papyrus.uml.tools.isRoot">
+                        </test>
+                     </iterate>
+                  </with>
+               </visibleWhen>
          </menu>
          <menu
                label="Select serialization format">
@@ -94,6 +111,23 @@
                   class="ca.queensu.cs.observer.ui.commands.SelectSerializationFormatContributionItem"
                   id="ca.queensu.cs.observer.ui.selectSerializationFormatMenu">
             </dynamic>
+            <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <test
+                           property="org.eclipse.papyrus.views.modelexplorer.tester.eClass"
+                           value="uml::Package">
+                     </test>
+                     <iterate
+                           ifEmpty="false"
+                           operator="and">
+                        <test
+                              property="org.eclipse.papyrus.uml.tools.isRoot">
+                        </test>
+                     </iterate>
+                  </with>
+               </visibleWhen>
          </menu>
          </menu>
       </menuContribution>
