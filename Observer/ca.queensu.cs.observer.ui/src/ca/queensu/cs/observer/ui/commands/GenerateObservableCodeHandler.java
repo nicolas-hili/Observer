@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.papyrus.infra.emf.utils.EMFHelper;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.uml2.uml.Model;
 
 public class GenerateObservableCodeHandler extends AbstractHandler {
 
@@ -60,6 +61,7 @@ public class GenerateObservableCodeHandler extends AbstractHandler {
 		// Instrument the model
 		InstrumentModelCommand instrumentCommand = new InstrumentModelCommand(editingDomain);
 		instrumentCommand.setResourceToInstrument(uri);
+		instrumentCommand.setModel((Model)eobj);
 		instrumentCommand.doExecute();
 		return null;
 	}

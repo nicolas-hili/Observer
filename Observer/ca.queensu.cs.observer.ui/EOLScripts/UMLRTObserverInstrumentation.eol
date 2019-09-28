@@ -33,7 +33,12 @@
  * Absolute path to the include file of serializer to be used.
  * Example: "<absolutePathTo_ca.queensu.cs.observer.serializers.text>/cpplib/include/SerializerImpl.hh" to use the text serialization addon
  *
-*/
+ * @param
+ * unobserved_capsules: String
+ * Coma-separated list of capsule names that will be ignored during the transformation process
+ * Example: Gen,Sensor
+ *
+ */
 
 import "UMLRTQuery.eol";
 import "UMLRTCodeReflection.eol";
@@ -52,6 +57,9 @@ var methodHH : String = fileSystemTool.getContents(method_include);
 
 var serializerCC : String = fileSystemTool.getContents(serializer_src);
 var serializerHH : String = fileSystemTool.getContents(serializer_include);
+
+// The capsules to not observe
+var unobservedCapsules : Sequence = unobserved_capsules.split(",");
 
 //-----------------------------intialize variables........................................//
 
@@ -157,6 +165,9 @@ transaction{
 		// Un-instumenting the capsule	
 		for (capsule in allClasses) {
 		
+			if (unobservedCapsules.indexOf(capsule.name) <> -1) {
+				continue;
+			}
 			var stateMachine : UMLRTModel!StateMachine = capsule
 								.ownedBehavior
 								->selectOne(b | b.type.name = "StateMachine");
@@ -245,6 +256,10 @@ transaction{
 	// Instrument capsules	
 	for (capsule in allClasses) {
 	
+		if (unobservedCapsules.indexOf(capsule.name) <> -1) {
+			continue;
+		}
+		
 		var stateMachine : UMLRTModel!StateMachine = capsule
 							.ownedBehavior
 							->selectOne(b | b.type.name = "StateMachine");

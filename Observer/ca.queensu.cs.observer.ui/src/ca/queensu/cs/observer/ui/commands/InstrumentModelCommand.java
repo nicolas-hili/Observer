@@ -1,10 +1,12 @@
 package ca.queensu.cs.observer.ui.commands;
 
-import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.lang.model.element.PackageElement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -17,7 +19,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.spi.RegistryContributor;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.epsilon.common.parse.problem.ParseProblem;
@@ -34,6 +35,7 @@ import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
 import org.eclipse.epsilon.eol.types.EolNativeType;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.papyrusrt.umlrt.core.utils.CapsuleUtils;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
@@ -41,12 +43,18 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.PackageableElement;
 import org.osgi.framework.Bundle;
 
 import ca.queensu.cs.observer.ui.Activator;
 
 public class InstrumentModelCommand {// extends RecordingCommand {
+
+	/* The Marker id */
+	private static final String MARKER = "ca.queensu.cs.observer.capsule.marker";
 
 	private Resource resourceToInstrument;
 	private org.eclipse.emf.common.util.URI resourceToInstrumentUri;
@@ -54,6 +62,7 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 	private TransactionalEditingDomain domain;
 	
 	protected IEolModule module;//IEolExecutableModule module;
+	private Model model;
 
 	public InstrumentModelCommand(TransactionalEditingDomain domain) {
 	//	super(domain);
@@ -171,6 +180,41 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		return models;
 	}
 	
+	/**
+	 * Convenience method returning the IResource corresponding to a Resource
+	 *
+	 * @param resource
+	 *            The Resource from which the corresponding IResource has to be retrieved
+	 * @return the IResource corresponding to the Resource
+	 */
+	public static IResource getIResource(Resource resource) {
+		if (resource == null) {
+			return null;
+		}
+		String uriPath = resource.getURI().toPlatformString(true);
+		if (uriPath == null) {
+			return null;
+		}
+		IResource iresource = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(uriPath));
+		if (iresource != null) {
+			if (iresource.exists()) {
+				return iresource;
+			}
+		}
+		return null;
+	}
+	
+	private boolean hasObserveMarker(Element element) {
+		IResource iresource = getIResource(element.eResource());
+		try {
+			IMarker[] markers = iresource.findMarkers(MARKER, false, IResource.DEPTH_ZERO);
+			return markers.length == 1;
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	protected Object execute(IEolModule module)  throws EolRuntimeException {
 
 		// Retrieve the currently selected Ecore resource
@@ -189,10 +233,6 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		// Retrieve the first configurations' names
 		String communicationName = communications[0].getAttribute("name");
 		String serializationName = serializations[0].getAttribute("name");
-		
-		// Get the stored communication/serialization value, or use the default one (first on the list)
-		String communicationValue = marker.getAttribute("communication", communicationName);
-		String serializationValue = marker.getAttribute("serialization", serializationName);
 		
 		IConfigurationElement communicationConfiguration = null;
 		IConfigurationElement serializationConfiguration = null;
@@ -228,12 +268,21 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		String serialization_include_file = pluginLocation + serializationConfiguration.getAttribute("cpp_include_file");
 		String serialization_src_file = pluginLocation + serializationConfiguration.getAttribute("cpp_source_file");
 		
+		
+		// Get all unobserved capsules
+		String pes = model.getPackagedElements()
+								  .stream()
+								  .filter(pe -> pe instanceof Classifier && CapsuleUtils.isCapsule((Classifier)pe))
+								  .filter(pe -> hasObserveMarker(pe))
+								  .map(pe -> pe.getName())
+								  .collect(Collectors.joining(","));
 
 		module.getContext().getFrameStack().putGlobal(
 			new Variable("method_src", communication_src_file, EolNativeType.Instance),
 			new Variable("method_include", communication_include_file, EolNativeType.Instance),
 			new Variable("serializer_include", serialization_include_file, EolNativeType.Instance),
 			new Variable("serializer_src", serialization_src_file, EolNativeType.Instance), 
+			new Variable("unobserved_capsules", pes, EolNativeType.Instance),
 			new Variable("observerPath", "platform:/plugin/ca.queensu.cs.observer/libraries/observer.uml", EolNativeType.Instance)
 		);
 		
@@ -289,5 +338,9 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 	uri = this.getClass().getClassLoader().getResource("../" + fileName).toURI();
 	return uri;
   }
+
+public void setModel(Model model) {
+	this.model = model;
+}
 
 }
