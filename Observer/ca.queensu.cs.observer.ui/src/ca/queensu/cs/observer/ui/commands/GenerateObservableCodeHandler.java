@@ -1,5 +1,7 @@
 package ca.queensu.cs.observer.ui.commands;
 
+import java.io.IOException;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,8 +18,14 @@ import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.papyrus.infra.emf.utils.EMFHelper;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.uml2.uml.Model;
+import ca.queensu.cs.observer.ui.console.ObserverConsole;
 
 public class GenerateObservableCodeHandler extends AbstractHandler {
 
@@ -35,14 +43,18 @@ public class GenerateObservableCodeHandler extends AbstractHandler {
 		if (eobj == null || resource == null || editingDomain == null)
 			return null;
 		
-		// Retrieve the file corresponding to the EMF Resource
+		ObserverConsole console = ObserverConsole.getInstance();
+		console.write("Generating Observer code\n");
+		
+	    // Retrieve the file corresponding to the EMF Resource
 		String path = resource.getURI().toPlatformString(true);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IFile file = root.getFile(new Path(path));
 		
 		// Prepare the name of the copied resource
-		String name = new Path(path).removeFileExtension().lastSegment() + "_observed";	
+		String name = new Path(path).removeFileExtension().lastSegment() + "_observed";
 		
+		console.write("Cloning UML resource... ");
 		// Copy the file
 		IFile copiedFile = root.getFile(new Path(path).removeFileExtension().removeLastSegments(1).append(name).addFileExtension("uml"));
 		try {
@@ -54,6 +66,7 @@ public class GenerateObservableCodeHandler extends AbstractHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		console.write("done.\n");
 		
 		// Retrieve the URI of the copied file
 		URI uri = resource.getURI().trimFileExtension().trimSegments(1).appendSegment(name).appendFileExtension("uml");
@@ -85,5 +98,20 @@ public class GenerateObservableCodeHandler extends AbstractHandler {
 	private TransactionalEditingDomain getEditingDomain(EObject eobj) {
 		return TransactionUtil.getEditingDomain(eobj);
 	}
+	
+
+	  
+  private MessageConsole findConsole(String name) {
+      ConsolePlugin plugin = ConsolePlugin.getDefault();
+      IConsoleManager conMan = plugin.getConsoleManager();
+      IConsole[] existing = conMan.getConsoles();
+      for (int i = 0; i < existing.length; i++)
+         if (name.equals(existing[i].getName()))
+            return (MessageConsole) existing[i];
+      //no console found, so create a new one
+      MessageConsole myConsole = new MessageConsole(name, null);
+      conMan.addConsoles(new IConsole[]{myConsole});
+      return myConsole;
+   }
 
 }

@@ -1,6 +1,7 @@
 package ca.queensu.cs.observer.ui.commands;
 
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +51,7 @@ import org.eclipse.uml2.uml.PackageableElement;
 import org.osgi.framework.Bundle;
 
 import ca.queensu.cs.observer.ui.Activator;
+import ca.queensu.cs.observer.ui.console.ObserverConsole;
 
 public class InstrumentModelCommand {// extends RecordingCommand {
 
@@ -112,10 +114,10 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		// Relative link to the main EOL file
 		String eolScript = "EOLScripts/UMLRTObserverInstrumentation.eol";
 		
-		// Create a console
-		MessageConsole myConsole = findConsole("Observer Console");
-	    MessageConsoleStream out = myConsole.newMessageStream();
-	    
+		
+		ObserverConsole console = ObserverConsole.getInstance();
+		console.write("Creating Epsilon module...");
+		
 	    // Create an Epsilon module
 	    module = createModule();
 	    module.getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
@@ -133,7 +135,8 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		for (IModel model : getModels()) {
 		  module.getContext().getModelRepository().addModel(model);
 		}
-	    
+		console.write("Done.\n");
+		console.write("Instrumenting... ");
 		Object object = execute(module);
 	    System.out.println(((org.eclipse.uml2.uml.Model)object).getPackagedElements());
 	//	this.resourceToInstrument.save(null);
@@ -255,18 +258,29 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		
 		
 		
+		
+		
 		// Retrieve the path to the header and include files
 		String communicationPluginName = ((RegistryContributor)communicationConfiguration.getContributor()).getActualName();
+		ObserverConsole console = ObserverConsole.getInstance();
+		console.write(communicationPluginName);
+		
 		Bundle plugin = Platform.getBundle (communicationPluginName);
+		
+		
 		String pluginLocation = plugin.getLocation().toString().substring(15); 
-		String communication_include_file = pluginLocation + communicationConfiguration.getAttribute("cpp_include_file");
-		String communication_src_file = pluginLocation + communicationConfiguration.getAttribute("cpp_source_file");
+		console.write("\n");
+		console.write(pluginLocation);
+		String communication_include_file = pluginLocation +"/"+ communicationConfiguration.getAttribute("cpp_include_file");
+		console.write("\n");
+		console.write(communication_include_file);
+		String communication_src_file = pluginLocation + "/" + communicationConfiguration.getAttribute("cpp_source_file");
 
 		String serializationPluginName = ((RegistryContributor)serializationConfiguration.getContributor()).getActualName();
 		plugin = Platform.getBundle (serializationPluginName);
 		pluginLocation = plugin.getLocation().toString().substring(15); 
-		String serialization_include_file = pluginLocation + serializationConfiguration.getAttribute("cpp_include_file");
-		String serialization_src_file = pluginLocation + serializationConfiguration.getAttribute("cpp_source_file");
+		String serialization_include_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_include_file");
+		String serialization_src_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_source_file");
 		
 		
 		// Get all unobserved capsules
@@ -286,6 +300,8 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 			new Variable("observerPath", "platform:/plugin/ca.queensu.cs.observer/libraries/observer.uml", EolNativeType.Instance)
 		);
 		
+		
+//		module.getContext().setOutputStream(console.getStream());
 		return module.execute();
 	    
 	}
@@ -312,35 +328,15 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		this.resourceToInstrumentUri = resourceUri;
 	}
 	
-	  
-  private MessageConsole findConsole(String name) {
-      ConsolePlugin plugin = ConsolePlugin.getDefault();
-      IConsoleManager conMan = plugin.getConsoleManager();
-      IConsole[] existing = conMan.getConsoles();
-      for (int i = 0; i < existing.length; i++)
-         if (name.equals(existing[i].getName()))
-            return (MessageConsole) existing[i];
-      //no console found, so create a new one
-      MessageConsole myConsole = new MessageConsole(name, null);
-      conMan.addConsoles(new IConsole[]{myConsole});
-      return myConsole;
-   }
   
   
   protected java.net.URI getFileURI(String fileName) throws URISyntaxException {
-
-	java.net.URI uri= URIUtil.fromString("file:"+fileName);
-	
-	if (uri.isAbsolute())
-		return uri;
-	
-//	uri = TransformUMLRTModel.class.getClassLoader().getResource("../" + fileName).toURI();
-	uri = this.getClass().getClassLoader().getResource("../" + fileName).toURI();
-	return uri;
+	java.net.URI res = Activator.getDefault().getBundle().getResource(fileName).toURI();
+	return res;
   }
 
-public void setModel(Model model) {
+  public void setModel(Model model) {
 	this.model = model;
-}
+  }
 
 }
