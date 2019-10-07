@@ -50,13 +50,20 @@ import "DetailTracing.eol";
 var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
 var ecoreUtil = emfTool.ecoreUtil;
 
-var fileSystemTool = new Native("org.eclipse.epsilon.eol.tools.FileSystemTool");
+//var fileSystemTool = new Native("org.eclipse.epsilon.eol.tools.FileSystemTool");
+var platformResourceTool = new Native("ca.queensu.cs.observer.epsilon.tool.PlatformResourceTool");
 
-var methodCC : String = fileSystemTool.getContents(method_src);
+/*var methodCC : String = fileSystemTool.getContents(method_src);
 var methodHH : String = fileSystemTool.getContents(method_include);
 
 var serializerCC : String = fileSystemTool.getContents(serializer_src);
 var serializerHH : String = fileSystemTool.getContents(serializer_include);
+*/
+var methodCC : String = platformResourceTool.getContents(method_src);
+var methodHH : String = platformResourceTool.getContents(method_include);
+
+var serializerCC : String = platformResourceTool.getContents(serializer_src);
+var serializerHH : String = platformResourceTool.getContents(serializer_include);
 
 // The capsules to not observe
 var unobservedCapsules : Sequence = unobserved_capsules.split(",");
@@ -101,6 +108,7 @@ var observerCapsule: UMLRTModel!Class;
 var observerProtocol: UMLRTModel!Collaboration;
 
 if (observerPath.isDefined()) {
+	observerPath.println();
 	observerURI = UMLRTModel.resource.uri.createURI(observerPath);
 }
 else {
@@ -145,7 +153,7 @@ allStateMachines.getAllRegions().getAllStates().size().println("Number of states
 var observerPackage;
 
 //----------------------------main loop of the transformation........................................//
-transaction{
+//transaction{
 
 	observerPackage = modelroot.packagedElement->selectOne(c | c.name == "Observation");
 	if (observerPackage.isDefined()) {
@@ -279,14 +287,16 @@ transaction{
 	observerCapsule.instrumentObserver();
 
 	"Done.\n--".println();
-	
+	modelroot.name = "ObservedModel";
+	"New name".println();
+	modelroot.name.println();
 	return modelroot;
 	/*triggerCount.println("Number of triggers: ");
 	addedTrigger.println("Number of added triggers: ");
 	allClasses.size().println("Number of classes before instrument: ");
 	modelroot.getAllOwnedClasses().size().println("Number of classes after instrument: ");*/
 	//abort;
-} 
+//} 
 
 /**
  * Return the observation port of a capsule.

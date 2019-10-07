@@ -263,12 +263,6 @@ std::map&lt;std::string, size_t>::iterator iter;
       <packagedElement xmi:type="uml:Artifact" xmi:id="_EGklAOLyEemCY6XvPOiEPQ" name="Method"/>
       <packagedElement xmi:type="uml:Artifact" xmi:id="_EGlMEOLyEemCY6XvPOiEPQ" name="Config"/>
       <packagedElement xmi:type="uml:Artifact" xmi:id="_EGlzIOLyEemCY6XvPOiEPQ" name="Serializer"/>
-      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_EDv6gOLyEemCY6XvPOiEPQ">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_EDyWwOLyEemCY6XvPOiEPQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
-          <references xmi:type="ecore:EPackage" href="platform:/Development/ca.queensu.cs.observer.update/model/RTCppProperties.profile.uml#_u3BoQJ9ZEeWtHskdthI1Bg"/>
-        </eAnnotations>
-        <appliedProfile xmi:type="uml:Profile" href="platform:/Development/ca.queensu.cs.observer.update/model/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
-      </profileApplication>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_hltsEFzUEeevlLbSf8F1Eg" name="EventObj"/>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_rqpQsNRIEeayFZJ-SYgDzA">

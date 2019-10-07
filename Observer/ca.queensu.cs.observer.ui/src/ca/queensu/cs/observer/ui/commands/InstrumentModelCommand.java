@@ -1,28 +1,33 @@
 package ca.queensu.cs.observer.ui.commands;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
-import javax.lang.model.element.PackageElement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.spi.RegistryContributor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.epsilon.common.parse.problem.ParseProblem;
+import org.eclipse.epsilon.common.util.FileUtil;
 import org.eclipse.epsilon.common.util.StringProperties;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.EolModule;
@@ -39,16 +44,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.papyrusrt.umlrt.core.utils.CapsuleUtils;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.PackageableElement;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 import ca.queensu.cs.observer.ui.Activator;
 import ca.queensu.cs.observer.ui.console.ObserverConsole;
@@ -258,17 +258,33 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		
 		
 		
-		
+		String communication_include_file = "",
+				communication_source_file = "",
+				serialization_include_file = "",
+				serialization_source_file = "";
 		
 		// Retrieve the path to the header and include files
-		String communicationPluginName = ((RegistryContributor)communicationConfiguration.getContributor()).getActualName();
-		ObserverConsole console = ObserverConsole.getInstance();
-		console.write(communicationPluginName);
+		//ObserverConsole console = ObserverConsole.getInstance();
 		
-		Bundle plugin = Platform.getBundle (communicationPluginName);
+		try {
+			
+			String communicationPluginName = ((RegistryContributor)communicationConfiguration.getContributor()).getActualName();
+			Bundle plugin = Platform.getBundle (communicationPluginName);
+
+			communication_include_file = this.getFileURL(communicationConfiguration.getAttribute("cpp_include_file"), plugin).toString();
+			communication_source_file = this.getFileURL(communicationConfiguration.getAttribute("cpp_source_file"), plugin).toString();
+	
+			String serializationPluginName = ((RegistryContributor)serializationConfiguration.getContributor()).getActualName();
+			plugin = Platform.getBundle (serializationPluginName);
+			serialization_include_file = this.getFileURI(serializationConfiguration.getAttribute("cpp_include_file"), plugin).toString();
+			serialization_source_file = this.getFileURI(serializationConfiguration.getAttribute("cpp_source_file"), plugin).toString();
+
+		} catch (InvalidRegistryObjectException | URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
-		String pluginLocation = plugin.getLocation().toString().substring(15); 
+/*		String pluginLocation = plugin.getLocation().toString().substring(15); 
 		console.write("\n");
 		console.write(pluginLocation);
 		String communication_include_file = pluginLocation +"/"+ communicationConfiguration.getAttribute("cpp_include_file");
@@ -281,7 +297,7 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		pluginLocation = plugin.getLocation().toString().substring(15); 
 		String serialization_include_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_include_file");
 		String serialization_src_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_source_file");
-		
+	*/	
 		
 		// Get all unobserved capsules
 		String pes = model.getPackagedElements()
@@ -292,10 +308,10 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 								  .collect(Collectors.joining(","));
 
 		module.getContext().getFrameStack().putGlobal(
-			new Variable("method_src", communication_src_file, EolNativeType.Instance),
+			new Variable("method_src", communication_source_file, EolNativeType.Instance),
 			new Variable("method_include", communication_include_file, EolNativeType.Instance),
 			new Variable("serializer_include", serialization_include_file, EolNativeType.Instance),
-			new Variable("serializer_src", serialization_src_file, EolNativeType.Instance), 
+			new Variable("serializer_src", serialization_source_file, EolNativeType.Instance), 
 			new Variable("unobserved_capsules", pes, EolNativeType.Instance),
 			new Variable("observerPath", "platform:/plugin/ca.queensu.cs.observer/libraries/observer.uml", EolNativeType.Instance)
 		);
@@ -328,12 +344,88 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		this.resourceToInstrumentUri = resourceUri;
 	}
 	
+	protected java.net.URI getFileURI(String fileName) throws URISyntaxException {
+		Bundle bundle = Activator.getDefault().getBundle();
+		return getFileURI(fileName, bundle);
+	}
+	
+	protected java.net.URL getFileURL(String fileName) throws URISyntaxException {
+		Bundle bundle = Activator.getDefault().getBundle();
+		return getFileURL(fileName, bundle);
+	}
+	
+	protected String removeProtocol(String url) {
+		return url.substring(url.indexOf("/"));
+	}
+	
+	protected java.net.URL getFileURL(String fileName, Bundle bundle) throws URISyntaxException {
+		ObserverConsole console = ObserverConsole.getInstance();
+//		Path path = new Path(fileName);
+//		URL url = bundle.getResource(fileName);
+		String path = bundle.getLocation() + "/" + fileName;
+		if (path.startsWith("reference:")) {
+    		path = path.substring("reference:".length());
+    	}
+		URL url = null;
+		
+		try {
+			url = new URL(path);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		console.write("\n---");
+		console.write("\nBundle: " + bundle.getSymbolicName());
+		console.write("\nFile to retrieve: " + fileName);
+    	console.write("\nURL: " + path);
+    	console.write("\n---");
+    	
+		return url;
+	}
   
-  
-  protected java.net.URI getFileURI(String fileName) throws URISyntaxException {
-	java.net.URI res = Activator.getDefault().getBundle().getResource(fileName).toURI();
-	return res;
-  }
+	protected java.net.URI getFileURI(String fileName, Bundle bundle) throws URISyntaxException {
+		ObserverConsole console = ObserverConsole.getInstance();
+		Path path = new Path(fileName);
+		URL fileURL = FileLocator.find(bundle, path, null);
+		   
+		
+ //   	String url = bundle.getLocation();
+ //   	url += "/"+fileName;
+		try {
+			fileURL = FileLocator.resolve(fileURL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String url = fileURL.toString();
+//		String url = bundle.getResource(fileName).toURI().toString();
+    	console.write("\n---");
+    	console.write("\nURL: " + url);
+//    	console.write("\nprunned URL: " + url.substring(15));
+    	
+  /*  	System.out.println(url.substring(15));
+    	String content = FileUtil.getFileContents(new File(url.substring(15)));
+    	System.out.println(content); */
+    	
+    	
+	//	java.net.URI res = bundle.getResource(fileName).toURI();
+	//	URI uri = new URI(url.substring(10));
+    //	url = url.substring(0, url.indexOf("/") - 1);
+    	
+    	URI uri = new URI(url);
+    	
+    	console.write("\nFormatted URL: " + url);
+    	//console.write("\nPrunned URL: " + url.substring(10));
+		console.write("\nBundle: " + bundle.getSymbolicName());
+		console.write("\nFile to retrieve: " + fileName);
+		console.write("\nState: " + bundle.getState());
+		
+//		console.write("\nURI: " + res );
+		console.write("\n---");
+		return uri;
+//		return res;
+	  }
 
   public void setModel(Model model) {
 	this.model = model;

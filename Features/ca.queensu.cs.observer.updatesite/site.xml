@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/ca.queensu.cs.observer.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.feature" version="1.0.1.201910070739">
+      <category name="core"/>
+   </feature>
+   <feature url="features/ca.queensu.cs.observer.method.mqtt.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.mqtt.feature" version="1.0.1.201910070739">
+      <category name="communication"/>
+   </feature>
+   <feature url="features/ca.queensu.cs.observer.method.sharedmem.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.sharedmem.feature" version="1.0.1.201910070739">
+      <category name="communication"/>
+   </feature>
+   <feature url="features/ca.queensu.cs.observer.method.socket.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.socket.feature" version="1.0.1.201910070739">
+      <category name="communication"/>
+   </feature>
+   <feature url="features/ca.queensu.cs.observer.serializer.text.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.serializer.text.feature" version="1.0.1.201910070739">
+      <category name="serialization"/>
+   </feature>
+   <category-def name="core" label="Core"/>
+   <category-def name="communication" label="Communication"/>
+   <category-def name="serialization" label="Serialization"/>
+</site>

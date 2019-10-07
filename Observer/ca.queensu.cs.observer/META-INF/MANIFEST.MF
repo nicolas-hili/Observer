@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Observer
-Bundle-SymbolicName: ca.queensu.cs.observer
-Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: ca.queensu.cs.observer;singleton:=true
+Bundle-Version: 1.0.1
 Bundle-Vendor: School of Computing, Queen's University
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.ui;bundle-version="3.108.1",
  org.eclipse.osgi,
  org.eclipse.core.runtime;bundle-version="3.12.0"
-Export-Package: ca.queensu.cs.observer
+Export-Package: ca.queensu.cs.observer;uses:="org.osgi.framework,org.eclipse.ui.plugin"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: ca.queensu.cs.observer.Activator
