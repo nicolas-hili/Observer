@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ca.queensu.cs.observer.feature"
-      label="Observer feature"
-      version="1.0.1.qualifier"
+      label="Observer Core Feature"
+      version="1.0.2"
       provider-name="School of Computing, Queen&apos;s University">
 
    <description url="http://www.example.com/description">
@@ -21,21 +21,21 @@
          id="ca.queensu.cs.observer"
          download-size="0"
          install-size="0"
-         version="1.0.1"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ca.queensu.cs.observer.epsilon.tool"
          download-size="0"
          install-size="0"
-         version="1.0.1"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ca.queensu.cs.observer.ui"
          download-size="0"
          install-size="0"
-         version="1.0.1"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
