@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ca.queensu.cs.observer.method.mqtt.feature"
-      label="MQTT Support Add-on feature"
-      version="1.0.1.qualifier"
+      label="MQTT Support Add-on Feature"
+      version="1.0.2"
       provider-name="School of Computing, Queen&apos;s University">
 
    <description url="http://www.example.com/description">
@@ -21,7 +21,7 @@
          id="ca.queensu.cs.observer.method.mqtt"
          download-size="0"
          install-size="0"
-         version="1.0.1"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

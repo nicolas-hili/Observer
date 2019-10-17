@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ca.queensu.cs.observer.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.feature" version="1.0.1.201910070739">
+   <description name="Observer update site" url="http://mase.cs.queensu.ca/observer">
+      Observer update site
+   </description>
+   <feature url="features/ca.queensu.cs.observer.feature_1.0.2.jar" id="ca.queensu.cs.observer.feature" version="1.0.2">
       <category name="core"/>
    </feature>
-   <feature url="features/ca.queensu.cs.observer.method.mqtt.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.mqtt.feature" version="1.0.1.201910070739">
+   <feature url="features/ca.queensu.cs.observer.method.mqtt.feature_1.0.2.jar" id="ca.queensu.cs.observer.method.mqtt.feature" version="1.0.2">
       <category name="communication"/>
    </feature>
-   <feature url="features/ca.queensu.cs.observer.method.sharedmem.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.sharedmem.feature" version="1.0.1.201910070739">
+   <feature url="features/ca.queensu.cs.observer.method.sharedmem.feature_1.0.2.jar" id="ca.queensu.cs.observer.method.sharedmem.feature" version="1.0.2">
       <category name="communication"/>
    </feature>
-   <feature url="features/ca.queensu.cs.observer.method.socket.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.method.socket.feature" version="1.0.1.201910070739">
+   <feature url="features/ca.queensu.cs.observer.method.socket.feature_1.0.2.jar" id="ca.queensu.cs.observer.method.socket.feature" version="1.0.2">
       <category name="communication"/>
    </feature>
-   <feature url="features/ca.queensu.cs.observer.serializer.text.feature_1.0.1.201910070739.jar" id="ca.queensu.cs.observer.serializer.text.feature" version="1.0.1.201910070739">
+   <feature url="features/ca.queensu.cs.observer.serializer.text.feature_1.0.2.jar" id="ca.queensu.cs.observer.serializer.text.feature" version="1.0.2">
       <category name="serialization"/>
    </feature>
-   <category-def name="core" label="Core"/>
-   <category-def name="communication" label="Communication"/>
-   <category-def name="serialization" label="Serialization"/>
+   <category-def name="core" label="Core">
+      <description>
+         Core feature for the Observer (mandatory)
+      </description>
+   </category-def>
+   <category-def name="communication" label="Communication Add-on">
+      <description>
+         Communication add-ons for the Observer capsule. At least one feature of this category must be selected.
+      </description>
+   </category-def>
+   <category-def name="serialization" label="Serialization Add-on">
+      <description>
+         Serialization add-ons for the Observer capsule. At least one feature of this category must be selected.
+      </description>
+   </category-def>
 </site>
