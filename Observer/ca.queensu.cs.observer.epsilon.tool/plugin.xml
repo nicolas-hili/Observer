@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.epsilon.common.dt.tool">
+      <tool
+            class="ca.queensu.cs.observer.epsilon.tool.PlatformResourceTool"
+            defaultName="PlatformResourceTool"
+            description="A tool to load Eclipse resource from a java.net.URL">
+      </tool>
+   </extension>
+
+</plugin>
