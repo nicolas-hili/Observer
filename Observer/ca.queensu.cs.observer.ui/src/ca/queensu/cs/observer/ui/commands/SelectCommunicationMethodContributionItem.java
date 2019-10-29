@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.uml2.uml.Model;
 
 import ca.queensu.cs.observer.ui.Activator;
+import ca.queensu.cs.observer.ui.utils.ConfigurationUtil;
 
 public class SelectCommunicationMethodContributionItem extends ContributionItem {
 
@@ -83,7 +84,7 @@ public class SelectCommunicationMethodContributionItem extends ContributionItem 
 		IMarker marker = getMarker(file);
 		
 		// Get the communication configurations
-		IConfigurationElement[] communications = Activator.getDefault().getCommunicationConfig();
+		IConfigurationElement[] communications = ConfigurationUtil.getInstance().getCommunicationMethods();
 		
 		// Retrieve the first communication
 		String communicationName = communications[0].getAttribute("name");

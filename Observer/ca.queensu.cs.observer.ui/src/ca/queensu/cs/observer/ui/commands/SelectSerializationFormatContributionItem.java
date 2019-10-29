@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.uml2.uml.Model;
 
 import ca.queensu.cs.observer.ui.Activator;
+import ca.queensu.cs.observer.ui.utils.ConfigurationUtil;
 
 public class SelectSerializationFormatContributionItem extends ContributionItem {
 
@@ -82,8 +83,8 @@ public class SelectSerializationFormatContributionItem extends ContributionItem 
 		// Retrieve the observer marker. Create it if it does not exist
 		IMarker marker = getMarker(file);
 		
-		// Get the communication configurations
-		IConfigurationElement[] serializations = Activator.getDefault().getSerializationConfig();
+		// Get the serialization configurations
+		IConfigurationElement[] serializations = ConfigurationUtil.getInstance().getSerializationFormats();
 		
 		// Retrieve the first communication
 		String serializationName = serializations[0].getAttribute("name");

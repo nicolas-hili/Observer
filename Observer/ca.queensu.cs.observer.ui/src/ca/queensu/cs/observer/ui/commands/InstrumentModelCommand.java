@@ -52,6 +52,7 @@ import org.osgi.framework.BundleException;
 
 import ca.queensu.cs.observer.ui.Activator;
 import ca.queensu.cs.observer.ui.console.ObserverConsole;
+import ca.queensu.cs.observer.ui.utils.ConfigurationUtil;
 
 public class InstrumentModelCommand {// extends RecordingCommand {
 
@@ -230,14 +231,17 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		IMarker marker = getMarker(file);
 		
 		// Get the configurations
-		IConfigurationElement[] communications = Activator.getDefault().getCommunicationConfig();
-		IConfigurationElement[] serializations = Activator.getDefault().getSerializationConfig();
+//		IConfigurationElement[] communications = Activator.getDefault().getCommunicationConfig();
+//		IConfigurationElement[] serializations = Activator.getDefault().getSerializationConfig();
+		
+		IConfigurationElement communicationMethod = ConfigurationUtil.getInstance().getCommunicationMethod();
+		IConfigurationElement serializationFormat = ConfigurationUtil.getInstance().getSerializationFormat();
 		
 		// Retrieve the first configurations' names
-		String communicationName = communications[0].getAttribute("name");
-		String serializationName = serializations[0].getAttribute("name");
+		String communicationName = communicationMethod.getAttribute("name");
+		String serializationName = serializationFormat.getAttribute("name");
 		
-		IConfigurationElement communicationConfiguration = null;
+/*		IConfigurationElement communicationConfiguration = null;
 		IConfigurationElement serializationConfiguration = null;
 		
 		// Retrieve the corresponding communication / serialization
@@ -254,7 +258,7 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 				serializationConfiguration = serialization;
 				break;
 			}
-		}
+		} */
 		
 		
 		
@@ -268,36 +272,20 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 		
 		try {
 			
-			String communicationPluginName = ((RegistryContributor)communicationConfiguration.getContributor()).getActualName();
+			String communicationPluginName = ((RegistryContributor)communicationMethod.getContributor()).getActualName();
 			Bundle plugin = Platform.getBundle (communicationPluginName);
 
-			communication_include_file = this.getFileURL(communicationConfiguration.getAttribute("cpp_include_file"), plugin).toString();
-			communication_source_file = this.getFileURL(communicationConfiguration.getAttribute("cpp_source_file"), plugin).toString();
+			communication_include_file = this.getFileURI(communicationMethod.getAttribute("cpp_include_file"), plugin).toString();
+			communication_source_file = this.getFileURI(communicationMethod.getAttribute("cpp_source_file"), plugin).toString();
 	
-			String serializationPluginName = ((RegistryContributor)serializationConfiguration.getContributor()).getActualName();
+			String serializationPluginName = ((RegistryContributor)serializationFormat.getContributor()).getActualName();
 			plugin = Platform.getBundle (serializationPluginName);
-			serialization_include_file = this.getFileURI(serializationConfiguration.getAttribute("cpp_include_file"), plugin).toString();
-			serialization_source_file = this.getFileURI(serializationConfiguration.getAttribute("cpp_source_file"), plugin).toString();
+			serialization_include_file = this.getFileURI(serializationFormat.getAttribute("cpp_include_file"), plugin).toString();
+			serialization_source_file = this.getFileURI(serializationFormat.getAttribute("cpp_source_file"), plugin).toString();
 
 		} catch (InvalidRegistryObjectException | URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-/*		String pluginLocation = plugin.getLocation().toString().substring(15); 
-		console.write("\n");
-		console.write(pluginLocation);
-		String communication_include_file = pluginLocation +"/"+ communicationConfiguration.getAttribute("cpp_include_file");
-		console.write("\n");
-		console.write(communication_include_file);
-		String communication_src_file = pluginLocation + "/" + communicationConfiguration.getAttribute("cpp_source_file");
-
-		String serializationPluginName = ((RegistryContributor)serializationConfiguration.getContributor()).getActualName();
-		plugin = Platform.getBundle (serializationPluginName);
-		pluginLocation = plugin.getLocation().toString().substring(15); 
-		String serialization_include_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_include_file");
-		String serialization_src_file = pluginLocation + "/" + serializationConfiguration.getAttribute("cpp_source_file");
-	*/	
 		
 		// Get all unobserved capsules
 		String pes = model.getPackagedElements()
@@ -315,7 +303,6 @@ public class InstrumentModelCommand {// extends RecordingCommand {
 			new Variable("unobserved_capsules", pes, EolNativeType.Instance),
 			new Variable("observerPath", "platform:/plugin/ca.queensu.cs.observer/libraries/observer.uml", EolNativeType.Instance)
 		);
-		
 		
 //		module.getContext().setOutputStream(console.getStream());
 		return module.execute();

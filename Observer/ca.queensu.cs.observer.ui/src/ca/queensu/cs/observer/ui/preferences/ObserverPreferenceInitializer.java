@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import ca.queensu.cs.observer.ui.Activator;
+import ca.queensu.cs.observer.ui.utils.ConfigurationUtil;
 
 public class ObserverPreferenceInitializer extends AbstractPreferenceInitializer {
 
@@ -26,7 +27,9 @@ public class ObserverPreferenceInitializer extends AbstractPreferenceInitializer
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		
-		IConfigurationElement[] configs = Activator.getDefault().getSerializationConfig();
+		//IConfigurationElement[] configs = Activator.getDefault().getSerializationConfig();
+		IConfigurationElement[] configs = ConfigurationUtil.getInstance().getSerializationFormats();
+		
 		for (IConfigurationElement config: configs) {
 			
 			String serializationName = config.getAttribute("name");
@@ -42,7 +45,7 @@ public class ObserverPreferenceInitializer extends AbstractPreferenceInitializer
 			}
 		}
 		
-		configs = Activator.getDefault().getCommunicationConfig();
+		configs = ConfigurationUtil.getInstance().getCommunicationMethods();
 		for (IConfigurationElement config: configs) {
 			
 			String communicationName = config.getAttribute("name");

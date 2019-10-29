@@ -13,6 +13,7 @@ import org.osgi.framework.BundleContext;
 
 import ca.queensu.cs.observer.ui.preferences.ObserverNode;
 import ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage;
+import ca.queensu.cs.observer.ui.utils.ConfigurationUtil;
 
 
 public class Activator extends AbstractUIPlugin {
@@ -57,7 +58,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	public void createSerializationPreferencePageSubNodes(IPreferenceNode root) {
 		
-		IConfigurationElement[] configs = this.getSerializationConfig();
+		IConfigurationElement[] configs = ConfigurationUtil.getInstance().getSerializationFormats();
 		for (IConfigurationElement config: configs) {
 			
 			String name = config.getAttribute("name");
@@ -87,7 +88,7 @@ public class Activator extends AbstractUIPlugin {
 	
 public void createCommunicationPreferencePageSubNodes(IPreferenceNode root) {
 		
-		IConfigurationElement[] configs = this.getCommunicationConfig();
+		IConfigurationElement[] configs = ConfigurationUtil.getInstance().getCommunicationMethods();
 		for (IConfigurationElement config: configs) {
 			
 			String name = config.getAttribute("name");
@@ -113,49 +114,6 @@ public void createCommunicationPreferencePageSubNodes(IPreferenceNode root) {
 			}
 			
 		}
-	}
-	
-	public String[][] getSerializationMethods() {
-		
-		IConfigurationElement[] configs = this.getSerializationConfig();
-		
-		String[][] serializations = new String[configs.length][];
-		
-		for (int i = 0; i < configs.length; i++) {
-			IConfigurationElement e = configs[i];
-			 
-			
-			String[] val = new String[] {
-				e.getAttribute("label"),
-				e.getAttribute("name")
-			};
-			serializations[i] = val;
-		}
-		return serializations;
-	}
-	
-	public IConfigurationElement[] getSerializationConfig() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		
-		IConfigurationElement[] config = registry.getConfigurationElementsFor("ca.queensu.cs.observer.serializations");
-		
-		
-		if (config == null)
-			return new IConfigurationElement[0];
-		
-		return config;
-	}
-	
-	public IConfigurationElement[] getCommunicationConfig() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		
-		IConfigurationElement[] config = registry.getConfigurationElementsFor("ca.queensu.cs.observer.communications");
-		
-		
-		if (config == null)
-			return new IConfigurationElement[0];
-
-		return config;
 	}
 
 	/*
