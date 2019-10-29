@@ -2,14 +2,14 @@
 The Observer is a versatile library implemented in C++ to add obsersability and steering capabilities to any soft-real time system generated from a UML-RT model created in the Papyrus-RT tool. It supports the following features:
 
 - Observation of the execution of soft real-time systems modelled in UML-RT through Model-to-Model (M2M) transformations (using Epsilon)
-- Execution steering
+- Steering of the execution
 - Trace generation with customizable format of traces
 - Possibility to connect multiple monitors seamlessly
-- Traces can be transmit to monitors on-the-fly or periodically
+- Traces can be transmitted to monitors instantaneously or periodically
 - Various formats of communication supported (TCP/IP, Shared Memory, MQTT, ...)
 - Various formats of serialization supported (Text, XML, ...)
 - Easily extensible to add new formats of communication/serialization
-- Instrumentation of a system can be done manually or automatically through Graphical User interface (GUI) available
+- Instrumentation of a system can be done manually or automatically through a Graphical User interface (GUI) in Papyrus-RT
 - Adaptable to UML models with minor changes to the Observer library
 - Adaptable to non-modelled systems (C++ library used in standalone)
 
@@ -88,9 +88,10 @@ The following section will guide you through the process of generating observabl
 It is decomposed into the following steps:
 
  1. Generate observable code
- 2. Compile and execute the system
- 3. Observer the system execution
- 4. Steer the system execution
+ 2. (optional) Filter the capsules to observe
+ 3. Compile and execute the system
+ 4. Observer the system execution
+ 5. Steer the system execution
  
  In the following, we assume that you installed the TCP/IP add-on along with the text serialization format. For this tutorial, we will use the model located under `Models/ParcelRouter` of the Git repository.
 
@@ -121,14 +122,21 @@ A modal window will open when the instrumented code of the system is generated. 
  *  Double-click on *EOL Program* to create a new configuration
  *  In the *Source* tab, browse to select `/ca.queensu.cs.observer.ui/EOLScripts/UMLRTObserverInstrumentation.eol`
  *  In the *Model* tab, add a new Epsilon Model by clicking on *Add*, then:
- *  * Select *UML Model*. If you do not see this option, it is likely that you have not installed the *Epsilon UML Integration* feature ;
- *  * Set the values of both *Name* and *Aliases* to *UMLRTModel* ;
- *  * For the *Model file* field, browse to select `/ParcelRouter/model.uml` ;
- *  * Leave all other fields as set by default ;
- *  In the *Parameters* tab, create the three following variables:
- *  * name = "observerPath", type = "String", value = "platform:/resources/ca.queensu.cs.observer/libraries/observer.uml"
- *  * name = "method", type = "String", value = "&lt;PATH_TO_GIT_REPOSITORY&gt;/Observer/addons/methods/ca.queensu.cs.observer.method.socket/cpplib"
- *  * name = "serializer", type = "String", value = "&lt;PATH_TO_GIT_REPOSITORY&gt;/Observer/addons/serializers/ca.queensu.cs.observer.serializer.text/cpplib"
+ 	* Select *UML Model*. If you do not see this option, it is likely that you have not installed the *Epsilon UML Integration* feature ;
+ 	* Set the values of both *Name* and *Aliases* to *UMLRTModel* ;
+ 	* For the *Model file* field, browse to select `/ParcelRouter/model.uml` ;
+ 	* Leave all other fields as set by default ;
+ *  In the *Parameters* tab, create the following variables:
+ 
+ | Name               | Description                                                                                | Format    | Examples                                                       |
+|--------------------|--------------------------------------------------------------------------------------------|-----------|---------------------------------------------------------------------|
+| observerPath          | Set the path to the Observer UML library. It must be prefixed by any valid Eclipse URI scheme (file:, platform:/resource, and platform:plugin)                                                        | String | `file:<ObserverPath>/libraries/observer.uml` for absolute URI `platform:resource/ca.queensu.cs.observer/libraries/observer.uml` for Eclipse-based URI|
+| method_src          | Absolute path to the source file of the method to be used                                                         | String | [absolutePathTo_ca.queensu.cs.observer.methods.socket]/cpplib/src/MethodImpl.cc to use the TCP/IP Socket communication add-on |
+| method_include          | Absolute path to the include file of the method to be used                                                         | String | [absolutePathTo_ca.queensu.cs.observer.methods.socket]/cpplib/include/MethodImpl.hh to use the TCP/IP Socket communication add-on |
+| serializer_src          | Absolute path to the source file of the serializer to be used                                                         | String | [absolutePathTo_ca.queensu.cs.observer.serializers.text]/cpplib/src/SerializerImpl.cc to use the text serialization add-on |
+| serializer_include          | Absolute path to the include file of the serializer to be used                                                         | String | [absolutePathTo_ca.queensu.cs.observer.serializers.text]/cpplib/include/SerializerImpl.hh to use the text serialization add-on |
+| unobserved_capsules          | Coma-separated list of capsule names that will be ignored during the instrumentation process | String | Gen,Sensor |
+ 	
  *  Hit *Run*
 
 The Eclipse console should output the following content:
@@ -148,25 +156,37 @@ The Eclipse console should output the following content:
     -> Add the method artifact
     Done.
     
-    -> Instrumentation of capsule: Sensor
     -> Instrumentation of capsule: Switcher
     -> Instrumentation of capsule: Bin
     -> Instrumentation of capsule: Chute
-    -> Instrumentation of capsule: Gen
     -> Instrumentation of the Observer capsule
     Done.
     --
 
+* Open the model (in the *Project Explorer* view, open `ParcelRouter/model`). A Papyrus graphical editor will be opened
+ * In the *Model Explorer* view, right-click on *RootElement* and select *(Re)Generate Code*
+ 
 **Notes:**
 
- * If during set-up you selected other serialization and communication methods, you should reflect it when setting the Epsilon variables in the *Parameters* tab ;
+ * If during set-up you selected other serialization and communication methods, you should reflect it when setting the Epsilon variables in the *Parameters* tab
  * The *observerPath* variable is an Eclipse-compliant URI that can be defined following an available URI scheme:
- *  * The `file:/` URI scheme is used to refer to absolute files on your Hard drive
- *  * The `platform:/resources/plugin-name` URI scheme is used to refer to a plug-in imported in you Eclipse workspace
- *  * &lt;PATH_TO_GIT_REPOSITORY&gt; should be replaced with the absolute path containing your Git repository
+    * The `file:/` URI scheme is used to refer to absolute files on your Hard drive
+    * The `platform:/resources/plugin-name` URI scheme is used to refer to a plug-in imported in you Eclipse workspace
+    * &lt;PATH_TO_GIT_REPOSITORY&gt; should be replaced with the absolute path containing your Git repository
+  * This method directly affects the model and therefore, the diagram can be messed up.
 
+### Step 2: (Optional) Filter the Capsules to Observe
 
-### Step 2: Compile and Execute the System
+Optionally, you can reduce the set of trace events you want to observer by reducing the set of observable capsules. This can be done through the *Model Explorer*.
+
+* Unfold the *RootElement* item in the *Model Explorer* to reveal all capsules of the system
+* Right-click on the capsule you do not want to observe and select *Observer/Un-observe*
+
+A similar configuration is possible when instrumenting the model manually using Epsilon EOL (see step 1).
+
+> **Note:** there is currently no visual feedback on the diagrams nor the *Model Explorer* to see which capsules are observed and which are not. To see whether a capsule is observed or not, redo the two steps above and see whether *Un-observe* or *Observer* is disabled. Visual feedback should be implemented in a future release. 
+
+### Step 3: Compile and Execute the System
 
 You should now have a project called *ParcelRouter_CDTProject* created in you workspace.
 
@@ -180,22 +200,51 @@ At this point, the Parcel Router executes in a loop and routes parcels randomly 
  2. Registers all capsules of the system. This action is used for steering the model (see below) ;
  3. For each event generated by the model, an Observer capsule added to the model will forward it to any external monitoring tools supporting TCP/IP and listening to the port`8080`
 
-### Step 3: Observe the System Execution
+### Step 4: Observe the System Execution
 
 To retrieve the events generated by the Observer capsule (and to test that everything works by the same occasion), you can create a TCP/IP client connecting to port `8080`. Alongwith the implementation of the Observer, we provide two monitors:
 
  * ParcelRouterAnimation: a GTK animation animating the execution of the Parcel Router system through the Observer capsule
  * TCPClient: a simple TCP/IP client to read from and write into TCP/IP socket communication.
  
-Both monitors are located under the `Monitors` directory. For Step 3, we only focus on the *ParcelRouterAnimation* plug-in
+Both monitors are located under the `Monitors` directory. For Steps 4 and 5, we only focus on the *TCPClient* monitor
 
- * If not already done, import the *ParcelRouterAnimation* plug-in into your workspace.
- * From the *Project Explorer*, right-click on the *ParcelRouterAnimation* plug-in and select *Run As/Java Application*
+ * If not already done, import the *TCPClient* plug-in into your workspace.
+ * From the *Project Explorer*, right-click on the *TCPClient* plug-in and select *Run As/Java Application*
  * If you have stopped the execution of the *Parcel Router* system from Step 2, relaunch it: `$ ./Parcel_RouterMain`
+ * On the TCPClient, click on *Connect*
+ * Check that traces are generated.
 
-### Step 4: Steer the System Execution
+### Step 5: Steer the System Execution
 
-[TBD]
+To see how to steer the execution, first make a subtle change to the generated code source from Step 3:
+
+ * Open a terminal and navigate into `ParcelRouter_CDTProject/src`
+ * Open `Gen.cc` with your favorite editor
+ * Comment line 174: `timer.informEvery(UMLRTTimespec(4,0));`
+ 
+> **Note:** The above steps are not necessary, but it simplifies the visualization of the effect of steering the system execution. Indeed, we saw on Step 4 that the system generates a lot of traces and it will be difficult to distinguish traces generated by the steering from traces generated by the normal execution of the system. Concretly, the above modification just prevents the parcel router from generating a parcel every four seconds.
+ 
+
+> **Note 2:** Off course, the normal way would have been to make the change in the model itself and (re-)generate the code ;) However, since this tutorial is not an introduction to UML-RT and Papyrus-RT, we did not want to overload the already dense content.
+
+ * Compile the code again and execute the system again
+ * Open again TCPClient and connect again to port 8080 
+ * In the field below the list of events that are generated, enter a command and press `Enter`
+ 
+ To guarantee that events generated by the Observer and commands received by the external monitoring tools are formatted in the same serialization format, commands sent to the Observer are seen by the Observer as event coming from the external world (i.e., the monitors) rather than from the internal components of the system. The counterpart is that commands are not simply strings and must exactly comply to the format of the events generated by the Observer. We assume in the following that events are generated using the text formatting from the Text serialization format plugin (which should be the case if you followed the previous steps). That means that a command should be of the following format:
+ 
+	 commandId|sourceName|capsuleInstance|eventSource|eventKind|seconds|nanoseconds|cpuTick|params|
+ 
+ In practice, only `sourceName`, `capsuleInstance`, `eventSource`, `eventKind`, and `params` are read by the Observer for parsing a command from external monitoring tools. You can use any value for the other fields but you must comply with the format above unless you use another serialization format or you customized the formatting of the string).
+ 
+ Three commands are available:
+ 
+ * `List`: command the Observer to send the list of capsule parts currently running. This is done by the following command: `1|||9|31|0|0|0||`. The output is displayed in the TCPClient monitor
+ * `Show`: give some information about a specific capsule, in particular the transitions that can be triggered from outside. The name of the capsule is passed through the `sourceName` field. An example of the use of this command is: `1|Gen|TcpClient|9|32|0|0|0||`. The output is displaed in the TCPClient monitor. It shows that two transitions can be triggered for the `Gen` capsule: *enter_setFree* and *timer_timeout*. We will trigger the second one to manually generate a parcel.
+ * `Trigger`: manually trigger a transition of a capsule. An example of use of this command is: `1|Gen|Parcer_Router.Gen:0|9|33|0|0|0|operation:timer_timeout|`
+ 
+ If every goes well, the system will generate a parcel that will go down the multiple parcel router stages.
 
 <a name="advanced-config"></a>
 # Advanced Configuration
@@ -313,8 +362,41 @@ Basic IO communication supported via `std::cout` and `std::cin`. Useful for debu
 <a name="new-addons"></a>
 # Creating New Add-ons
 
-[TODO]
+Creating new add-ons for supporting other methods of serialization/communication can be easily done in Papyrus-RT. Examples of serializers and communication methods are available in the Git repository. To create a new add-on, proceed to the following steps:
 
+ * Create a new Eclipse plug-in:  *File/New/Project...* then select *Plug-in project*. Complete the information of your new plug-in
+ * Create a `cpplib` directory (or whathever name you want to use) at the root of your new plug-in. This directory contains all C++ code of your new add-on. We suggest you to take examples on existing add-ons to create yours. Specially, this directory must contain:
+ 	* `MethodImpl.hh`(for a new communication method) or `SerializerImpl.hh` (for a new serializer): this file must extend `Method.hh` or `Serializer.hh` located under the Observer C++ library. 
+  	* `MethodImpl.cc` or `SerializerImpl.cc` for the implementation of your add-on
+  	* a C++ test file to test your method
+ * To let users of the GUI select your add-on, open the Manifest file (`META-INF/MANIFEST.MG`) of your Eclipse plug-in, open the *Depedencies* tab and add the following dependency: `ca.queensu.cs.observer.ui`
+ * Open the *Extensions* tab and create a new extension by selecting either the `ca.queensu.cs.observer.communications` or `ca.queensu.cs.observer.serializations` extension point.
+ 
+ An example of extension for the TCP/IP Socket communication is the following:
+ 
+	 <extension
+	         point="ca.queensu.cs.observer.communications">
+	      <communication
+	            cpp_include_file="cpplib/include/MethodImpl.hh"
+	            cpp_source_file="cpplib/src/MethodImpl.cc"
+	            description="This is the configuration page for the Socket serialization format"
+	            label="Socket"
+	            name="socket"
+	            preference_page="ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage">
+	         <attribute
+	               default_value="8080"
+	               is_required="true"
+	               label="Port of the TCP connection"
+	               name="Port"
+	               type="Integer">
+	         </attribute>
+	      </communication>
+	   </extension>
+ 
+ It must include the relative path to your `MethodImpl.hh` (resp. `SerializerImpl.hh`) and `MethodImpl.cc` (resp. `SerializerImpl.cc`) files, a description, label, and name of the add-on. A default preference page `ca.queensu.cs.observer.ui.preferences.ObserverPreferencePage` can be used. If your plug-in is configurable, attributes can be defined and will automatically populate your preference page. If you prefer to use a custom preference page, change the value of the `preference_page` field.
+ 
+> **Current limitation**: The schema associated with the extension points are not provided with the build when installing from the update site. This will be fixed soon.
+ 
 <a name="extending"></a>
 # Extending the Observer
 
