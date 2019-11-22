@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Observer UI
 Bundle-SymbolicName: ca.queensu.cs.observer.ui;singleton:=true
-Bundle-Version: 1.0.2
+Bundle-Version: 1.0.3
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
  org.eclipse.ui;bundle-version="3.108.1",
@@ -27,7 +27,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
  org.eclipse.ui.console;bundle-version="3.7.0",
  org.eclipse.papyrusrt.codegen;bundle-version="1.0.0",
  org.eclipse.papyrusrt.codegen.config;bundle-version="1.0.0",
- org.eclipse.epsilon.eol.dt;bundle-version="1.6.0"
+ org.eclipse.epsilon.eol.dt;bundle-version="1.6.0",
+ ca.queensu.cs.observer.epsilon.tool;bundle-version="1.0.2"
 Bundle-Activator: ca.queensu.cs.observer.ui.Activator
 Bundle-ActivationPolicy: lazy
 Export-Package: ca.queensu.cs.observer.ui.preferences

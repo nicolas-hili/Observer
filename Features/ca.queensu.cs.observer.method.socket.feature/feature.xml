@@ -2,7 +2,7 @@
 <feature
       id="ca.queensu.cs.observer.method.socket.feature"
       label="TCP/IP Support Add-on Feature"
-      version="1.0.2"
+      version="1.0.3"
       provider-name="School of Computing, Queen&apos;s University">
 
    <description url="http://www.example.com/description">
